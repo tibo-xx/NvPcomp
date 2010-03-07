@@ -1,5 +1,5 @@
 /***********************************************************************
- *   symTable - Symbol table implementation for NvPcomp
+ *   symNode - Symbol Table Node.
  *   Copyright (C) 2010  CMT & DRJ
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -16,46 +16,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-#include <symTable.h>
+#include <symNode.h>
 
 using namespace std;
 
-symTable::symTable() {
+symNode::symNode() 
+{
 	
 }
 
-symTable::~symTable() {
-	
-	
-}
-
-bool symTable::insert(string key, symNode node) {
-	bool retVal = true;
-		
-	return retVal;
-}
-
-symNode *symTable::search(string key) {
-	
-	return 0;
-}
-
-void symTable::dump() {
+symNode::~symNode() 
+{
 	
 }
 
-bool symTable::push() {
-	bool retVal = true;
-	
-	return retVal;
-}
-
-bool symTable::pop() {
-	bool retVal = true;
-	
-	return retVal;
+bool symNode::operator ==( const symNode &other ) {
 	
 }
-
-
- 

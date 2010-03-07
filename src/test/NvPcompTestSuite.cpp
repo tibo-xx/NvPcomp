@@ -1,6 +1,6 @@
 /***********************************************************************
- *   symTable - Symbol table implementation for NvPcomp
- *   Copyright (C) 2010  CMT & DRJ
+ *   NvPcompTestSuite
+ *   Copyright (C) 2010 CMT & DRJ
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,46 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-#include <symTable.h>
+#include <cppunit/CompilerOutputter.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/ui/text/TestRunner.h>
 
-using namespace std;
-
-symTable::symTable() {
+int main( int argc, char **argv)
+{
+	CppUnit::TextUi::TestRunner runner;
+	CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
 	
+	runner.addTest( registry.makeTest() );
+	bool wasSuccessful = runner.run( "", false );
+	return wasSuccessful;
 }
-
-symTable::~symTable() {
-	
-	
-}
-
-bool symTable::insert(string key, symNode node) {
-	bool retVal = true;
-		
-	return retVal;
-}
-
-symNode *symTable::search(string key) {
-	
-	return 0;
-}
-
-void symTable::dump() {
-	
-}
-
-bool symTable::push() {
-	bool retVal = true;
-	
-	return retVal;
-}
-
-bool symTable::pop() {
-	bool retVal = true;
-	
-	return retVal;
-	
-}
-
-
- 
