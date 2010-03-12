@@ -27,6 +27,7 @@ LIBS = -lstdc++
 TEST_TARGET = ./bin/UnitTest
 TEST_OBJS =  ./src/test/unit_test/NvPcompTestSuite.o
 TEST_OBJS += ./src/test/unit_test/symNodeTest.o
+TEST_OBJS += ./src/test/unit_test/symTableTest.o
 TEST_OBJS += $(OBJS)
 TEST_LIBS = $(LIBS) -lcppunit -ldl
 ########################################################################
@@ -53,6 +54,19 @@ LOG_TEST_OBJS = ./src/test/logging/log_test.o
 test_logging: $(LOG_TEST_OBJS)
 	@echo "\nbuilding Logger Test...\n"
 	$(CXX) $(CXXFLAGS) $(INCS) -o ./bin/log_test $(LOG_TEST_OBJS) $(LIBS)
+
+
+
+########################################################################
+# Test program for The Symbol Tree
+########################################################################
+#LOG_TEST_OBJS = ./src/test/logging/log_test.o
+#test_logging: $(LOG_TEST_OBJS)
+#	@echo "\nbuilding Logger Test...\n"
+#	$(CXX) $(CXXFLAGS) $(INCS) -o ./bin/log_test $(LOG_TEST_OBJS) $(LIBS)
+
+
+
 ########################################################################
 # UnitTest Executable
 ########################################################################

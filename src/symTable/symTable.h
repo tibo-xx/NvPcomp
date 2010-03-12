@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iterator>
 
 class symTable {
 
@@ -23,8 +24,9 @@ private:
 	std::vector<std::map< std::string, symNode *> *> _table;
 public:
 	symTable();
+	symTable(FILE*);
 	~symTable();
-	bool insert(std::string key, symNode node);
+	bool insert(std::string key, symNode* node);
 	symNode *search(std::string key);
 	void dump();
 	bool push();
