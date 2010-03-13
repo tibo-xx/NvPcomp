@@ -1,0 +1,78 @@
+/***********************************************************************
+ *   symTable - Symbol table implementation for NvPcomp
+ *   Copyright (C) 2010  CMT & DRJ
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **********************************************************************/
+#include <symTable.h>
+
+using namespace std;
+
+symTable::symTable() {
+	// create the first level of the table.
+	//*_pos = new map<string, symNode *>;
+}
+
+symTable::~symTable() {
+	map<string, symNode *>::iterator map_iter;
+	
+	// Delete the contents of the stack.
+	while(!_table.empty()) {
+		// loop through and delete all of the map symNodes.
+		for(map_iter = (_table.top())->begin(); map_iter != (_table.top())->end(); map_iter++) {
+			if((*map_iter).second != NULL) {
+				delete (*map_iter).second;
+			}
+		}
+		// Clear out the map.
+		(_table.top())->clear();
+		// Delete the Map object.
+		delete _table.top();
+		_table.pop();	
+	}			
+}
+
+bool symTable::insert(string key, symNode *node) {
+	//pair<map<string, symNode *>::iterator, bool> ret;
+	//ret = (*_pos)->insert(make_pair(key, node));
+	//return ret.second;
+}
+
+symNode *symTable::search(string key) {
+	//map<string, symNode *>::iterator iter;
+	//iter = (*_pos)->find(key);
+	//return (*iter).second;
+	return 0;
+}
+
+void symTable::dump() {
+	
+}
+
+bool symTable::push() {
+	bool retVal = true;
+	
+	return retVal;
+}
+
+bool symTable::pop() {
+	bool retVal = true;
+	
+	return retVal;
+	
+}
+
+
+ 

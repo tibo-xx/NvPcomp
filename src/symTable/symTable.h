@@ -20,8 +20,9 @@
 
 class symTable {
 
-private:
+protected:
 	std::vector<std::map< std::string, symNode *> *> _table;
+	int _level;
 public:
 	symTable();
 	symTable(FILE*);

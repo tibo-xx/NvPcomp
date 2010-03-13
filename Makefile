@@ -54,19 +54,6 @@ LOG_TEST_OBJS = ./src/test/logging/log_test.o
 test_logging: $(LOG_TEST_OBJS)
 	@echo "\nbuilding Logger Test...\n"
 	$(CXX) $(CXXFLAGS) $(INCS) -o ./bin/log_test $(LOG_TEST_OBJS) $(LIBS)
-
-
-
-########################################################################
-# Test program for The Symbol Tree
-########################################################################
-#LOG_TEST_OBJS = ./src/test/logging/log_test.o
-#test_logging: $(LOG_TEST_OBJS)
-#	@echo "\nbuilding Logger Test...\n"
-#	$(CXX) $(CXXFLAGS) $(INCS) -o ./bin/log_test $(LOG_TEST_OBJS) $(LIBS)
-
-
-
 ########################################################################
 # UnitTest Executable
 ########################################################################

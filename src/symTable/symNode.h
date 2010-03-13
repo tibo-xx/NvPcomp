@@ -17,7 +17,8 @@ private:
 public:
 	symNode();
 	~symNode();
-	bool operator ==( const symNode &other );
+	
+	//bool operator ==( const symNode &other );
 };
 
 

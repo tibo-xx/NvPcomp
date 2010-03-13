@@ -23,7 +23,15 @@ using namespace std;
 
 symTable::symTable() {
 	// Push on the first level.
+	_level = -1;
 	this->push();
+}
+
+symTable::symTable(FILE* out) {
+	// Push on the first level.
+	_level = -1;
+	this->push();
+	SET_OUTPUT(SymbolDump, out);
 }
 
 symTable::~symTable() {
@@ -53,9 +61,16 @@ bool symTable::insert(string key, symNode *node) {
 }
 
 symNode *symTable::search(string key) {
+	symNode *retVal = NULL;
 	map<string, symNode *>::iterator iter;
+	
 	iter = (_table.back())->find(key);
-	return (*iter).second;
+	
+	if(iter != (_table.back())->end()) {
+		retVal = (*iter).second;
+	}
+	
+	return retVal;
 }
 
 void symTable::dump() {
@@ -64,51 +79,55 @@ void symTable::dump() {
     vector<map<string, symNode *> *>::iterator iter;
 	map<string, symNode *>::iterator map_iter;
 
-	LOG(SymbolDump, logLEVEL1) << "Dumping current Symbol Table:\n";		
+	LOG(SymbolDump, logLEVEL1) << "Dumping current Symbol Table:";		
 	
 	for(iter = _table.begin(); iter < _table.end(); iter++) {
-		LOG(SymbolDump, logLEVEL1) << string(level, '\t');
-		LOG(SymbolDump, logLEVEL1) << "Level: " << level << endl;
+		LOG(SymbolDump, logLEVEL1) << string(level, '\t') << "Level: " << level;
 
 		// loop through and print out node information:
 		for(map_iter = (*iter)->begin(); map_iter != (*iter)->end(); map_iter++) {
 			if((*map_iter).second != NULL) {
-				
-				LOG(SymbolDump, logLEVEL1) << string(level, '\t');
-				LOG(SymbolDump, logLEVEL1) << (*map_iter).first << ": ";
-				//! \TODO Add in the symNode Information.
-				LOG(SymbolDump, logLEVEL1) << endl;
-				
+				LOG(SymbolDump, logLEVEL1) << string(level, '\t') << (*map_iter).first << ": " << "Node Information.";				
 			}
 		}
+		
+		level++;
+		
 	}		
 }
 
 bool symTable::push() {
 	bool retVal = true;
 	_table.push_back(new map<string, symNode *>);
+	_level++;
 	return retVal;
 }
 
 bool symTable::pop() {
 	bool retVal = true;
-	map<string, symNode *>::iterator map_iter;
-	map<string, symNode *> *mapPtr = _table.back();
 	
-	// Loop through and clear the allocated memory.	
-	for(map_iter = (mapPtr)->begin(); map_iter != (mapPtr)->end(); map_iter++) {
-		if((*map_iter).second != NULL) {
-			delete (*map_iter).second;
+	if(_level > 0) {
+		map<string, symNode *>::iterator map_iter;
+		map<string, symNode *> *mapPtr = _table.back();
+		
+		// Loop through and clear the allocated memory.	
+		for(map_iter = (mapPtr)->begin(); map_iter != (mapPtr)->end(); map_iter++) {
+			if((*map_iter).second != NULL) {
+				delete (*map_iter).second;
+			}
 		}
+		// Clear out the map.
+		mapPtr->clear();	
+		// Delete the Map object.
+		delete mapPtr;	
+		// pop the map pointer
+		_table.pop_back();		
+		// Decrement the Level Counter.
+		_level--;
+	} else {
+		retVal = false;
 	}
-	// Clear out the map.
-	mapPtr->clear();	
-	// Delete the Map object.
-	delete mapPtr;	
-	// pop the map pointer
-	_table.pop_back();		
+	
 	return retVal;
+	
 }
-
-
- 

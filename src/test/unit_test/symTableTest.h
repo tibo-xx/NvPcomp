@@ -1,3 +1,35 @@
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <symTable.h>
+#include <symNode.h>
+
+//! Symbol Table Access Class
+/*!
+ * \class symTableAccess
+ *
+ * \brief Class that inherits from symTable to gain complete access.
+ *
+ * \author CMT & DRJ
+ *
+ */
+class symTableAccess : public symTable {
+	public:
+		symTableAccess();
+		symTableAccess(FILE* out);
+		~symTableAccess();
+		int getCurrentLevel();
+};
+
+symTableAccess::symTableAccess() : symTable() {}
+
+symTableAccess::symTableAccess(FILE* out) : symTable(out) {}
+
+symTableAccess::~symTableAccess() {}
+
+int symTableAccess::getCurrentLevel() {
+		return _level;
+}
+
 //! Symbol Table Test Fixture
 /*!
  * \class symTableTest
@@ -7,23 +39,19 @@
  * \author CMT & DRJ
  *
  */
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <symTable.h>
-#include <symNode.h>
-
 class symTableTest : public CppUnit::TestFixture {
 	
 	CPPUNIT_TEST_SUITE( symTableTest );
 	CPPUNIT_TEST( testConstructor );
 	CPPUNIT_TEST( testPush );
-	CPPUNIT_TEST( testInsert );
-	CPPUNIT_TEST( testSearch );
 	CPPUNIT_TEST( testPop );
+	CPPUNIT_TEST( testInsertSearch_1 );
+	CPPUNIT_TEST( testInsertSearch_2 );
+	CPPUNIT_TEST( testOutput );
 	CPPUNIT_TEST_SUITE_END();
 	
 private:
-	symTable * _table;
+	symTableAccess * _table;
 	
 public:
 	void setUp();
@@ -44,13 +72,17 @@ public:
 	void testPop(); 
 	
 	/*!
-	 *  testSearch
+	 *  testInsertSearch_1
 	 */
-	void testSearch(); 
+	void testInsertSearch_1(); 
 	
 	/*!
-	 *  testInsert
+	 *  testInsertSearch_2
 	 */
-	void testInsert(); 
+	void testInsertSearch_2(); 
 	
+	/*!
+	 *  testOutput
+	 */
+	void testOutput(); 
 };

@@ -66,6 +66,9 @@
     else if (level > log_name::ReportingLevel() || !log_name##_2File::Stream()) ; \
     else log_name().Get(level)
 
+#define SET_OUTPUT(log_name, out) \
+	log_name##_2File::Stream() = out;
+
 #ifndef FILELOG_MAX_LEVEL
 #define FILELOG_MAX_LEVEL logLEVEL8
 #endif
@@ -138,7 +141,7 @@ NvPcomp_logger<T>::NvPcomp_logger(){}
 template <typename T>
 std::ostringstream& NvPcomp_logger<T>::Get(LogLevel level)
 {
-    os << " " << ToString(level) << ": ";
+    //os << " " << ToString(level) << ": ";
     os << std::string(level > logLEVEL1 ? level - logLEVEL1 : 0, '\t');
     return os;
 }
