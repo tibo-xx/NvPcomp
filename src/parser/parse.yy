@@ -1,17 +1,32 @@
+%skeleton "lalr1.cc"
 
+%defines
+%define namespace "NvPcomp"
+%define parser_class_name "BParser"
+%parse-param { NvPcomp::FlexScanner &scanner }
+%lex-param   { NvPcomp::FlexScanner &scanner }
 
+%code requires {
+	#include <stdio.h>
+	namespace NvPcomp {
+		class FlexScanner;
+	}
+}
 
-%{
-
-#include <stdio.h>
-
-
-
-%}
+%code {
+	// Prototype for the yylex function
+	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::FlexScanner &scanner);
+}
 
 /************************************************************************/
 /* Definitions															*/
 /************************************************************************/
+%union
+{
+  double dval;
+  int    ival;
+}
+
 /* Reserved Keywords													*/
 %token 	AUTO_TK			BREAK_TK 		CASE_TK 		CHAR_TK
 %token 	CONST_TK 		CONTINUE_TK 	DEFAULT_TK		DO_TK			
@@ -33,8 +48,7 @@
 %token 	LEFT_OP_TK 		RIGHT_OP_TK 
 %token 	LE_OP_TK 		GE_OP_TK 		EQ_OP_TK 		NE_OP_TK
 %token 	AND_OP_TK 		OR_OP_TK
-%token 	MUL_ASSIGN_TK 	DIV_ASSIGN_TK 	MOD_ASSIGN_TK 	ADD_ASSIGN_TK 
-%token	SUB_ASSIGN_TK 
+%left 	ADD_ASSIGN_TK	SUB_ASSIGN_TK	MOD_ASSIGN_TK	MUL_ASSIGN_TK 	DIV_ASSIGN_TK
 %token 	LEFT_ASSIGN_TK 	RIGHT_ASSIGN_TK AND_ASSIGN_TK 	XOR_ASSIGN_TK 
 %token	OR_ASSIGN_TK
 %token 	TYPEDEF_NAME_TK
@@ -468,10 +482,15 @@ identifier
 /************************************************************************/
 /* Code																	*/
 /************************************************************************/
+// Error Function Implementation
+void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
+	std::cerr << "Error: " << msg << std::endl;
+}
 
-int yyerror( char *s ) {
-
-	return;
+// Declare the Scanner and implement the yylex function
+#include "NvPcompScanner.h"
+static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::FlexScanner &scanner) {
+	return scanner.yylex(yylval);
 }
 
 	
