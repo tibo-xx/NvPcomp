@@ -236,12 +236,10 @@ LogLevel NvPcomp_logger<T>::FromString(const std::string& level)
 // who considers looking at it.
 LOG2FILE(INFOLog_2File);
 LOG2FILE(DEBUGLog_2File);
-LOG2FILE(SymbolDump_2File);
 
 // Definition of the seperate log classes.
 class DEBUGLog : public NvPcomp_logger<DEBUGLog_2File> {};
 class INFOLog : public NvPcomp_logger<INFOLog_2File> {};
-class SymbolDump : public NvPcomp_logger<SymbolDump_2File> {};
 /**********************************************************************/
 
 #endif // __NVPCOMP_LOGGER_H__

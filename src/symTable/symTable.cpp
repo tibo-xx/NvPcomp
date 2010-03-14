@@ -21,6 +21,12 @@
 
 using namespace std;
 
+/**********************************************************************/
+// symTable logging declarations
+LOG2FILE(SymbolDump_2File);
+class SymbolDump : public NvPcomp_logger<SymbolDump_2File> {};
+/**********************************************************************/
+
 symTable::symTable() {
 	// Push on the first level.
 	_level = -1;
