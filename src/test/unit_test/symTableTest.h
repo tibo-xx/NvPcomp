@@ -47,6 +47,7 @@ class symTableTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST( testPop );
 	CPPUNIT_TEST( testInsertSearch_1 );
 	CPPUNIT_TEST( testInsertSearch_2 );
+	CPPUNIT_TEST( testInsertSearch_3 );
 	CPPUNIT_TEST( testOutput );
 	CPPUNIT_TEST_SUITE_END();
 	
@@ -80,6 +81,11 @@ public:
 	 *  testInsertSearch_2
 	 */
 	void testInsertSearch_2(); 
+	
+		/*!
+	 *  testInsertSearch_2
+	 */
+	void testInsertSearch_3();
 	
 	/*!
 	 *  testOutput

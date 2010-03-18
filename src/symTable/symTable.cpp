@@ -60,23 +60,74 @@ symTable::~symTable() {
 	_table.clear();		
 }
 
-bool symTable::insert(string key, symNode *node) {
+InsertResult symTable::insert(string key, symNode *node) {
+	InsertResult retVal = INSERT_FAIL_IN_CURRENT_LEVEL;
+	
 	pair<map<string, symNode *>::iterator, bool> ret;
 	ret = (_table.back())->insert(make_pair(key, node));
-	return ret.second;
-}
-
-symNode *symTable::search(string key) {
-	symNode *retVal = NULL;
-	map<string, symNode *>::iterator iter;
 	
-	iter = (_table.back())->find(key);
-	
-	if(iter != (_table.back())->end()) {
-		retVal = (*iter).second;
+	// The node was found on this level of the tree.
+	if(ret.second) {
+		symNode *tempNode;
+		// Search for this string on other levels.
+		if(this->search(key, tempNode, true) > -1) {
+			// The node was found on another level.
+			retVal = INSERT_SUCCESS_W_SHADOW;	
+		} else {
+			// The node was not found on another level.
+			retVal = INSERT_SUCCESS;	
+		}		
 	}
 	
 	return retVal;
+}
+
+symNode *symTable::search_top(string key) {
+	
+	symNode *retVal = NULL;
+	map<string, symNode *>::iterator iter;
+ 
+	iter = (_table.back())->find(key);
+ 
+	if(iter != (_table.back())->end()) {
+		retVal = (*iter).second;
+	}
+
+	return retVal;
+
+}
+
+int symTable::search(const string key, symNode* &Node, bool ignoreFirst) {		
+		
+	bool found = false;
+	int retVal = -1;
+	int level = 0;
+    vector<map<string, symNode *> *>::reverse_iterator iter;
+	map<string, symNode *>::iterator map_iter;
+	
+	level = _table.size() - 1;
+	
+	for(iter = _table.rbegin(); iter < _table.rend(); ++iter) {
+		if(!ignoreFirst || iter != _table.rbegin() ) { 
+			// loop through each level backwards searching for the key.
+			map_iter = (*iter)->find(key);
+			if(map_iter != (*iter)->end()) {
+				if(!found) {
+					Node = (*map_iter).second;
+					retVal = level;
+					found = true;
+					LOG(DEBUGLog, logLEVEL3) << SYMLOG_START << "Found key: " << key << " on level " << level << endl;
+				} else {
+					retVal = -2;
+					LOG(DEBUGLog, logLEVEL3) << SYMLOG_START << "key: " << key << "is shadowed on level " << level <<  endl;				
+				}
+			}
+		}
+		level--;
+	}
+
+	return retVal;
+	
 }
 
 void symTable::dump() {

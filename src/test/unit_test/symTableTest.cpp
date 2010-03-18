@@ -97,14 +97,14 @@ void symTableTest::testInsertSearch_1() {
 	_table->push();
 	_table->insert(strNode2, node2);
 
-	CPPUNIT_ASSERT(_table->search(strNode2) != NULL);
-	CPPUNIT_ASSERT(_table->search(strNode1) == NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode2) != NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode1) == NULL);
 	_table->pop();
-	CPPUNIT_ASSERT(_table->search(strNode2) == NULL);
-	CPPUNIT_ASSERT(_table->search(strNode1) != NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode2) == NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode1) != NULL);
 	_table->pop();
-	CPPUNIT_ASSERT(_table->search(strNode2) == NULL);
-	CPPUNIT_ASSERT(_table->search(strNode1) != NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode2) == NULL);
+	CPPUNIT_ASSERT(_table->search_top(strNode1) != NULL);
 	
 	cout << "Finish Symble Table testInsertSearch_1." << endl;
 
@@ -128,17 +128,90 @@ void symTableTest::testInsertSearch_2() {
 	_table->push();
 	_table->insert(strNode2, node2);
 
-	tempNode = _table->search(strNode2);
+	tempNode = _table->search_top(strNode2);
 	CPPUNIT_ASSERT(tempNode == node2);
 	CPPUNIT_ASSERT(tempNode != node1);
 	_table->pop();
-	tempNode = _table->search(strNode1);
+	tempNode = _table->search_top(strNode1);
 	CPPUNIT_ASSERT(tempNode != node2);
 	CPPUNIT_ASSERT(tempNode == node1);
 		
 	cout << "Finish Symble Table testInsertSearch_2." << endl;
 
 }
+
+void symTableTest::testInsertSearch_3() {
+
+	cout << "Start Symble Table testInsertSearch_3." << endl;
+	
+	InsertResult result;
+	int resultLevel;
+	
+	symNode *node1, *node2, *node3, *node4, *node5, *node6;
+	symNode *node1_2;
+	symNode *tempNode;
+	
+	string strNode1 = "Node1";
+	string strNode1_2 = "Node1";
+	
+	string strNode2 = "Node2";
+	string strNode3 = "Node3";
+	string strNode4 = "Node4";
+	string strNode5 = "Node5";
+	string strNode6 = "Node6";
+
+	node1 = new symNode();
+	node1_2 = new symNode();
+	node2 = new symNode();
+	node3 = new symNode();
+	node4 = new symNode();
+	node5 = new symNode();
+	node6 = new symNode();		
+	
+	result = _table->insert(strNode1, node1);
+	CPPUNIT_ASSERT(result == INSERT_SUCCESS);
+	result = _table->insert(strNode2, node2);
+	CPPUNIT_ASSERT(result == INSERT_SUCCESS);
+	
+	// This should fail to insert.
+	result = _table->insert(strNode1_2, node1_2);
+	CPPUNIT_ASSERT(result == INSERT_FAIL_IN_CURRENT_LEVEL);
+	_table->push();
+	result = _table->insert(strNode1_2, node1_2);
+	CPPUNIT_ASSERT(result == INSERT_SUCCESS_W_SHADOW);
+	CPPUNIT_ASSERT(result != INSERT_SUCCESS);
+	CPPUNIT_ASSERT(result != INSERT_FAIL_IN_CURRENT_LEVEL);
+
+	// Search the entire stack for node2
+	resultLevel = _table->search(strNode2, tempNode, false);
+	CPPUNIT_ASSERT(resultLevel == 0);
+	CPPUNIT_ASSERT(tempNode == node2);
+	
+	// This should search the entire stack for strNode1_2.
+	resultLevel = _table->search(strNode1_2, tempNode, false);
+	cout << "resultLevel: " << resultLevel << endl;
+	CPPUNIT_ASSERT(resultLevel == -2);
+	
+	// The search should skip the top level and return node1 from level 0.
+	resultLevel = _table->search(strNode1_2, tempNode, true);
+	CPPUNIT_ASSERT(resultLevel == 0);
+	CPPUNIT_ASSERT(tempNode == node1);
+	CPPUNIT_ASSERT(tempNode != node1_2);
+	
+	/*
+	tempNode = _table->search_top(strNode2);
+	CPPUNIT_ASSERT(tempNode == node2);
+	CPPUNIT_ASSERT(tempNode != node1);
+
+	_table->pop();
+	tempNode = _table->search_top(strNode1);
+	CPPUNIT_ASSERT(tempNode != node2);
+	CPPUNIT_ASSERT(tempNode == node1);
+	*/
+
+	cout << "Finish Symble Table testInsertSearch_3." << endl;
+}
+
 
 void symTableTest::testOutput() {
 	cout << "Start Symble Table testOutput." << endl;

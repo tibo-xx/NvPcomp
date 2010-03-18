@@ -60,7 +60,9 @@ TEST_LIBS = $(LIBS) -lcppunit -ldl
 .cc.o:
 	@echo "\nBuilding object file: " $@ "\n"
 	$(CXX) $(CXXFLAGS) $(INCS) -c $< -o $@	
-
+.yy.cc.o:
+	@echo "\nBuilding object file: " $@ "\n"
+	$(CXX) $(CXXFLAGS) $(INCS) -c $< -o $@	
 ########################################################################
 # Multiples
 ########################################################################

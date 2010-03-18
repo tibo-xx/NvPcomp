@@ -18,8 +18,17 @@
 #include <map>
 #include <iterator>
 
-class symTable {
+// Logging line start
+#define SYMLOG_START	"symTable: "
 
+enum InsertResult {
+	INSERT_SUCCESS,
+	INSERT_SUCCESS_W_SHADOW,
+	INSERT_FAIL_IN_CURRENT_LEVEL	
+};
+
+
+class symTable {
 protected:
 	std::vector<std::map< std::string, symNode *> *> _table;
 	int _level;
@@ -27,12 +36,12 @@ public:
 	symTable();
 	symTable(FILE*);
 	~symTable();
-	bool insert(std::string key, symNode* node);
-	symNode *search(std::string key);
+	InsertResult insert(std::string key, symNode* node);
+	int search(const std::string key, symNode* &Node, bool ignoreFirst);
+	symNode *search_top(std::string key);
 	void dump();
 	bool push();
 	bool pop();
-	
 };
 
 #endif /* SYMTABLE_H_ */

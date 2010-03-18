@@ -87,15 +87,6 @@ enum LogLevel {
 	logLEVEL7,
 	logLEVEL8
 };
-//! enum of Log Level
-/*! This holds information about the different streams.*/
-enum LogDestination {
-	destERROR,
-	destWARNING,
-	destINFO,
-	destDEBUG, 
-	destPARSER 
-};
 
 /**********************************************************************/
 //! Templatized Logging Class
