@@ -3,14 +3,14 @@
 namespace NvPcomp {
 	class Parser {
 	public:
-		Parser() : parser(scanner) {}
+		Parser(NvPcomp::FlexScanner *arg_scanner) : parser(*arg_scanner) {scanner = arg_scanner;}
 	
 		int parse() {
 			return parser.parse();
 		}
 				
 	private:
-		NvPcomp::FlexScanner scanner;
+		NvPcomp::FlexScanner *scanner;
 		NvPcomp::BParser parser;
 	};
 }

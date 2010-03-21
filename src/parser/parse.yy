@@ -1,3 +1,4 @@
+%require "2.4.1"
 %skeleton "lalr1.cc"
 
 %defines
@@ -5,8 +6,18 @@
 %define parser_class_name "BParser"
 %parse-param { NvPcomp::FlexScanner &scanner }
 %lex-param   { NvPcomp::FlexScanner &scanner }
-
+%locations
+%debug
+/*
+%initial-action
+	{
+		// Initialize the initial location.
+		//@$.begin.filename = @$.end.filename = &scanner.file;
+	};
+*/
 %code requires {
+	#define YYDEBUG 1
+	
 	#include <stdio.h>
 	namespace NvPcomp {
 		class FlexScanner;
@@ -15,7 +26,7 @@
 
 %code {
 	// Prototype for the yylex function
-	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::FlexScanner &scanner);
+	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner);
 }
 
 /************************************************************************/
@@ -25,6 +36,7 @@
 {
   double dval;
   int    ival;
+  std::string *sval;
 }
 
 /* Reserved Keywords													*/
@@ -36,22 +48,68 @@
 %token	SHORT_TK		SIGNED_TK		SIZEOF_TK		STATIC_TK
 %token	STRUCT_TK		SWITCH_TK 		TYPEDEF_TK		UNION_TK
 %token	UNSIGNED_TK		VOID_TK 		VOLATILE_TK		WHILE_TK
-%token 	ELIPSIS_TK 		RANGE_TK
 
-/* Language Tokens														*/
+%token	COMMENT_TK
+
+%token	ERROR_TK
+
+%token 	RANGE_TK
+
 %token 	IDENTIFIER_TK 
 %token 	INTEGER_CONSTANT_TK		FLOATING_CONSTANT_TK 	
 %token	CHARACTER_CONSTANT_TK 	ENUMERATION_CONSTANT_TK
 %token 	STRING_LITERAL_TK 
-%token 	PTR_OP_TK 
-%token 	INC_OP_TK 		DEC_OP_TK
-%token 	LEFT_OP_TK 		RIGHT_OP_TK 
-%token 	LE_OP_TK 		GE_OP_TK 		EQ_OP_TK 		NE_OP_TK
-%token 	AND_OP_TK 		OR_OP_TK
-%left 	ADD_ASSIGN_TK	SUB_ASSIGN_TK	MOD_ASSIGN_TK	MUL_ASSIGN_TK 	DIV_ASSIGN_TK
-%token 	LEFT_ASSIGN_TK 	RIGHT_ASSIGN_TK AND_ASSIGN_TK 	XOR_ASSIGN_TK 
-%token	OR_ASSIGN_TK
 %token 	TYPEDEF_NAME_TK
+
+/* Block Tokens															*/
+/*		{				}				(				)				*/
+%token	OPEN_BRACE_TK	CLOSE_BRACE_TK	OPEN_PAREN_TK	CLOSE_PAREN_TK
+/*		;																*/
+%token	SEMICOLON_TK
+/* Reference															*/
+/*		[				]												*/
+%token	OPEN_BRACK_TK	CLOSE_BRACK_TK
+/* Sequencing															*/
+/*		,				...												*/
+%token	COMMA_TK		ELIPSIS_TK
+/* Bitwise Logic Tokens												*/
+/*		~				&				|				^				*/
+%token	BIT_NOT_TK		BIT_AND_TK		BIT_OR_TK		BIT_XOR_TK
+/* Arithmetic tokens													*/
+/*		*				/				+				-				*/
+%token	STAR_TK			DIV_TK			PLUS_TK			MINUS_TK
+/*		%																*/
+%token	MOD_TK
+/* Order Relations 														*/
+/*		<				<=				>				>=				*/
+%token	LT_TK			LE_OP_TK 		GT_TK			GE_OP_TK
+/* Boolean Logic 														*/
+/*		!				&&				||								*/
+%token	NOT_TK			AND_OP_TK 		OR_OP_TK		
+/* Bitwise Shift 														*/
+/*		<<				>>												*/
+%token 	LEFT_OP_TK 		RIGHT_OP_TK
+/* Assignment															*/
+/*		=				+=				-=				%=				*/
+%token	EQUAL_TK		ADD_ASSIGN_TK	SUB_ASSIGN_TK	MOD_ASSIGN_TK
+/*		*=				/=												*/
+%token	MUL_ASSIGN_TK 	DIV_ASSIGN_TK
+/*		<<=				>>=				&=				^=				*/
+%token 	LEFT_ASSIGN_TK 	RIGHT_ASSIGN_TK AND_ASSIGN_TK 	XOR_ASSIGN_TK 
+/*		|=																*/
+%token	OR_ASSIGN_TK
+/* Conditional Evaluation												*/
+/*		?				:												*/
+%token	QUESTION_TK		COLON_TK
+/* Increment and Decrement												*/
+/*		++				--												*/
+%token 	INC_OP_TK 		DEC_OP_TK
+/* Member Selection														*/
+/*		->				.												*/
+%token 	PTR_OP_TK		PERIOD_TK 
+/* Equality Testing														*/
+/*		==				!=												*/
+%token 	EQ_OP_TK 		NE_OP_TK
 /************************************************************************/
 /* Grammar Rules														*/
 /************************************************************************/
@@ -75,8 +133,8 @@ function_definition
 	;
 
 declaration
-	: declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'
+	: declaration_specifiers SEMICOLON_TK		{std::cout << "Production at: " << @1 << std::endl;}
+	| declaration_specifiers init_declarator_list SEMICOLON_TK
 	;
 
 declaration_list
@@ -122,8 +180,8 @@ type_qualifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union identifier '{' struct_declaration_list '}'
-	| struct_or_union '{' struct_declaration_list '}'
+	: struct_or_union identifier OPEN_BRACE_TK struct_declaration_list CLOSE_BRACE_TK
+	| struct_or_union OPEN_BRACE_TK struct_declaration_list CLOSE_BRACE_TK
 	| struct_or_union identifier
 	;
 
@@ -139,16 +197,16 @@ struct_declaration_list
 
 init_declarator_list
 	: init_declarator
-	| init_declarator_list ',' init_declarator
+	| init_declarator_list COMMA_TK init_declarator
 	;
 
 init_declarator
 	: declarator
-	| declarator '=' initializer
+	| declarator EQUAL_TK initializer
 	;
 
 struct_declaration
-	: specifier_qualifier_list struct_declarator_list ';'
+	: specifier_qualifier_list struct_declarator_list SEMICOLON_TK
 	;
 
 specifier_qualifier_list
@@ -160,29 +218,29 @@ specifier_qualifier_list
 
 struct_declarator_list
 	: struct_declarator
-	| struct_declarator_list ',' struct_declarator
+	| struct_declarator_list COMMA_TK struct_declarator
 	;
 
 struct_declarator
 	: declarator
-	| ':' constant_expression
-	| declarator ':' constant_expression
+	| COLON_TK constant_expression
+	| declarator COLON_TK constant_expression
 	;
 
 enum_specifier
-	: ENUM_TK '{' enumerator_list '}'
-	| ENUM_TK identifier '{' enumerator_list '}'
+	: ENUM_TK OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK
+	| ENUM_TK identifier OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK
 	| ENUM_TK identifier
 	;
 
 enumerator_list
 	: enumerator
-	| enumerator_list ',' enumerator
+	| enumerator_list COMMA_TK enumerator
 	;
 
 enumerator
 	: identifier
-	| identifier '=' constant_expression
+	| identifier EQUAL_TK constant_expression
 	;
 
 declarator
@@ -192,19 +250,19 @@ declarator
 
 direct_declarator
 	: identifier
-	| '(' declarator ')'
-	| direct_declarator '[' ']'
-	| direct_declarator '[' constant_expression ']'
-	| direct_declarator '(' ')'
-	| direct_declarator '(' parameter_type_list ')'
-	| direct_declarator '(' identifier_list ')'
+	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK
+	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK
+	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK
+	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK
+	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
+	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK
 	;
 
 pointer
-	: '*'
-	| '*' type_qualifier_list
-	| '*' pointer
-	| '*' type_qualifier_list pointer
+	: STAR_TK
+	| STAR_TK type_qualifier_list
+	| STAR_TK pointer
+	| STAR_TK type_qualifier_list pointer
 	;
 
 type_qualifier_list
@@ -214,12 +272,12 @@ type_qualifier_list
 
 parameter_type_list
 	: parameter_list
-	| parameter_list ',' ELIPSIS_TK
+	| parameter_list COMMA_TK ELIPSIS_TK
 	;
 
 parameter_list
 	: parameter_declaration
-	| parameter_list ',' parameter_declaration
+	| parameter_list COMMA_TK parameter_declaration
 	;
 
 parameter_declaration
@@ -230,18 +288,18 @@ parameter_declaration
 
 identifier_list
 	: identifier
-	| identifier_list ',' identifier
+	| identifier_list COMMA_TK identifier
 	;
 
 initializer
 	: assignment_expression
-	| '{' initializer_list '}'
-	| '{' initializer_list ',' '}'
+	| OPEN_BRACE_TK initializer_list CLOSE_BRACE_TK
+	| OPEN_BRACE_TK initializer_list COMMA_TK CLOSE_BRACE_TK
 	;
 
 initializer_list
 	: initializer
-	| initializer_list ',' initializer
+	| initializer_list COMMA_TK initializer
 	;
 
 type_name
@@ -256,15 +314,15 @@ abstract_declarator
 	;
 
 direct_abstract_declarator
-	: '(' abstract_declarator ')'
-	| '[' ']'
-	| '[' constant_expression ']'
-	| direct_abstract_declarator '[' ']'
-	| direct_abstract_declarator '[' constant_expression ']'
-	| '(' ')'
-	| '(' parameter_type_list ')'
-	| direct_abstract_declarator '(' ')'
-	| direct_abstract_declarator '(' parameter_type_list ')'
+	: OPEN_PAREN_TK abstract_declarator CLOSE_PAREN_TK
+	| OPEN_BRACK_TK CLOSE_BRACK_TK
+	| OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK
+	| direct_abstract_declarator OPEN_BRACK_TK CLOSE_BRACK_TK
+	| direct_abstract_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK
+	| OPEN_PAREN_TK CLOSE_PAREN_TK
+	| OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
+	| direct_abstract_declarator OPEN_PAREN_TK CLOSE_PAREN_TK
+	| direct_abstract_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
 	;
 
 statement
@@ -277,21 +335,21 @@ statement
 	;
 
 labeled_statement
-	: identifier ':' statement
-	| CASE_TK constant_expression ':' statement
-	| DEFAULT_TK ':' statement
+	: identifier COLON_TK statement
+	| CASE_TK constant_expression COLON_TK statement
+	| DEFAULT_TK COLON_TK statement
 	;
 
 expression_statement
-	: ';'
-	| expression ';'
+	: SEMICOLON_TK
+	| expression SEMICOLON_TK
 	;
 
 compound_statement
-	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+	: OPEN_BRACE_TK CLOSE_BRACE_TK
+	| OPEN_BRACE_TK statement_list CLOSE_BRACE_TK
+	| OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK
+	| OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK
 	;
 
 statement_list
@@ -300,35 +358,35 @@ statement_list
 	;
 
 selection_statement
-	: IF_TK '(' expression ')' statement
-	| IF_TK '(' expression ')' statement ELSE_TK statement
-	| SWITCH_TK '(' expression ')' statement
+	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
+	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement
+	| SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
 	;
 
 iteration_statement
-	: WHILE_TK '(' expression ')' statement
-	| DO_TK statement WHILE_TK '(' expression ')' ';'
-	| FOR_TK '(' ';' ';' ')' statement
-	| FOR_TK '(' ';' ';' expression ')' statement
-	| FOR_TK '(' ';' expression ';' ')' statement
-	| FOR_TK '(' ';' expression ';' expression ')' statement
-	| FOR_TK '(' expression ';' ';' ')' statement
-	| FOR_TK '(' expression ';' ';' expression ')' statement
-	| FOR_TK '(' expression ';' expression ';' ')' statement
-	| FOR_TK '(' expression ';' expression ';' expression ')' statement
+	: WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
+	| DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
 	;
 
 jump_statement
-	: GOTO_TK identifier ';'
-	| CONTINUE_TK ';'
-	| BREAK_TK ';'
-	| RETURN_TK ';'
-	| RETURN_TK expression ';'
+	: GOTO_TK identifier SEMICOLON_TK
+	| CONTINUE_TK SEMICOLON_TK
+	| BREAK_TK SEMICOLON_TK
+	| RETURN_TK SEMICOLON_TK
+	| RETURN_TK expression SEMICOLON_TK
 	;
 
 expression
 	: assignment_expression
-	| expression ',' assignment_expression
+	| expression COMMA_TK assignment_expression
 	;
 
 assignment_expression
@@ -337,7 +395,7 @@ assignment_expression
 	;
 
 assignment_operator
-	: '='
+	: EQUAL_TK
 	| MUL_ASSIGN_TK
 	| DIV_ASSIGN_TK
 	| MOD_ASSIGN_TK
@@ -352,7 +410,7 @@ assignment_operator
 
 conditional_expression
 	: logical_or_expression
-	| logical_or_expression '?' expression ':' conditional_expression
+	| logical_or_expression QUESTION_TK expression COLON_TK conditional_expression
 	;
 
 constant_expression
@@ -371,17 +429,17 @@ logical_and_expression
 
 inclusive_or_expression
 	: exclusive_or_expression
-	| inclusive_or_expression '|' exclusive_or_expression
+	| inclusive_or_expression BIT_OR_TK exclusive_or_expression
 	;
 
 exclusive_or_expression
 	: and_expression
-	| exclusive_or_expression '^' and_expression
+	| exclusive_or_expression BIT_XOR_TK and_expression
 	;
 
 and_expression
 	: equality_expression
-	| and_expression '&' equality_expression
+	| and_expression BIT_AND_TK equality_expression
 	;
 
 equality_expression
@@ -392,8 +450,8 @@ equality_expression
 
 relational_expression
 	: shift_expression
-	| relational_expression '<' shift_expression
-	| relational_expression '>' shift_expression
+	| relational_expression LT_TK shift_expression
+	| relational_expression GT_TK shift_expression
 	| relational_expression LE_OP_TK shift_expression
 	| relational_expression GE_OP_TK shift_expression
 	;
@@ -406,20 +464,20 @@ shift_expression
 
 additive_expression
 	: multiplicative_expression
-	| additive_expression '+' multiplicative_expression
-	| additive_expression '-' multiplicative_expression
+	| additive_expression PLUS_TK multiplicative_expression
+	| additive_expression MINUS_TK multiplicative_expression
 	;
 
 multiplicative_expression
 	: cast_expression
-	| multiplicative_expression '*' cast_expression
-	| multiplicative_expression '/' cast_expression
-	| multiplicative_expression '%' cast_expression
+	| multiplicative_expression STAR_TK cast_expression
+	| multiplicative_expression DIV_TK cast_expression
+	| multiplicative_expression MOD_TK cast_expression
 	;
 
 cast_expression
 	: unary_expression
-	| '(' type_name ')' cast_expression
+	| OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression
 	;
 
 unary_expression
@@ -428,24 +486,24 @@ unary_expression
 	| DEC_OP_TK unary_expression
 	| unary_operator cast_expression
 	| SIZEOF_TK unary_expression
-	| SIZEOF_TK '(' type_name ')'
+	| SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK
 	;
 
 unary_operator
-	: '&'
-	| '*'
-	| '+'
-	| '-'
-	| '~'
-	| '!'
+	: BIT_AND_TK
+	| STAR_TK
+	| PLUS_TK
+	| MINUS_TK
+	| BIT_NOT_TK
+	| NOT_TK
 	;
 
 postfix_expression
 	: primary_expression
-	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
-	| postfix_expression '.' identifier
+	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK
+	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK
+	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK
+	| postfix_expression PERIOD_TK identifier
 	| postfix_expression PTR_OP_TK identifier
 	| postfix_expression INC_OP_TK
 	| postfix_expression DEC_OP_TK
@@ -455,12 +513,12 @@ primary_expression
 	: identifier
 	| constant
 	| string
-	| '(' expression ')'
+	| OPEN_PAREN_TK expression CLOSE_PAREN_TK
 	;
 
 argument_expression_list
 	: assignment_expression
-	| argument_expression_list ',' assignment_expression
+	| argument_expression_list COMMA_TK assignment_expression
 	;
 
 constant
@@ -478,19 +536,23 @@ identifier
 	: IDENTIFIER_TK
 	;
 
+comment
+	: COMMENT_TK
+	;
+
 %%
 /************************************************************************/
 /* Code																	*/
 /************************************************************************/
 // Error Function Implementation
 void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
-	std::cerr << "Error: " << msg << std::endl;
+	std::cerr << "Error: " << msg << " location: " << loc << std::endl;
 }
 
 // Declare the Scanner and implement the yylex function
 #include "NvPcompScanner.h"
-static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::FlexScanner &scanner) {
-	return scanner.yylex(yylval);
+static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner) {
+	return scanner.yylex(yylval,loc);
 }
 
 	

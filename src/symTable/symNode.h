@@ -10,18 +10,20 @@
 #ifndef SYMNODE_H_
 #define SYMNODE_H_
 
+#include <string>
+
 // I need to rethink this whole type thing.
 enum SymType {
 	symInt,
 	symLong,
 	symFunction	
-}
+};
 
 class symNode {
 
 private:
-	stl::string lineStr;
-	stl::string	key;
+	std::string lineStr;
+	std::string	key;
 	long lineNum;
 	
 	

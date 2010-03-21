@@ -17,6 +17,7 @@ LEXFLAGS = -+
 TARGET = ./bin/NvPcomp
 OBJS = ./src/symTable/symNode.o
 OBJS += ./src/symTable/symTable.o
+OBJS += ./src/buffer/sourceBuffer.o
 OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 
@@ -27,6 +28,7 @@ INCS += -I./src/symTable
 INCS += -I./src/logging
 INCS += -I./src/scanner
 INCS += -I./src/parser
+INCS += -I./src/buffer
 INCS += -I./src/test
 INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test

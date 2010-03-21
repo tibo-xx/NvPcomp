@@ -68,7 +68,10 @@
 
 #define SET_OUTPUT(log_name, out) \
 	log_name##_2File::Stream() = out;
-
+	
+#define SET_LOG_LEVEL(log_name, level) \
+	log_name::ReportingLevel() = level;
+	
 #ifndef FILELOG_MAX_LEVEL
 #define FILELOG_MAX_LEVEL logLEVEL8
 #endif
