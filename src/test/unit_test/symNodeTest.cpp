@@ -17,13 +17,18 @@
  * 
  **********************************************************************/
 #include <symNodeTest.h>
+#include <parse.hh>
 
 /* Register this test suite with the factory. */
 CPPUNIT_TEST_SUITE_REGISTRATION( symNodeTest );
 
 void symNodeTest::setUp()
 {
-	node1 = new symNode();
+	NvPcomp::BParser::token::yytokentype tok;
+	tok = NvPcomp::BParser::token::IDENTIFIER_TK;
+	NvPcomp::BParser::location_type loc;
+	
+	node1 = new symNode(tok,loc," ", " ");
 }
 
 void symNodeTest::tearDown()

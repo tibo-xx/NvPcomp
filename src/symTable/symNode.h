@@ -16,14 +16,16 @@
 class symNode {
 
 private:
-	std::string lineStr;
-	std::string	key;
-	long lineNum;
-	
-	
+	std::string	_key;	
+	std::string	_strType;
+	NvPcomp::BParser::token::yytokentype _tok;
+	NvPcomp::BParser::location_type _loc;
 	
 public:
-	symNode();
+	symNode(NvPcomp::BParser::token::yytokentype tok, \
+			NvPcomp::BParser::location_type loc, \
+			std::string key, \
+			std::string strType);
 	~symNode();
 };
 

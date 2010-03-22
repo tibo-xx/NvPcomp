@@ -101,7 +101,7 @@ void scanner_mode(const char *fileName) {
 	
 }
 
-int main( int argc, const char* argv[] ) {
+int main( int argc, char* argv[] ) {
 
 	int retVal = -1;
 	//buf_test();
