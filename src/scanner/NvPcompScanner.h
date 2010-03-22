@@ -36,15 +36,26 @@ namespace NvPcomp {
 		// Scanning function created by Flex; make this private to force usage
 		// of the overloaded method so we can get a pointer to Bison's yylval
 		int yylex();
+		
+		// figure out what to do with this identifier.
+		NvPcomp::BParser::token::yytokentype check_id();
+		
+		// Check the bounds of the given integer.
+		NvPcomp::BParser::token::yytokentype check_integer();
+		
+			// Check the bounds of the given float.
+		NvPcomp::BParser::token::yytokentype check_float();
+		
+		// There was an unkown identifier
+		NvPcomp::BParser::token::yytokentype id_error();
+
+	private:
 
 		// Keep track of the current column.
 		long currColumn;
 
 		// Location tracking.
 		NvPcomp::BParser::location_type *yylloc;
-
-		// figure out what to do with this identifier.
-		NvPcomp::BParser::token::yytokentype check_id();
 
 		// point to yylval (provided by Bison in overloaded yylex).
 		NvPcomp::BParser::semantic_type * yylval;

@@ -38,9 +38,10 @@ void buf_test() {
 		cout << "file open." << endl;
 		cout << "Grabbing line." << endl;
 		cout << buf->bufferGetLine(2,2);
-		cout << buf->bufferGetLine(4,4);
-		cout << buf->bufferGetLine(7,7);
-		cout << buf->bufferGetLine(1,5);
+		cout << buf->bufferGetLine(2,2);
+		//cout << buf->bufferGetLine(4,4);
+		//cout << buf->bufferGetLine(7,7);
+		//cout << buf->bufferGetLine(1,5);
 		buf->closeFile();
 	} else {
 		cout << "error opening file" << endl;
@@ -49,11 +50,12 @@ void buf_test() {
 	
 }
 
-
 void lex_test(int retVal) {
 	NvPcomp::FlexScanner *scanner;
 	NvPcomp::Parser *main_parser;
 	ifstream in;
+	
+	SET_OUTPUT(PARSERLog, stdout);
 	
 	cout << "Trying to open input file..." << endl;
 	in.open("test.c", ifstream::in);
@@ -63,19 +65,45 @@ void lex_test(int retVal) {
 	} else {
 		cout << "Past input file open..." << endl;
 		scanner = new NvPcomp::FlexScanner(&in,"test.c");
-		main_parser = new NvPcomp::Parser(scanner);
-		SET_OUTPUT(SCANNERLog, stdout);
+		main_parser = new NvPcomp::Parser(scanner, "test.c");
+		//SET_OUTPUT(SCANNERLog, stdout);
 		retVal = main_parser->parse();
 		in.close();
 	}
 }
 
+void scanner_mode(const char *fileName) {
+	
+	NvPcomp::FlexScanner *scanner;
+	ifstream in;
+	NvPcomp::BParser::token::yytokentype token;
+	NvPcomp::BParser::semantic_type lval;
+	NvPcomp::BParser::location_type loc;
+	
+	SET_OUTPUT(SCANNERLog, stdout);
+	SET_OUTPUT(WARNINGLog, stdout);
+	
+	cout << "Running in scanner mode:" << "..." << endl;
+	cout << "Trying to open input file " << fileName << "..." << endl;
+	in.open(fileName, ifstream::in);
+	
+	if(!in.good()) {
+		cout << "Bad input file." << endl;
+	} else {
+		scanner = new NvPcomp::FlexScanner(&in, fileName);
+		
+		while(scanner->yylex(&lval, &loc));
+		in.close();
+		
+	}
+	
+}
+
 int main( int argc, const char* argv[] ) {
 	int retVal = -1;
-	//SET_OUTPUT(DEBUGLog, stdout);
-	//SET_LOG_LEVEL(DEBUGLog, logLEVEL6);
 	//buf_test();
 	lex_test(retVal);	
+	//scanner_mode("test.c");
 	return retVal;
 }
 

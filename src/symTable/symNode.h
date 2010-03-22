@@ -11,13 +11,7 @@
 #define SYMNODE_H_
 
 #include <string>
-
-// I need to rethink this whole type thing.
-enum SymType {
-	symInt,
-	symLong,
-	symFunction	
-};
+#include <parse.hh>
 
 class symNode {
 
@@ -31,8 +25,6 @@ private:
 public:
 	symNode();
 	~symNode();
-	
-	//bool operator ==( const symNode &other );
 };
 
 

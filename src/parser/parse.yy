@@ -4,27 +4,27 @@
 %defines
 %define namespace "NvPcomp"
 %define parser_class_name "BParser"
-%parse-param { NvPcomp::FlexScanner &scanner }
+%parse-param { NvPcomp::FlexScanner &scanner}
+%parse-param { sourceBuffer &buffer }
 %lex-param   { NvPcomp::FlexScanner &scanner }
 %locations
 %debug
-/*
-%initial-action
-	{
-		// Initialize the initial location.
-		//@$.begin.filename = @$.end.filename = &scanner.file;
-	};
-*/
-%code requires {
-	#define YYDEBUG 1
-	
+
+%code requires {	
 	#include <stdio.h>
+	#include <sourceBuffer.h>
+	#include <NvPcomp_logger.h>
+	
 	namespace NvPcomp {
 		class FlexScanner;
 	}
 }
 
 %code {
+	#define PRODUCTION(spot) \
+		LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
+		LOG(PARSERLog, logLEVEL1) << std::string(yylloc.begin.column - 1, ' ') <<"^-Production: " << #spot << " at: " << yylloc << std::endl;
+	
 	// Prototype for the yylex function
 	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner);
 }
@@ -121,25 +121,25 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition
-	| declaration
+	: function_definition 		{PRODUCTION(external_declaration:function_definition)}
+	| declaration				{PRODUCTION(external_declaration:declaration)}
 	;
 
 function_definition
-	: declarator compound_statement
+	: declarator compound_statement	
 	| declarator declaration_list compound_statement
 	| declaration_specifiers declarator compound_statement
 	| declaration_specifiers declarator declaration_list compound_statement
 	;
 
 declaration
-	: declaration_specifiers SEMICOLON_TK		{std::cout << "Production at: " << @1 << std::endl;}
-	| declaration_specifiers init_declarator_list SEMICOLON_TK
+	: declaration_specifiers SEMICOLON_TK						{PRODUCTION(declaration_specifiers SEMICOLON_TK)}
+	| declaration_specifiers init_declarator_list SEMICOLON_TK 	{PRODUCTION(declaration_specifiers init_declarator_list SEMICOLON_TK)}
 	;
 
 declaration_list
-	: declaration
-	| declaration_list declaration
+	: declaration												{PRODUCTION(declaration_list:declaration)}
+	| declaration_list declaration								{PRODUCTION(declaration_list:declaration_list declaration)}
 	;
 
 declaration_specifiers
@@ -180,7 +180,7 @@ type_qualifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union identifier OPEN_BRACE_TK struct_declaration_list CLOSE_BRACE_TK
+	: struct_or_union identifier OPEN_BRACE_TK struct_declaration_list CLOSE_BRACE_TK	
 	| struct_or_union OPEN_BRACE_TK struct_declaration_list CLOSE_BRACE_TK
 	| struct_or_union identifier
 	;
