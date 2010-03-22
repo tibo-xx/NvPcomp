@@ -8,7 +8,8 @@
 CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0
 CXX = g++
 LEX = flex++
-YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+#YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+YACC = bison
 LEXFLAGS = -+
 
 ########################################################################
@@ -20,6 +21,7 @@ OBJS += ./src/symTable/symTable.o
 OBJS += ./src/buffer/sourceBuffer.o
 OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
+OBJS += ./src/comLineParser/comLineParser.o
 
 # OBJS += ./src/main.o
 
@@ -28,15 +30,16 @@ INCS += -I./src/symTable
 INCS += -I./src/logging
 INCS += -I./src/scanner
 INCS += -I./src/parser
+INCS += -I./src/comLineParser
 INCS += -I./src/buffer
 INCS += -I./src/test
 INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
-LIBS = -lstdc++ -lfl -lm
+LIBS = -lstdc++ -lfl -lm -largtable2
 
 ########################################################################
-# Sanner and Parser
+# Scanner and Parser
 ########################################################################
 SCAN_OUTPUT = ./src/scanner/lex.yy.cc
 PARSE_OUTPUT  = ./src/parser/parse.cc ./src/parser/parse.hh 

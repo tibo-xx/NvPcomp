@@ -21,6 +21,7 @@
 #include <NvPcompScanner.h>
 #include <NvPcompParser.h>
 #include <sourceBuffer.h>
+#include <comLineParser.h>
 #include <iostream>
 #include <fstream>
 
@@ -70,12 +71,16 @@ void lex_test(int retVal) {
 	}
 }
 
-int main( int argc, const char* argv[] ) {
+int main( int argc, char* argv[] ) {
 	int retVal = -1;
 	//SET_OUTPUT(DEBUGLog, stdout);
 	//SET_LOG_LEVEL(DEBUGLog, logLEVEL6);
 	//buf_test();
-	lex_test(retVal);	
+	lex_test(retVal);
+	cout << "Calling command line parser." << endl;	
+	comLineParser *clp;
+	clp = new comLineParser(argc, argv);
+	cout << "Past command line parser..." << endl;	
 	return retVal;
 }
 
