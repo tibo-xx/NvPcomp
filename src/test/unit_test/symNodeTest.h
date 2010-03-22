@@ -19,7 +19,7 @@ class symNodeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE_END();
 	
 private:
-	symNode *node1;
+	NvPcomp::symNode *node1;
 	
 public:
 	void setUp();

@@ -13,6 +13,7 @@
 #define RETURN(x) \
 			LOG(SCANNERLog,logLEVEL1) << "Token: " << #x << " on line: " << yylineno; \
 			prev_token = x; \
+			str_prev_token = std::string(#x); \
 			return(x)
 
 using namespace NvPcomp;
@@ -33,18 +34,11 @@ DIGIT	[0-9]
 NUMBER	(-)?{DIGIT}+
 FLOAT	{DIGIT}+"."{DIGIT}*
 
-/*num1    [-+]?{DIGIT}+\.?([eE][-+]?{DIGIT}+)?*/
-/*num2    [-+]?{DIGIT}*\.{DIGIT}+([eE][-+]?{DIGIT}+)?*/
-/*number  {num1}|{num2}*/
-
 /************************************************************************/
 /* Rules																*/
 /* TODO:																*/
 /*																		*/
-/*%token 	IDENTIFIER_TK */
-/*%token 	INTEGER_CONSTANT_TK		FLOATING_CONSTANT_TK 	*/
 /*%token	CHARACTER_CONSTANT_TK 	ENUMERATION_CONSTANT_TK */
-/*%token 	STRING_LITERAL_TK */
 /*%token 	TYPEDEF_NAME_TK   */
 /************************************************************************/
 %%
@@ -52,6 +46,7 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 {WS}		{ yylloc->step(); }
 [\n]+		{ yylloc->lines(yyleng);  yylloc->step();}
 "\t"		{ yylloc->columns (8);}
+
 auto		{ RETURN(token::AUTO_TK); }
 break		{ RETURN(token::BREAK_TK); }
 case		{ RETURN(token::CASE_TK); }
@@ -90,7 +85,10 @@ while		{ RETURN(token::WHILE_TK); }
 {NUMBER}	{return check_integer();}
 {FLOAT}		{return check_float();}
 
+"!!$"		{table->dump();}
+
 L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
+
 "{"			{ RETURN(token::OPEN_BRACE_TK); }
 "}"			{ RETURN(token::CLOSE_BRACE_TK); }
 "("			{ RETURN(token::OPEN_PAREN_TK); }
@@ -147,27 +145,22 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 
 /* Very basic INDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
-	
-	/*
-	NvPcomp::BParser::token::yytokentype retVal = token::IDENTIFIER_TK;
-	
-	switch(prev_token) {
-		case token::STRUCT_TK:
-			retVal = 
-			break;
-		default:
-	}
-	if(prev_token == token::STRUCT_TK)
-
-	}
-	*/
-	
-	
+		
 	// We need to really check if adding to the symbol table is correct.
+	symNode *tempNode = new symNode(*yylloc, std::string(yytext), str_prev_token);	
 	
-	
-	
-	RETURN(token::IDENTIFIER_TK);
+	if(table->insert(std::string(yytext), tempNode) != INSERT_SUCCESS) {
+		
+		std::cout << buffer.bufferGetLine(yylineno, yylineno);
+		std::cout << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined ";
+		std::cout << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+		RETURN(token::ERROR_TK);
+		
+	} else {
+		
+		RETURN(token::IDENTIFIER_TK);
+		
+	}	
 	
 }
 

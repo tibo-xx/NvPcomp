@@ -23,7 +23,7 @@ OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 
-SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.so
+SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
 
 # OBJS += ./src/main.o
 

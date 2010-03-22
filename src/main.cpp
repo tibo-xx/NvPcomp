@@ -57,6 +57,7 @@ void lex_test(int retVal) {
 	ifstream in;
 	
 	SET_OUTPUT(PARSERLog, stdout);
+	SET_OUTPUT(SymbolDump, stdout);
 	
 	cout << "Trying to open input file..." << endl;
 	in.open("test.c", ifstream::in);
@@ -67,7 +68,6 @@ void lex_test(int retVal) {
 		cout << "Past input file open..." << endl;
 		scanner = new NvPcomp::FlexScanner(&in,"test.c");
 		main_parser = new NvPcomp::Parser(scanner, "test.c");
-		//SET_OUTPUT(SCANNERLog, stdout);
 		retVal = main_parser->parse();
 		in.close();
 	}
@@ -77,13 +77,17 @@ void lex_test(int retVal) {
 void scanner_mode(const char *fileName) {
 	
 	NvPcomp::FlexScanner *scanner;
+	NvPcomp::symTable *table;
 	ifstream in;
 	NvPcomp::BParser::token::yytokentype token;
 	NvPcomp::BParser::semantic_type lval;
 	NvPcomp::BParser::location_type loc;
 	
+	table = new NvPcomp::symTable();
+	
 	SET_OUTPUT(SCANNERLog, stdout);
 	SET_OUTPUT(WARNINGLog, stdout);
+	SET_OUTPUT(SymbolDump, stdout);
 	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;
@@ -94,7 +98,13 @@ void scanner_mode(const char *fileName) {
 	} else {
 		scanner = new NvPcomp::FlexScanner(&in, fileName);
 		
-		while(scanner->yylex(&lval, &loc));
+		table->dump();
+		
+		while(scanner->yylex(&lval, &loc, table));
+		
+		scanner->table->dump();
+		cout << endl << endl;
+		table->dump();
 		in.close();
 		
 	}
@@ -106,10 +116,9 @@ int main( int argc, char* argv[] ) {
 	int retVal = -1;
 	//buf_test();
 
-	lex_test(retVal);
-	cout << "Calling command line parser." << endl;	
-	comLineParser *clp;
-	clp = new comLineParser(argc, argv);
+	//cout << "Calling command line parser." << endl;	
+	//comLineParser *clp;
+	//clp = new comLineParser(argc, argv);
 	// Testing comLineParser
 	
 	// To see if debug flag is on
@@ -124,10 +133,10 @@ int main( int argc, char* argv[] ) {
 		// if (clp->isScanner()) cout << "-c scanner mode" << endl;
 	// To see if output is on and get output file name
 		// if (clp->isOutput()) cout << clp->getOutput() << endl;
-	cout << "Past command line parser..." << endl;	
+	//cout << "Past command line parser..." << endl;	
 
-	lex_test(retVal);	
-
+	//scanner_mode("test.c");
+	lex_test(retVal);
 	return retVal;
 }
 
