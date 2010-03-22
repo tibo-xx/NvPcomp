@@ -24,6 +24,12 @@ using namespace std;
 
 comLineParser::comLineParser() { }
 comLineParser::comLineParser(int argc, char* argv[]) {
+	_debug = false;
+	_debugLex = false; 
+	_debugST = false;
+	_debugLexST = false;
+	_output = false;
+	_scanner = false;
 	debug    		= 	arg_lit0
 						("d",NULL,                      
 						"debug");
@@ -33,9 +39,12 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 	debugSymTab   	= 	arg_lit0
 						("ds",NULL,                      
 						"debugSymTab");
-	debugLexSym	= 	arg_lit0
+	debugLexSym		= 	arg_lit0
 						("dls",NULL,                      
-						"debugLexSym");																
+						"debugLexSym");		
+	scan    		= 	arg_lit0
+						("c",NULL,                      
+						"scanner");														
 	output 				= arg_file0
 						("o", NULL,"myfile", 
 						"output file");
@@ -44,44 +53,76 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						"NvPcomp target files");	
 	end     		= 	arg_end(20);					
 	void* argtable[] = 	{debug, debugLex, debugSymTab, debugLexSym, 
-				output, targetFiles, end};
+						scan, output, targetFiles, end};
 	nerrors = arg_parse(argc, argv, argtable);
 	
 	exitcode = clpDriver(debug->count, debugLex->count, debugSymTab->count,
-						debugLexSym->count, output->count, 
+						debugLexSym->count, scan->count, output->count, 
 						output->filename[0], targetFiles->count, 
 						targetFiles->filename);
-	arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
+	
 }
 
 comLineParser::~comLineParser() {
-	
+	//arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
 }
 
-
-/* void comLineParser::errorCheck(int &argc, const char *&argv, void *argtable) {
-	nerrors = arg_parse(argc,argv,argtable);
-} */
-
-int comLineParser::clpDriver	(int &d, int &dl, int &ds, int &dls, int &o, 
-								const char *outfile, int &numTarget, const 
-								char **tarFiles) {
+int comLineParser::clpDriver	(int &d, int &dl, int &ds, int &dls, int
+								&sc, int &o, const char *outfile, int 
+								&numTarget, const char **tarFiles) {
 	int i;
 	
-	if (d > 0) 
-		cout << "debugging" << endl;	
+	if (d > 0) 			
+		_debug = true; 
 	if (dl > 0) 
-		cout <<	"debugging & lexer" << endl;
+		_debugLex = true;
 	if (ds > 0)
-		cout << "debugging & symbol table" << endl;
+		_debugST = true;
 	if (dls > 0)
-		cout << "debugging & lexer & symbol table" <<endl;
-	if (o > 0) {
-		cout << "output" << endl;
-		cout << "output file is: " << outfile << endl;
+		_debugLexST = true;
+	if (sc > 0)
+		_scanner = true;
+	if (o >= 0) {
+		_output = true;
+		if (o > 0) 
+			strcpy( outputFN , outfile);
+		else 
+			outputFN = "generic.out";
 	}
-	
-	for (i = 0; i < numTarget; i++) 
+	_numTargets = numTarget; 
+	for (i = 0; i < numTarget; i++) {
+		//strcpy(targetFN[i], (**tarFiles)[i]);
 		cout << "target file: " << tarFiles[i] << endl;
+	}
 	return 1;
 } 
+
+bool comLineParser::isDebug() {
+		if (_debug) return true;
+		return false;
+	} 
+bool comLineParser::isDebugLex(){
+		if (_debugLex) return true;
+		return false;
+	} 
+bool comLineParser::isDebugST(){
+		if (_debugST) return true;
+		return false;
+	} 
+bool comLineParser::isDebugLexST(){
+		if (_debugLexST) return true;
+		return false;
+	} 
+	
+bool comLineParser::isScanner(){
+		if (_scanner) return true;
+		return false;
+	} 
+bool comLineParser::isOutput(){
+		if (_output) return true;
+		return false;
+	} 
+	
+string comLineParser::getOutput() {
+	return outputFN;
+}

@@ -51,10 +51,19 @@ public:
 	comLineParser();
 	comLineParser(int argc, char* argv[]);	
 	~comLineParser();
+	bool isDebug();
+	bool isDebugLex();
+	bool isDebugST();
+	bool isDebugLexST();
+	bool isScanner();
+	bool isOutput();
+	std::string getOutput();
+	
 private:
 	//void errorCheck(int &argc, const char *&argv, void *argtable);
-	int clpDriver 	(int &d, int &dl, int &ds, int &dls, int &o, const char 
-					*outfile, int &numTarget, const char **tarFiles);
+	int clpDriver 	(int &d, int &dl, int &ds, int &dls, int &sc, int 
+					&o, const char *outfile, int &numTarget, const char 
+					**tarFiles);
 	/* -d command line argument */
 	struct arg_lit  *debug;
 	/* -dl command line argument */
@@ -63,14 +72,27 @@ private:
 	struct arg_lit  *debugSymTab;
 	/* -dls command line argument */
 	struct arg_lit  *debugLexSym;
+	/* -c command line argument */
+	struct arg_lit  *scan;
 	/* -o command line argument (with or without <outputfile>) */
 	struct arg_file *output;
 	/* target files for NvPcomp */
 	struct arg_file *targetFiles;
 	/* */
 	struct arg_end *end; 
-	int nerrors; 
-	int exitcode;
+	int nerrors, exitcode;
+	
+	bool _debug;
+	bool _debugLex; 
+	bool _debugST;
+	bool _debugLexST;
+	bool _output;
+	bool _scanner;
+	
+	char *outputFN;
+	char **targetFN;
+	int _numTargets;
+	 
 	
 		
 /*The order of the structs in the argument table defines the order in 

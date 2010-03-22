@@ -101,7 +101,7 @@ void scanner_mode(const char *fileName) {
 	
 }
 
-int main( int argc, const char* argv[] ) {
+int main( int argc, char* argv[] ) {
 
 	int retVal = -1;
 	//buf_test();
@@ -110,6 +110,20 @@ int main( int argc, const char* argv[] ) {
 	cout << "Calling command line parser." << endl;	
 	comLineParser *clp;
 	clp = new comLineParser(argc, argv);
+	// Testing comLineParser
+	
+	// To see if debug flag is on
+		// if (clp->isDebug()) cout << "-d debug" << endl;
+	// To see if debug & lexer flag is on
+		// if (clp->isDebugLex()) cout << "-dl debug & lexer" << endl;
+	// To see if debug & symbol table is on
+		// if (clp->isDebugST()) cout << "-ds debug & symbol table" << endl;
+	// To see if debug, lexer, & symbol table is on
+		// if (clp->isDebugLexST()) cout << "-dls debug & lexer & symbol table" << endl;
+	// To see if scanner is on
+		// if (clp->isScanner()) cout << "-c scanner mode" << endl;
+	// To see if output is on and get output file name
+		// if (clp->isOutput()) cout << clp->getOutput() << endl;
 	cout << "Past command line parser..." << endl;	
 
 	lex_test(retVal);	
