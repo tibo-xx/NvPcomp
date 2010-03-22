@@ -25,8 +25,6 @@ OBJS += ./src/comLineParser/comLineParser.o
 
 SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
 
-# OBJS += ./src/main.o
-
 INCS =	-I./src/
 INCS += -I./src/symTable
 INCS += -I./src/logging

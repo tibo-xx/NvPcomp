@@ -145,21 +145,23 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 
 /* Very basic INDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
-		
+	InsertResult result;
+	
 	// We need to really check if adding to the symbol table is correct.
 	symNode *tempNode = new symNode(*yylloc, std::string(yytext), str_prev_token);	
 	
-	if(table->insert(std::string(yytext), tempNode) != INSERT_SUCCESS) {
-		
-		std::cout << buffer.bufferGetLine(yylineno, yylineno);
-		std::cout << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined ";
-		std::cout << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	result = table->insert(std::string(yytext), tempNode);
+	if(result == INSERT_SUCCESS_W_SHADOW) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
 		RETURN(token::ERROR_TK);
 		
+	} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::ERROR_TK);
 	} else {
-		
 		RETURN(token::IDENTIFIER_TK);
-		
 	}	
 	
 }

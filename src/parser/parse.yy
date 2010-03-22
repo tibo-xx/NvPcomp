@@ -35,7 +35,7 @@
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		} \
-		LOG(PARSERLog, logLEVEL1) << std::string(yylloc.begin.column - 1, ' ') <<"^-Production: " << #spot << " at: " << yylloc; \
+		LOG(PARSERLog, logLEVEL1) << std::string(yylloc.begin.column - 1, ' ') <<"^-Reduction: " << #spot << " at: " << yylloc; \
 		BP_lastLine = yylloc.begin.line;
 	
 	#define SCOPE_PUSH() \
@@ -208,366 +208,366 @@ struct_or_union_specifier
 	;
 
 struct_or_union
-	: STRUCT_TK							{REDUCTION()}
-	| UNION_TK							{REDUCTION()}
+	: STRUCT_TK							{REDUCTION(struct_or_union:STRUCT_TK)}
+	| UNION_TK							{REDUCTION(struct_or_union:UNION_TK)}
 	;
 
 struct_declaration_list
-	: struct_declaration							{REDUCTION()}
-	| struct_declaration_list struct_declaration							{REDUCTION()}
+	: struct_declaration							{REDUCTION(struct_declaration_list:struct_declaration)}
+	| struct_declaration_list struct_declaration	{REDUCTION(struct_declaration_list:struct_declaration_list struct_declaration)}
 	;
 
 init_declarator_list
-	: init_declarator							{REDUCTION()}
-	| init_declarator_list COMMA_TK init_declarator							{REDUCTION()}
+	: init_declarator									{REDUCTION(init_declarator_list:init_declarator)}
+	| init_declarator_list COMMA_TK init_declarator		{REDUCTION(init_declarator_list:init_declarator_list COMMA_TK init_declarator)}
 	;
 
 init_declarator
-	: declarator							{REDUCTION()}
-	| declarator EQUAL_TK initializer							{REDUCTION()}
+	: declarator							{REDUCTION(init_declarator:declarator)}
+	| declarator EQUAL_TK initializer		{REDUCTION(init_declarator:declarator EQUAL_TK initializer)}
 	;
 
 struct_declaration
-	: specifier_qualifier_list struct_declarator_list SEMICOLON_TK							{REDUCTION()}
+	: specifier_qualifier_list struct_declarator_list SEMICOLON_TK		{REDUCTION(struct_declaration:specifier_qualifier_list struct_declarator_list SEMICOLON_TK)}
 	;
 
 specifier_qualifier_list
-	: type_specifier							{REDUCTION()}
-	| type_specifier specifier_qualifier_list							{REDUCTION()}
-	| type_qualifier							{REDUCTION()}
-	| type_qualifier specifier_qualifier_list							{REDUCTION()}
+	: type_specifier									{REDUCTION(specifier_qualifier_list:type_specifier)}
+	| type_specifier specifier_qualifier_list			{REDUCTION(specifier_qualifier_list:type_specifier specifier_qualifier_list)}
+	| type_qualifier									{REDUCTION(specifier_qualifier_list:type_qualifier)}
+	| type_qualifier specifier_qualifier_list			{REDUCTION(specifier_qualifier_list:type_qualifier specifier_qualifier_list)}
 	;
 
 struct_declarator_list
-	: struct_declarator							{REDUCTION()}
-	| struct_declarator_list COMMA_TK struct_declarator							{REDUCTION()}
+	: struct_declarator										{REDUCTION(struct_declarator_list:struct_declarator)}
+	| struct_declarator_list COMMA_TK struct_declarator		{REDUCTION(struct_declarator_list:struct_declarator_list COMMA_TK struct_declarator)}
 	;
 
 struct_declarator
-	: declarator							{REDUCTION()}
-	| COLON_TK constant_expression							{REDUCTION()}
-	| declarator COLON_TK constant_expression							{REDUCTION()}
+	: declarator										{REDUCTION(struct_declarator:declarator)}
+	| COLON_TK constant_expression						{REDUCTION(struct_declarator:COLON_TK constant_expression)}
+	| declarator COLON_TK constant_expression			{REDUCTION(struct_declarator:declarator COLON_TK constant_expression)}
 	;
 
 enum_specifier
 	: ENUM_TK OPEN_BRACE_TK {SCOPE_PUSH()}
-							enumerator_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
+							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| ENUM_TK identifier OPEN_BRACE_TK {SCOPE_PUSH()}
-							enumerator_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
-	| ENUM_TK identifier							{REDUCTION()}
+							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK identifier OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
+	| ENUM_TK identifier												{REDUCTION(enum_specifier:)}
 	;
 
 enumerator_list
-	: enumerator							{REDUCTION()}
-	| enumerator_list COMMA_TK enumerator							{REDUCTION()}
+	: enumerator												{REDUCTION(enumerator_list:enumerator)}
+	| enumerator_list COMMA_TK enumerator						{REDUCTION(enumerator_list:enumerator_list COMMA_TK enumerator)}
 	;
 
 enumerator
-	: identifier							{REDUCTION()}
-	| identifier EQUAL_TK constant_expression							{REDUCTION()}
+	: identifier										{REDUCTION(enumerator:identifier)}
+	| identifier EQUAL_TK constant_expression			{REDUCTION(enumerator:identifier EQUAL_TK constant_expression)}
 	;
 
 declarator
-	: direct_declarator							{REDUCTION()}
-	| pointer direct_declarator							{REDUCTION()}
+	: direct_declarator					{REDUCTION(declarator:direct_declarator)}
+	| pointer direct_declarator			{REDUCTION(declarator:pointer direct_declarator)}
 	;
 
 direct_declarator
-	: identifier							{REDUCTION()}
-	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK							{REDUCTION()}
-	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION()}
-	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK							{REDUCTION()}
-	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION()}
-	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK							{REDUCTION()}
-	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK							{REDUCTION()}
+	: identifier																{REDUCTION(direct_declarator:identifier)}
+	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK									{REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)}
+	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)}
+	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)}
+	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)}
+	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)}
+	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK			{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)}
 	;
 
 pointer
-	: STAR_TK							{REDUCTION()}
-	| STAR_TK type_qualifier_list							{REDUCTION()}
-	| STAR_TK pointer							{REDUCTION()}
-	| STAR_TK type_qualifier_list pointer							{REDUCTION()}
+	: STAR_TK									{REDUCTION(pointer:STAR_TK)}
+	| STAR_TK type_qualifier_list				{REDUCTION(pointer:STAR_TK type_qualifier_list)}
+	| STAR_TK pointer							{REDUCTION(pointer:STAR_TK pointer)}
+	| STAR_TK type_qualifier_list pointer		{REDUCTION(pointer:STAR_TK type_qualifier_list pointer)}
 	;
 
 type_qualifier_list
-	: type_qualifier							{REDUCTION()}
-	| type_qualifier_list type_qualifier							{REDUCTION()}
+	: type_qualifier							{REDUCTION(type_qualifier_list:type_qualifier)}
+	| type_qualifier_list type_qualifier		{REDUCTION(type_qualifier_list:type_qualifier_list type_qualifier)}
 	;
 
 parameter_type_list
-	: parameter_list							{REDUCTION()}
-	| parameter_list COMMA_TK ELIPSIS_TK							{REDUCTION()}
+	: parameter_list							{REDUCTION(parameter_type_list:parameter_list)}
+	| parameter_list COMMA_TK ELIPSIS_TK		{REDUCTION(parameter_type_list:parameter_list COMMA_TK ELIPSIS_TK)}
 	;
 
 parameter_list
-	: parameter_declaration							{REDUCTION()}
-	| parameter_list COMMA_TK parameter_declaration							{REDUCTION()}
+	: parameter_declaration								{REDUCTION(parameter_list:parameter_declaration)}
+	| parameter_list COMMA_TK parameter_declaration		{REDUCTION(parameter_list:parameter_list COMMA_TK parameter_declaration)}
 	;
 
 parameter_declaration
-	: declaration_specifiers declarator							{REDUCTION()}
-	| declaration_specifiers							{REDUCTION()}
-	| declaration_specifiers abstract_declarator							{REDUCTION()}
+	: declaration_specifiers declarator					{REDUCTION(parameter_declaration:declaration_specifiers declarator)}
+	| declaration_specifiers							{REDUCTION(parameter_declaration:declaration_specifiers)}
+	| declaration_specifiers abstract_declarator		{REDUCTION(parameter_declaration:declaration_specifiers abstract_declarator)}
 	;
 
 identifier_list
-	: identifier							{REDUCTION()}
-	| identifier_list COMMA_TK identifier							{REDUCTION()}
+	: identifier									{REDUCTION(identifier_list:identifier)}
+	| identifier_list COMMA_TK identifier			{REDUCTION(identifier_list:identifier_list COMMA_TK identifier)}
 	;
 
 initializer
-	: assignment_expression							{REDUCTION()}
+	: assignment_expression									{REDUCTION(initializer:assignment_expression)}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				initializer_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
+				initializer_list CLOSE_BRACE_TK				{REDUCTION(initializer:OPEN_BRACE_TK initializer_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				initializer_list COMMA_TK CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP()}
+				initializer_list COMMA_TK CLOSE_BRACE_TK	{REDUCTION(initializer:OPEN_BRACE_TK initializer_list COMMA_TK CLOSE_BRACE_TK); SCOPE_POP()}
 	;
 
 initializer_list
-	: initializer							{REDUCTION()}
-	| initializer_list COMMA_TK initializer							{REDUCTION()}
+	: initializer									{REDUCTION(initializer_list:initializer)}
+	| initializer_list COMMA_TK initializer			{REDUCTION(initializer_list:initializer_list COMMA_TK initializer)}
 	;
 
 type_name
-	: specifier_qualifier_list							{REDUCTION()}
-	| specifier_qualifier_list abstract_declarator							{REDUCTION()}
+	: specifier_qualifier_list							{REDUCTION(type_name:specifier_qualifier_list)}
+	| specifier_qualifier_list abstract_declarator		{REDUCTION(type_name:specifier_qualifier_list abstract_declarator)}
 	;
 
 abstract_declarator
-	: pointer							{REDUCTION()}
-	| direct_abstract_declarator							{REDUCTION()}
-	| pointer direct_abstract_declarator							{REDUCTION()}
+	: pointer											{REDUCTION(abstract_declarator:pointer)}
+	| direct_abstract_declarator						{REDUCTION(abstract_declarator:direct_abstract_declarator)}
+	| pointer direct_abstract_declarator				{REDUCTION(abstract_declarator:pointer direct_abstract_declarator)}
 	;
 
 direct_abstract_declarator
-	: OPEN_PAREN_TK abstract_declarator CLOSE_PAREN_TK							{REDUCTION()}
-	| OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION()}
-	| OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK							{REDUCTION()}
-	| direct_abstract_declarator OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION()}
-	| direct_abstract_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK							{REDUCTION()}
-	| OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION()}
-	| OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK							{REDUCTION()}
-	| direct_abstract_declarator OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION()}
-	| direct_abstract_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK							{REDUCTION()}
+	: OPEN_PAREN_TK abstract_declarator CLOSE_PAREN_TK										{REDUCTION(direct_abstract_declarator:OPEN_PAREN_TK abstract_declarator CLOSE_PAREN_TK)}
+	| OPEN_BRACK_TK CLOSE_BRACK_TK															{REDUCTION(direct_abstract_declarator:OPEN_BRACK_TK CLOSE_BRACK_TK)}
+	| OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK										{REDUCTION(direct_abstract_declarator:OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)}
+	| direct_abstract_declarator OPEN_BRACK_TK CLOSE_BRACK_TK								{REDUCTION(direct_abstract_declarator:direct_abstract_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)}
+	| direct_abstract_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK			{REDUCTION(direct_abstract_declarator:direct_abstract_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)}
+	| OPEN_PAREN_TK CLOSE_PAREN_TK															{REDUCTION(direct_abstract_declarator:OPEN_PAREN_TK CLOSE_PAREN_TK)}
+	| OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK										{REDUCTION(direct_abstract_declarator:OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)}
+	| direct_abstract_declarator OPEN_PAREN_TK CLOSE_PAREN_TK								{REDUCTION(direct_abstract_declarator:direct_abstract_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)}
+	| direct_abstract_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK			{REDUCTION(direct_abstract_declarator:direct_abstract_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)}
 	;
 
 statement
-	: labeled_statement							{REDUCTION()}
-	| compound_statement							{REDUCTION()}
-	| expression_statement							{REDUCTION()}
-	| selection_statement							{REDUCTION()}
-	| iteration_statement							{REDUCTION()}
-	| jump_statement							{REDUCTION()}
+	: labeled_statement				{REDUCTION(statement:labeled_statement)}
+	| compound_statement			{REDUCTION(statement:compound_statement)}
+	| expression_statement			{REDUCTION(statement:expression_statement)}
+	| selection_statement			{REDUCTION(statement:selection_statement)}
+	| iteration_statement			{REDUCTION(statement:iteration_statement)}
+	| jump_statement				{REDUCTION(statement:jump_statement)}
 	;
 
 labeled_statement
-	: identifier COLON_TK statement							{REDUCTION()}
-	| CASE_TK constant_expression COLON_TK statement							{REDUCTION()}
-	| DEFAULT_TK COLON_TK statement							{REDUCTION()}
+	: identifier COLON_TK statement							{REDUCTION(labeled_statement:identifier COLON_TK statement)}
+	| CASE_TK constant_expression COLON_TK statement		{REDUCTION(labeled_statement:CASE_TK constant_expression COLON_TK statement)}
+	| DEFAULT_TK COLON_TK statement							{REDUCTION(labeled_statement:DEFAULT_TK COLON_TK statement)}
 	;
 
 expression_statement
-	: SEMICOLON_TK							{REDUCTION()}
-	| expression SEMICOLON_TK							{REDUCTION()}
+	: SEMICOLON_TK							{REDUCTION(expression_statement:SEMICOLON_TK)}
+	| expression SEMICOLON_TK				{REDUCTION(expression_statement:expression SEMICOLON_TK)}
 	;
 
 compound_statement
 	: OPEN_BRACE_TK {SCOPE_PUSH()}
-				CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
+				CLOSE_BRACE_TK											{REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); SCOPE_POP();}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				statement_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP()}
+				statement_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); SCOPE_POP()}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				declaration_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
+				declaration_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				declaration_list statement_list CLOSE_BRACE_TK							{REDUCTION(); SCOPE_POP();}
+				declaration_list statement_list CLOSE_BRACE_TK			{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK); SCOPE_POP();}
 	;
 
 statement_list
-	: statement							{REDUCTION()}
-	| statement_list statement							{REDUCTION()}
+	: statement							{REDUCTION(statement_list:statement)}
+	| statement_list statement			{REDUCTION(statement_list:statement_list statement)}
 	;
 
 selection_statement
-	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
-	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement							{REDUCTION()}
-	| SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
+	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)}
+	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement			{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement)}
+	| SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement						{REDUCTION(selection_statement:SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)}
 	;
 
 iteration_statement
-	: WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
-	| DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION()}
-	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement							{REDUCTION()}
+	: WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement													{REDUCTION(iteration_statement:WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)}
+	| DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK									{REDUCTION(iteration_statement:DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK)}
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement										{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement							{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement					{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement							{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement					{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement					{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement)}
+	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement		{REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement)}
 	;
 
 jump_statement
-	: GOTO_TK identifier SEMICOLON_TK							{REDUCTION()}
-	| CONTINUE_TK SEMICOLON_TK							{REDUCTION()}
-	| BREAK_TK SEMICOLON_TK							{REDUCTION()}
-	| RETURN_TK SEMICOLON_TK							{REDUCTION()}
-	| RETURN_TK expression SEMICOLON_TK							{REDUCTION()}
+	: GOTO_TK identifier SEMICOLON_TK			{REDUCTION(jump_statement:GOTO_TK identifier SEMICOLON_TK)}
+	| CONTINUE_TK SEMICOLON_TK					{REDUCTION(jump_statement:CONTINUE_TK SEMICOLON_TK)}
+	| BREAK_TK SEMICOLON_TK						{REDUCTION(jump_statement:BREAK_TK SEMICOLON_TK)}
+	| RETURN_TK SEMICOLON_TK					{REDUCTION(jump_statement:RETURN_TK SEMICOLON_TK)}
+	| RETURN_TK expression SEMICOLON_TK			{REDUCTION(jump_statement:RETURN_TK expression SEMICOLON_TK)}
 	;
 
 expression
-	: assignment_expression							{REDUCTION()}
-	| expression COMMA_TK assignment_expression							{REDUCTION()}
+	: assignment_expression							{REDUCTION(expression:assignment_expression)}
+	| expression COMMA_TK assignment_expression		{REDUCTION(expression:expression COMMA_TK assignment_expression)}
 	;
 
 assignment_expression
-	: conditional_expression							{REDUCTION()}
-	| unary_expression assignment_operator assignment_expression							{REDUCTION()}
+	: conditional_expression											{REDUCTION(assignment_expression:conditional_expression)}
+	| unary_expression assignment_operator assignment_expression		{REDUCTION(assignment_expression:unary_expression assignment_operator assignment_expression)}
 	;
 
 assignment_operator
-	: EQUAL_TK							{REDUCTION()}
-	| MUL_ASSIGN_TK							{REDUCTION()}
-	| DIV_ASSIGN_TK							{REDUCTION()}
-	| MOD_ASSIGN_TK							{REDUCTION()}
-	| ADD_ASSIGN_TK							{REDUCTION()}
-	| SUB_ASSIGN_TK							{REDUCTION()}
-	| LEFT_ASSIGN_TK							{REDUCTION()}
-	| RIGHT_ASSIGN_TK							{REDUCTION()}
-	| AND_ASSIGN_TK							{REDUCTION()}
-	| XOR_ASSIGN_TK							{REDUCTION()}
-	| OR_ASSIGN_TK							{REDUCTION()}
+	: EQUAL_TK					{REDUCTION(assignment_operator:EQUAL_TK)}
+	| MUL_ASSIGN_TK				{REDUCTION(assignment_operator:MUL_ASSIGN_TK)}
+	| DIV_ASSIGN_TK				{REDUCTION(assignment_operator:DIV_ASSIGN_TK)}
+	| MOD_ASSIGN_TK				{REDUCTION(assignment_operator:MOD_ASSIGN_TK)}
+	| ADD_ASSIGN_TK				{REDUCTION(assignment_operator:ADD_ASSIGN_TK)}
+	| SUB_ASSIGN_TK				{REDUCTION(assignment_operator:SUB_ASSIGN_TK)}
+	| LEFT_ASSIGN_TK			{REDUCTION(assignment_operator:LEFT_ASSIGN_TK)}
+	| RIGHT_ASSIGN_TK			{REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)}
+	| AND_ASSIGN_TK				{REDUCTION(assignment_operator:AND_ASSIGN_TK)}
+	| XOR_ASSIGN_TK				{REDUCTION(assignment_operator:XOR_ASSIGN_TK)}
+	| OR_ASSIGN_TK				{REDUCTION(assignment_operator:OR_ASSIGN_TK)}
 	;
 
 conditional_expression
-	: logical_or_expression							{REDUCTION()}
-	| logical_or_expression QUESTION_TK expression COLON_TK conditional_expression							{REDUCTION()}
+	: logical_or_expression																	{REDUCTION(conditional_expression:logical_or_expression)}
+	| logical_or_expression QUESTION_TK expression COLON_TK conditional_expression			{REDUCTION(conditional_expression:logical_or_expression QUESTION_TK expression COLON_TK conditional_expression)}
 	;
 
 constant_expression
-	: conditional_expression							{REDUCTION()}
+	: conditional_expression	{REDUCTION(constant_expression:conditional_expression)}
 	;
 
 logical_or_expression
-	: logical_and_expression							{REDUCTION()}
-	| logical_or_expression OR_OP_TK logical_and_expression							{REDUCTION()}
+	: logical_and_expression											{REDUCTION(logical_or_expression:logical_and_expression)}
+	| logical_or_expression OR_OP_TK logical_and_expression				{REDUCTION(logical_or_expression:logical_or_expression OR_OP_TK logical_and_expression)}
 	;
 
 logical_and_expression
-	: inclusive_or_expression							{REDUCTION()}
-	| logical_and_expression AND_OP_TK inclusive_or_expression							{REDUCTION()}
+	: inclusive_or_expression											{REDUCTION(logical_and_expression:inclusive_or_expression)}
+	| logical_and_expression AND_OP_TK inclusive_or_expression			{REDUCTION(logical_and_expression:logical_and_expression AND_OP_TK inclusive_or_expression)}
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression							{REDUCTION()}
-	| inclusive_or_expression BIT_OR_TK exclusive_or_expression							{REDUCTION()}
+	: exclusive_or_expression											{REDUCTION(inclusive_or_expression:exclusive_or_expression)}
+	| inclusive_or_expression BIT_OR_TK exclusive_or_expression			{REDUCTION(inclusive_or_expression:inclusive_or_expression BIT_OR_TK exclusive_or_expression)}
 	;
 
 exclusive_or_expression
-	: and_expression							{REDUCTION()}
-	| exclusive_or_expression BIT_XOR_TK and_expression							{REDUCTION()}
+	: and_expression													{REDUCTION(exclusive_or_expression:and_expression)}
+	| exclusive_or_expression BIT_XOR_TK and_expression					{REDUCTION(exclusive_or_expression:exclusive_or_expression BIT_XOR_TK and_expression)}
 	;
 
 and_expression
-	: equality_expression							{REDUCTION()}
-	| and_expression BIT_AND_TK equality_expression							{REDUCTION()}
+	: equality_expression												{REDUCTION(and_expression:equality_expression)}
+	| and_expression BIT_AND_TK equality_expression						{REDUCTION(and_expression:and_expression BIT_AND_TK equality_expression)}
 	;
 
 equality_expression
-	: relational_expression							{REDUCTION()}
-	| equality_expression EQ_OP_TK relational_expression							{REDUCTION()}
-	| equality_expression NE_OP_TK relational_expression							{REDUCTION()}
+	: relational_expression												{REDUCTION(equality_expression:relational_expression)}
+	| equality_expression EQ_OP_TK relational_expression				{REDUCTION(equality_expression:equality_expression EQ_OP_TK relational_expression)}
+	| equality_expression NE_OP_TK relational_expression				{REDUCTION(equality_expression:equality_expression NE_OP_TK relational_expression)}
 	;
 
 relational_expression
-	: shift_expression							{REDUCTION()}
-	| relational_expression LT_TK shift_expression							{REDUCTION()}
-	| relational_expression GT_TK shift_expression							{REDUCTION()}
-	| relational_expression LE_OP_TK shift_expression							{REDUCTION()}
-	| relational_expression GE_OP_TK shift_expression							{REDUCTION()}
+	: shift_expression													{REDUCTION(relational_expression:shift_expression)}
+	| relational_expression LT_TK shift_expression						{REDUCTION(relational_expression:relational_expression LT_TK shift_expression)}
+	| relational_expression GT_TK shift_expression						{REDUCTION(relational_expression:relational_expression GT_TK shift_expression)}
+	| relational_expression LE_OP_TK shift_expression					{REDUCTION(relational_expression:relational_expression LE_OP_TK shift_expression)}
+	| relational_expression GE_OP_TK shift_expression					{REDUCTION(relational_expression:relational_expression GE_OP_TK shift_expression)}
 	;
 
 shift_expression
-	: additive_expression							{REDUCTION()}
-	| shift_expression LEFT_OP_TK additive_expression							{REDUCTION()}
-	| shift_expression RIGHT_OP_TK additive_expression							{REDUCTION()}
+	: additive_expression												{REDUCTION(shift_expression:additive_expression)}
+	| shift_expression LEFT_OP_TK additive_expression					{REDUCTION(shift_expression:shift_expression LEFT_OP_TK additive_expression)}
+	| shift_expression RIGHT_OP_TK additive_expression					{REDUCTION(shift_expression:shift_expression RIGHT_OP_TK additive_expression)}
 	;
 
 additive_expression
-	: multiplicative_expression							{REDUCTION()}
-	| additive_expression PLUS_TK multiplicative_expression							{REDUCTION()}
-	| additive_expression MINUS_TK multiplicative_expression							{REDUCTION()}
+	: multiplicative_expression											{REDUCTION(additive_expression:multiplicative_expression)}
+	| additive_expression PLUS_TK multiplicative_expression				{REDUCTION(additive_expression:additive_expression PLUS_TK multiplicative_expression)}
+	| additive_expression MINUS_TK multiplicative_expression			{REDUCTION(additive_expression:additive_expression MINUS_TK multiplicative_expression)}
 	;
 
 multiplicative_expression
-	: cast_expression							{REDUCTION()}
-	| multiplicative_expression STAR_TK cast_expression							{REDUCTION()}
-	| multiplicative_expression DIV_TK cast_expression							{REDUCTION()}
-	| multiplicative_expression MOD_TK cast_expression							{REDUCTION()}
+	: cast_expression													{REDUCTION(multiplicative_expression:cast_expression)}
+	| multiplicative_expression STAR_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression STAR_TK cast_expression	)}
+	| multiplicative_expression DIV_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression DIV_TK cast_expression)}
+	| multiplicative_expression MOD_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression MOD_TK cast_expression)}
 	;
 
 cast_expression
-	: unary_expression							{REDUCTION()}
-	| OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression							{REDUCTION()}
+	: unary_expression													{REDUCTION(cast_expression:unary_expression)}
+	| OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression			{REDUCTION(cast_expression:OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression)}
 	;
 
 unary_expression
-	: postfix_expression							{REDUCTION()}
-	| INC_OP_TK unary_expression							{REDUCTION()}
-	| DEC_OP_TK unary_expression							{REDUCTION()}
-	| unary_operator cast_expression							{REDUCTION()}
-	| SIZEOF_TK unary_expression							{REDUCTION()}
-	| SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK							{REDUCTION()}
+	: postfix_expression												{REDUCTION(unary_expression:postfix_expression)}
+	| INC_OP_TK unary_expression										{REDUCTION(unary_expression:INC_OP_TK unary_expression)}
+	| DEC_OP_TK unary_expression										{REDUCTION(unary_expression:DEC_OP_TK unary_expression)}
+	| unary_operator cast_expression									{REDUCTION(unary_expression:unary_operator cast_expression)}
+	| SIZEOF_TK unary_expression										{REDUCTION(unary_expression:SIZEOF_TK unary_expression)}
+	| SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK					{REDUCTION(unary_expression:SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK)}
 	;
 
 unary_operator
-	: BIT_AND_TK							{REDUCTION()}
-	| STAR_TK							{REDUCTION()}
-	| PLUS_TK							{REDUCTION()}
-	| MINUS_TK							{REDUCTION()}
-	| BIT_NOT_TK							{REDUCTION()}
-	| NOT_TK							{REDUCTION()}
+	: BIT_AND_TK				{REDUCTION(unary_operator:BIT_AND_TK)}
+	| STAR_TK					{REDUCTION(unary_operator:STAR_TK)}
+	| PLUS_TK					{REDUCTION(unary_operator:PLUS_TK)}
+	| MINUS_TK					{REDUCTION(unary_operator:MINUS_TK)}
+	| BIT_NOT_TK				{REDUCTION(unary_operator:BIT_NOT_TK)}
+	| NOT_TK					{REDUCTION(unary_operator:NOT_TK)}
 	;
 
 postfix_expression
-	: primary_expression							{REDUCTION()}
-	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK							{REDUCTION()}
-	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION()}
-	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK							{REDUCTION()}
-	| postfix_expression PERIOD_TK identifier							{REDUCTION()}
-	| postfix_expression PTR_OP_TK identifier							{REDUCTION()}
-	| postfix_expression INC_OP_TK							{REDUCTION()}
-	| postfix_expression DEC_OP_TK							{REDUCTION()}
+	: primary_expression															{REDUCTION(postfix_expression:primary_expression)}
+	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK					{REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)}
+	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK								{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)}
+	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK		{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK)}
+	| postfix_expression PERIOD_TK identifier										{REDUCTION(postfix_expression:postfix_expression PERIOD_TK identifier)}
+	| postfix_expression PTR_OP_TK identifier										{REDUCTION(postfix_expression:postfix_expression PTR_OP_TK identifier)}
+	| postfix_expression INC_OP_TK													{REDUCTION(postfix_expression:postfix_expression INC_OP_TK)}
+	| postfix_expression DEC_OP_TK													{REDUCTION(postfix_expression:postfix_expression DEC_OP_TK)}
 	;
 
 primary_expression
-	: identifier							{REDUCTION()}
-	| constant							{REDUCTION()}
-	| string							{REDUCTION()}
-	| OPEN_PAREN_TK expression CLOSE_PAREN_TK							{REDUCTION()}
+	: identifier														{REDUCTION(primary_expression:identifier)}
+	| constant															{REDUCTION(primary_expression:constant)}
+	| string															{REDUCTION(primary_expression:string)}
+	| OPEN_PAREN_TK expression CLOSE_PAREN_TK							{REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)}
 	;
 
 argument_expression_list
-	: assignment_expression							{REDUCTION()}
-	| argument_expression_list COMMA_TK assignment_expression							{REDUCTION()}
+	: assignment_expression												{REDUCTION(argument_expression_list:assignment_expression)}
+	| argument_expression_list COMMA_TK assignment_expression			{REDUCTION(argument_expression_list:argument_expression_list COMMA_TK assignment_expression)}
 	;
 
 constant
-	: INTEGER_CONSTANT_TK							{REDUCTION()}
-	| CHARACTER_CONSTANT_TK							{REDUCTION()}
-	| FLOATING_CONSTANT_TK							{REDUCTION()}
-	| ENUMERATION_CONSTANT_TK							{REDUCTION()}
+	: INTEGER_CONSTANT_TK				{REDUCTION(constant:INTEGER_CONSTANT_TK)}
+	| CHARACTER_CONSTANT_TK				{REDUCTION(constant:CHARACTER_CONSTANT_TK)}
+	| FLOATING_CONSTANT_TK				{REDUCTION(constant:FLOATING_CONSTANT_TK)}
+	| ENUMERATION_CONSTANT_TK			{REDUCTION(constant:ENUMERATION_CONSTANT_TK)}
 	;
 
 string
-	: STRING_LITERAL_TK							{REDUCTION()}
+	: STRING_LITERAL_TK					{REDUCTION(string:STRING_LITERAL_TK)}
 	;
 
 identifier
-	: IDENTIFIER_TK							{REDUCTION()}
+	: IDENTIFIER_TK						{REDUCTION(identifier:IDENTIFIER_TK)}
 	;
 
 comment
-	: COMMENT_TK							{REDUCTION()}
+	: COMMENT_TK						{REDUCTION(comment:COMMENT_TK)}
 	;
 
 %%

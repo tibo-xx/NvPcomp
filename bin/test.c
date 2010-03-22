@@ -9,5 +9,9 @@ float f = 2.3;
 
 int func() {
 	int r;
-	
+	struct dat {
+		int something;
+		long nothing = 6;
+		!!$
+	} data;
 }
