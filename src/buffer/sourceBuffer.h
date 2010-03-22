@@ -27,6 +27,7 @@ public:
 	bool closeFile();
 	bool good();
 	std::string bufferGetLine(long lineNumStart, long lineNumFinish);
+	std::string bufferGetLineNoCR(long lineNumStart, long lineNumFinish);
 private:
 	bool skipLine(long numLines);
 	bool resetBuffer();

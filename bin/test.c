@@ -1,10 +1,6 @@
-int i;
-int 6i;
-Line 3;
-Line 4;
-Line 5;
-Line 6;
-		Line 7;
-Line 8;
-Line 9;
-Line 10;
+int i = 2;
+int j = 128;
+
+long z = -129;
+
+float f = 2.3;

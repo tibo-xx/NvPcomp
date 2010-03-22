@@ -55,7 +55,6 @@ bool sourceBuffer::closeFile() {
 
 string sourceBuffer::bufferGetLine(long lineNumStart, long lineNumFinish) {
 	
-	char *str[256];
 	string strTemp;
 	int i;
 	
@@ -66,13 +65,12 @@ string sourceBuffer::bufferGetLine(long lineNumStart, long lineNumFinish) {
 	if(in.good()) {
 				
 		// Are we currently past the requested line?	
-		if(lineNumStart < _curLine) {
+		if(lineNumStart <= _curLine) {
 			resetBuffer();
 		}
 		
 		// Loop through the file discarding unwanted lines.
 		if(_curLine < lineNumStart - 1) {
-			cout << "curLine: "<< _curLine << " lineNumStart: " << lineNumStart << endl;
 			skipLine(lineNumStart - 1 - _curLine);
 		}
 		
@@ -88,13 +86,50 @@ string sourceBuffer::bufferGetLine(long lineNumStart, long lineNumFinish) {
 	
 }
 
+// For working with NvPcomp_logger Cleanly.
+string sourceBuffer::bufferGetLineNoCR(long lineNumStart, long lineNumFinish) {
+	
+	string strTemp;
+	int i;
+	
+	// Clear the string
+	_curLineBuffer.clear();
+	
+	// Check if the input stream is good.
+	if(in.good()) {
+				
+		// Are we currently past the requested line?	
+		if(lineNumStart <= _curLine) {
+			resetBuffer();
+		}
+		
+		// Loop through the file discarding unwanted lines.
+		if(_curLine < lineNumStart - 1) {
+			skipLine(lineNumStart - 1 - _curLine);
+		}
+		
+		for(i = 0; i <= (lineNumFinish - lineNumStart); i++) {
+			getline(in, strTemp);
+			LOG(DEBUGLog, logLEVEL5) << BUFFERLOG_START << "getLine: " << strTemp;
+			if(i != (lineNumFinish - lineNumStart)) {
+				_curLineBuffer += strTemp + '\n';
+			} else {
+				_curLineBuffer += strTemp;
+			}
+			_curLine++;
+		}
+	}
+		
+	return _curLineBuffer;
+	
+}
+
 bool sourceBuffer::skipLine(long numLines) {
 	bool retVal = true;
 	int i;
 	LOG(DEBUGLog, logLEVEL4) << BUFFERLOG_START << "skipping " << numLines << " lines";
 	for(i = 0;i < numLines;i++) {
 		while(in.get() != '\n') {}
-		cout << "i: " << i << endl;
 	}
 	_curLine += numLines;	
 	return retVal;

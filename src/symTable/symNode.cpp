@@ -29,8 +29,3 @@ symNode::~symNode()
 {
 	
 }
-
-
-//bool symNode::operator ==( const symNode &other ) {
-	
-//}

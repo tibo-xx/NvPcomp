@@ -103,7 +103,7 @@ scanner: ./src/scanner/scanner.lex
 	@echo "\nBuilding Scanner...\n"
 	$(LEX) $(LEXFLAGS) $<
 	mv lex.* ./src/scanner/
-
+	$(CXX) $(CXXFLAGS) $(INCS) -c ./src/scanner/lex.yy.cc -o ./src/scanner/lex.yy.o
 ########################################################################
 # Parser:
 ########################################################################
@@ -112,7 +112,7 @@ parser: ./src/parser/parse.yy
 	$(YACC) --verbose -t -d -o parse.cc $<
 	mv parse.* ./src/parser/
 	mv *.hh ./src/parser/
-
+	$(CXX) $(CXXFLAGS) $(INCS) -c ./src/parser/parse.cc -o ./src/parser/parse.o
 ########################################################################
 # Clean up (more of a clobber really)
 ########################################################################

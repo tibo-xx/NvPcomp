@@ -1,21 +1,13 @@
 
 %{
 #include <stdio.h>
+#include <limits.h>
 #include <parse.hh>
 #include <NvPcomp_logger.h>
 #include <NvPcompScanner.h>
+#include <defines.h>
 
 #define YY_USER_ACTION yylloc->columns (yyleng);
-
-/*
-#define YY_USER_ACTION {yylloc.first_line = yylineno; \
-	yylloc.first_column = currColumn; \
-	currColumn=currColumn+yyleng; \
-	yylloc.last_column=currColumn; \
-	yylloc.last_line = yylineno;}
-*/
-
-//parser->yylloc.first_line = 1;
 
 /* For logging */
 #define RETURN(x) \
@@ -38,6 +30,12 @@ DELIM	[ \f]
 WS		{DELIM}+
 LETTER	[A-Za-z]
 DIGIT	[0-9]
+NUMBER	(-)?{DIGIT}+
+FLOAT	{DIGIT}+"."{DIGIT}*
+
+/*num1    [-+]?{DIGIT}+\.?([eE][-+]?{DIGIT}+)?*/
+/*num2    [-+]?{DIGIT}*\.{DIGIT}+([eE][-+]?{DIGIT}+)?*/
+/*number  {num1}|{num2}*/
 
 /************************************************************************/
 /* Rules																*/
@@ -89,10 +87,10 @@ while		{ RETURN(token::WHILE_TK); }
 
 {LETTER}({LETTER}|{DIGIT})* { return(check_id()); }
 
+{NUMBER}	{return check_integer();}
+{FLOAT}		{return check_float();}
+
 L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
-
-
-
 "{"			{ RETURN(token::OPEN_BRACE_TK); }
 "}"			{ RETURN(token::CLOSE_BRACE_TK); }
 "("			{ RETURN(token::OPEN_PAREN_TK); }
@@ -139,20 +137,91 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 "^="		{ RETURN(token::XOR_ASSIGN_TK); }
 "|="		{ RETURN(token::OR_ASSIGN_TK); }
 "..."		{ RETURN(token::ELIPSIS_TK); }
-.			{ 	std::cout << buffer.bufferGetLine(yylineno, yylineno);
-				std::cout << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
-				std::cout << yytext << " on line: " << yylineno << " at position: " << yylloc->begin.column << std::endl;
-				/*RETURN(token::ERROR_TK);*/}
+.			{ 	id_error();}
 
 %%
 
 /************************************************************************/
 /* User Code															*/
 /************************************************************************/
+
+/* Very basic INDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	
-		RETURN(token::IDENTIFIER_TK);
+	/*
+	NvPcomp::BParser::token::yytokentype retVal = token::IDENTIFIER_TK;
+	
+	switch(prev_token) {
+		case token::STRUCT_TK:
+			retVal = 
+			break;
+		default:
+	}
+	if(prev_token == token::STRUCT_TK)
+
+	}
+	*/
+	
+	
+	// We need to really check if adding to the symbol table is correct.
+	
+	
+	
+	RETURN(token::IDENTIFIER_TK);
+	
 }
+
+/* Check integer bounds */
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_integer() {
+	char *end_ptr;
+	long long_var;
+	
+	//std::string temp = std::string(yytext);
+	
+	errno = 0;
+	long_var = strtol(yytext, &end_ptr, 0);
+	
+	if(ERANGE == errno) {
+		LOG(WARNINGLog, logLEVEL1) << "WARNING: Value: " << yytext << " is out of range.";
+	} else if(long_var > ARCH_INT_MAX) {	/*Needs to be redefined for the target machine.*/
+		LOG(WARNINGLog, logLEVEL1) << "WARNING: Value: " << yytext << " is too large for the target architecture.";
+	} else if(long_var < ARCH_INT_MIN) {
+		LOG(WARNINGLog, logLEVEL1) << "WARNING: Value: " << yytext << " is too small for the target architecture.";
+	}
+
+	yylval->ival = (int) long_var;
+	
+	LOG(SCANNERLog,logLEVEL1) << "\tConstant Integer: " << long_var << " on line: " << yylineno;
+	
+	RETURN(token::INTEGER_CONSTANT_TK);	
+}
+
+// Check Float Bounds.
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_float() {
+	double doub_var; 
+	errno = 0; 
+	doub_var = strtod(yytext,NULL); 
+			
+	if(ERANGE == errno) {
+		LOG(WARNINGLog, logLEVEL1) << "WARNING: Value: " << yytext <<" is out of range.";
+	}
+	
+	yylval->dval = doub_var;	
+	LOG(SCANNERLog,logLEVEL1) << "\tConstant float: " << doub_var << " on line: " << yylineno;
+	
+	RETURN(token::FLOATING_CONSTANT_TK);	
+
+}
+
+// Unrecognized Character Error
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
+	
+	std::cout << buffer.bufferGetLine(yylineno, yylineno);
+	std::cout << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
+	std::cout << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	RETURN(token::ERROR_TK);
+}
+
 
 
 
