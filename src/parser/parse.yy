@@ -25,6 +25,12 @@
 		LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		LOG(PARSERLog, logLEVEL1) << std::string(yylloc.begin.column - 1, ' ') <<"^-Production: " << #spot << " at: " << yylloc << std::endl;
 	
+	#define SCOPE_PUSH() \
+		LOG(PARSERLog, logLEVEL2) << "BParser: Scope push";
+		
+	#define SCOPE_POP() \
+		LOG(PARSERLog, logLEVEL2) << "BParser: Scope pop";
+	
 	// Prototype for the yylex function
 	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner);
 }

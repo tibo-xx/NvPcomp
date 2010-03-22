@@ -9,7 +9,7 @@ CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0
 CXX = g++
 LEX = flex++
 #YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
-YACC = bison
+YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
 LEXFLAGS = -+
 
 ########################################################################
@@ -22,6 +22,8 @@ OBJS += ./src/buffer/sourceBuffer.o
 OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
+
+SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.so
 
 # OBJS += ./src/main.o
 
@@ -36,7 +38,8 @@ INCS += -I./src/test
 INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
-LIBS = -lstdc++ -lfl -lm -largtable2
+INCS += -I./lib/argtable2-12/include
+LIBS = -lstdc++ -lfl -lm
 
 ########################################################################
 # Scanner and Parser
@@ -54,6 +57,7 @@ TEST_OBJS =  ./src/test/unit_test/NvPcompTestSuite.o
 TEST_OBJS += ./src/test/unit_test/symNodeTest.o
 TEST_OBJS += ./src/test/unit_test/symTableTest.o
 TEST_OBJS += $(OBJS)
+
 TEST_LIBS = $(LIBS) -lcppunit -ldl
 
 ########################################################################
@@ -79,7 +83,7 @@ test: test_logging UnitTest
 ########################################################################
 NvPcomp: $(OBJS) ./src/main.o
 	@echo "\nBuilding NvPcomp... \n"
-	$(CXX) $(CXXFLAGS) $(INCS) -o $(TARGET) $(OBJS) ./src/main.o $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o $(TARGET) $(OBJS) $(SHARED_OBJS) ./src/main.o $(LIBS)
 
 ########################################################################
 # Test program for Logging
@@ -94,7 +98,7 @@ test_logging: $(LOG_TEST_OBJS)
 ########################################################################
 UnitTest: parser scanner $(TEST_OBJS)
 	@echo "\nbuilding Test Suite...\n"
-	$(CXX) $(CXXFLAGS) $(INCS) -o $(TEST_TARGET) $(TEST_OBJS) $(TEST_LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o $(TEST_TARGET) $(TEST_OBJS) $(SHARED_OBJS) $(TEST_LIBS)
 
 ########################################################################
 # Scanner:
