@@ -89,11 +89,16 @@ int comLineParser::clpDriver	(int &d, int &dl, int &ds, int &dls, int
 		else 
 			outputFN = "generic.out";
 	}
-	_numTargets = numTarget; 
-	for (i = 0; i < numTarget; i++) {
+	_numTargets = numTarget;
+	//for (i = 0; i < numTarget; i++) {
 		//strcpy(targetFN[i], (**tarFiles)[i]);
-		cout << "target file: " << tarFiles[i] << endl;
-	}
+		//cout << "target file: " << tarFiles[i] << endl;
+	//}
+	
+	// Just grab the first one for now.
+	if(_numTargets > 0) {
+		inputFile = string(tarFiles[0]);
+	} 	
 	return 1;
 } 
 
@@ -125,4 +130,12 @@ bool comLineParser::isOutput(){
 	
 string comLineParser::getOutput() {
 	return outputFN;
+}
+
+bool comLineParser::isInput(){		
+	return (_numTargets > 0);
+} 
+
+string comLineParser::getInput() {
+	return inputFile;
 }

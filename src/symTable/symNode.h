@@ -11,24 +11,24 @@
 #define SYMNODE_H_
 
 #include <string>
-#include <parse.hh>
+#include <location.hh>
+#include <position.hh>
 
-class symNode {
+namespace NvPcomp {
+	class symNode {
 
-private:
-	std::string	_key;	
-	std::string	_strType;
-	NvPcomp::BParser::token::yytokentype _tok;
-	NvPcomp::BParser::location_type _loc;
-	
-public:
-	symNode(NvPcomp::BParser::token::yytokentype tok, \
-			NvPcomp::BParser::location_type loc, \
-			std::string key, \
-			std::string strType);
-	~symNode();
-};
-
-
+	//This is only public until some access members are defined.
+	public:
+		std::string	_key;	
+		std::string	_strType;
+		NvPcomp::location _loc;
+		
+	public:
+		symNode(NvPcomp::location loc, \
+				std::string key, \
+				std::string strType);
+		~symNode();
+	};
+}
 
 #endif /* SYMNODE_H_ */

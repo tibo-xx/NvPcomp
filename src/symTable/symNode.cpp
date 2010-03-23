@@ -20,18 +20,16 @@
 
 using namespace std;
 
-symNode::symNode(NvPcomp::BParser::token::yytokentype tok, \
-				 NvPcomp::BParser::location_type loc, \
-				 string key, \
-				 string strType) {
-	_tok = tok;
+NvPcomp::symNode::symNode(NvPcomp::location loc, \
+							string key, \
+							string strType) {
 	_loc = loc;
 	_key = key;
 	_strType = strType;
 	
 }
 
-symNode::~symNode() 
+NvPcomp::symNode::~symNode() 
 {
 	
 }

@@ -21,26 +21,20 @@
 
 using namespace std;
 
-/**********************************************************************/
-// symTable logging declarations
-LOG2FILE(SymbolDump_2File);
-class SymbolDump : public NvPcomp_logger<SymbolDump_2File> {};
-/**********************************************************************/
-
-symTable::symTable() {
+NvPcomp::symTable::symTable() {
 	// Push on the first level.
 	_level = -1;
 	this->push();
 }
 
-symTable::symTable(FILE* out) {
+NvPcomp::symTable::symTable(FILE* out) {
 	// Push on the first level.
 	_level = -1;
 	this->push();
 	SET_OUTPUT(SymbolDump, out);
 }
 
-symTable::~symTable() {
+NvPcomp::symTable::~symTable() {
 	vector<map<string, symNode *> *>::iterator iter;
 	map<string, symNode *>::iterator map_iter;
 		
@@ -60,7 +54,7 @@ symTable::~symTable() {
 	_table.clear();		
 }
 
-InsertResult symTable::insert(string key, symNode *node) {
+InsertResult NvPcomp::symTable::insert(string key, symNode *node) {
 	InsertResult retVal = INSERT_FAIL_IN_CURRENT_LEVEL;
 	
 	pair<map<string, symNode *>::iterator, bool> ret;
@@ -82,7 +76,7 @@ InsertResult symTable::insert(string key, symNode *node) {
 	return retVal;
 }
 
-symNode *symTable::search_top(string key) {
+NvPcomp::symNode *NvPcomp::symTable::search_top(string key) {
 	
 	symNode *retVal = NULL;
 	map<string, symNode *>::iterator iter;
@@ -97,7 +91,7 @@ symNode *symTable::search_top(string key) {
 
 }
 
-int symTable::search(const string key, symNode* &Node, bool ignoreFirst) {		
+int NvPcomp::symTable::search(const string key, symNode* &Node, bool ignoreFirst) {		
 		
 	bool found = false;
 	int retVal = -1;
@@ -130,7 +124,7 @@ int symTable::search(const string key, symNode* &Node, bool ignoreFirst) {
 	
 }
 
-void symTable::dump() {
+void NvPcomp::symTable::dump() {
 	
 	int level = 0;
     vector<map<string, symNode *> *>::iterator iter;
@@ -144,7 +138,8 @@ void symTable::dump() {
 		// loop through and print out node information:
 		for(map_iter = (*iter)->begin(); map_iter != (*iter)->end(); map_iter++) {
 			if((*map_iter).second != NULL) {
-				LOG(SymbolDump, logLEVEL1) << string(level, '\t') << (*map_iter).first << ": " << "Node Information.";				
+				LOG(SymbolDump, logLEVEL1) << string(level, '\t') << "Symbol: " << (*map_iter).first << " of type " << (*map_iter).second->_strType << " on line " << (*map_iter).second->_loc.begin.line;
+								
 			}
 		}
 		
@@ -153,14 +148,14 @@ void symTable::dump() {
 	}		
 }
 
-bool symTable::push() {
+bool NvPcomp::symTable::push() {
 	bool retVal = true;
 	_table.push_back(new map<string, symNode *>);
 	_level++;
 	return retVal;
 }
 
-bool symTable::pop() {
+bool NvPcomp::symTable::pop() {
 	bool retVal = true;
 	
 	if(_level > 0) {

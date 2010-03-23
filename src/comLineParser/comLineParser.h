@@ -57,7 +57,9 @@ public:
 	bool isDebugLexST();
 	bool isScanner();
 	bool isOutput();
+	bool isInput();
 	std::string getOutput();
+	std::string getInput();
 	
 private:
 	//void errorCheck(int &argc, const char *&argv, void *argtable);
@@ -93,6 +95,7 @@ private:
 	char **targetFN;
 	int _numTargets;
 	 
+	std::string inputFile;
 	
 		
 /*The order of the structs in the argument table defines the order in 

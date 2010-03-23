@@ -12,7 +12,7 @@
  * \author CMT & DRJ
  *
  */
-class symTableAccess : public symTable {
+class symTableAccess : public NvPcomp::symTable {
 	public:
 		symTableAccess();
 		symTableAccess(FILE* out);
@@ -20,9 +20,9 @@ class symTableAccess : public symTable {
 		int getCurrentLevel();
 };
 
-symTableAccess::symTableAccess() : symTable() {}
+symTableAccess::symTableAccess() : NvPcomp::symTable() {}
 
-symTableAccess::symTableAccess(FILE* out) : symTable(out) {}
+symTableAccess::symTableAccess(FILE* out) : NvPcomp::symTable(out) {}
 
 symTableAccess::~symTableAccess() {}
 

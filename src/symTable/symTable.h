@@ -27,21 +27,22 @@ enum InsertResult {
 	INSERT_FAIL_IN_CURRENT_LEVEL	
 };
 
-
-class symTable {
-protected:
-	std::vector<std::map< std::string, symNode *> *> _table;
-	int _level;
-public:
-	symTable();
-	symTable(FILE*);
-	~symTable();
-	InsertResult insert(std::string key, symNode* node);
-	int search(const std::string key, symNode* &Node, bool ignoreFirst);
-	symNode *search_top(std::string key);
-	void dump();
-	bool push();
-	bool pop();
-};
+namespace NvPcomp {
+	class symTable {
+	protected:
+		std::vector<std::map< std::string, symNode *> *> _table;
+		int _level;
+	public:
+		symTable();
+		symTable(FILE*);
+		~symTable();
+		InsertResult insert(std::string key, symNode* node);
+		int search(const std::string key, symNode* &Node, bool ignoreFirst);
+		symNode *search_top(std::string key);
+		void dump();
+		bool push();
+		bool pop();
+	};
+}
 
 #endif /* SYMTABLE_H_ */

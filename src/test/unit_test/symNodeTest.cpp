@@ -19,6 +19,8 @@
 #include <symNodeTest.h>
 #include <parse.hh>
 
+using namespace NvPcomp;
+
 /* Register this test suite with the factory. */
 CPPUNIT_TEST_SUITE_REGISTRATION( symNodeTest );
 
@@ -28,7 +30,7 @@ void symNodeTest::setUp()
 	tok = NvPcomp::BParser::token::IDENTIFIER_TK;
 	NvPcomp::BParser::location_type loc;
 	
-	node1 = new symNode(tok,loc," ", " ");
+	node1 = new symNode(loc," ", " ");
 }
 
 void symNodeTest::tearDown()

@@ -27,39 +27,14 @@
 
 using namespace std;
 
-void buf_test() {
-	sourceBuffer *buf;
-	
-	SET_OUTPUT(DEBUGLog, stdout);
-	//SET_LOG_LEVEL(DEBUGLog, logLEVEL6);
-	
-	cout << "Start Buffer..." << endl;
-	buf = new sourceBuffer();
-	if(buf->openFile("test.c")) {
-		cout << "file open." << endl;
-		cout << "Grabbing line." << endl;
-		cout << buf->bufferGetLine(2,2);
-		cout << buf->bufferGetLine(2,2);
-		//cout << buf->bufferGetLine(4,4);
-		//cout << buf->bufferGetLine(7,7);
-		//cout << buf->bufferGetLine(1,5);
-		buf->closeFile();
-	} else {
-		cout << "error opening file" << endl;
-	}
-	cout << "End Buffer..." << endl;
-	
-}
-
-void lex_test(int retVal) {
+void parse_mode(const char *fileName) {
 	NvPcomp::FlexScanner *scanner;
 	NvPcomp::Parser *main_parser;
 	ifstream in;
 	
-	SET_OUTPUT(PARSERLog, stdout);
-	
 	cout << "Trying to open input file..." << endl;
-	in.open("test.c", ifstream::in);
+	
+	in.open(fileName, ifstream::in);
 	
 	if(!in.good()) {
 		cout << "Bad input file." << endl;
@@ -67,23 +42,20 @@ void lex_test(int retVal) {
 		cout << "Past input file open..." << endl;
 		scanner = new NvPcomp::FlexScanner(&in,"test.c");
 		main_parser = new NvPcomp::Parser(scanner, "test.c");
-		//SET_OUTPUT(SCANNERLog, stdout);
-		retVal = main_parser->parse();
+		main_parser->parse();
 		in.close();
 	}
 }
 
-
-void scanner_mode(const char *fileName) {
+void scan_mode(const char *fileName) {
 	
 	NvPcomp::FlexScanner *scanner;
+	NvPcomp::symTable *table;
 	ifstream in;
 	NvPcomp::BParser::token::yytokentype token;
 	NvPcomp::BParser::semantic_type lval;
 	NvPcomp::BParser::location_type loc;
-	
-	SET_OUTPUT(SCANNERLog, stdout);
-	SET_OUTPUT(WARNINGLog, stdout);
+	table = new NvPcomp::symTable();
 	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;
@@ -94,7 +66,13 @@ void scanner_mode(const char *fileName) {
 	} else {
 		scanner = new NvPcomp::FlexScanner(&in, fileName);
 		
-		while(scanner->yylex(&lval, &loc));
+		table->dump();
+		
+		while(scanner->yylex(&lval, &loc, table));
+		
+		scanner->table->dump();
+		cout << endl << endl;
+		table->dump();
 		in.close();
 		
 	}
@@ -103,31 +81,80 @@ void scanner_mode(const char *fileName) {
 
 int main( int argc, char* argv[] ) {
 
-	int retVal = -1;
-	//buf_test();
-
-	lex_test(retVal);
-	cout << "Calling command line parser." << endl;	
+	string inputFile;
 	comLineParser *clp;
 	clp = new comLineParser(argc, argv);
-	// Testing comLineParser
+	string fileName = clp->getOutput();
+			
+	FILE* scanner_out;
+	FILE* symbol_out;
+	FILE* parser_out;
+
+	SET_OUTPUT(INFOLog, stdout);
+	SET_OUTPUT(DEBUGLog, stdout);
+	SET_OUTPUT(WARNINGLog, stdout);
 	
-	// To see if debug flag is on
-		// if (clp->isDebug()) cout << "-d debug" << endl;
-	// To see if debug & lexer flag is on
-		// if (clp->isDebugLex()) cout << "-dl debug & lexer" << endl;
-	// To see if debug & symbol table is on
-		// if (clp->isDebugST()) cout << "-ds debug & symbol table" << endl;
-	// To see if debug, lexer, & symbol table is on
-		// if (clp->isDebugLexST()) cout << "-dls debug & lexer & symbol table" << endl;
-	// To see if scanner is on
-		// if (clp->isScanner()) cout << "-c scanner mode" << endl;
-	// To see if output is on and get output file name
-		// if (clp->isOutput()) cout << clp->getOutput() << endl;
-	cout << "Past command line parser..." << endl;	
-
-	lex_test(retVal);	
-
-	return retVal;
+	if(clp->isInput()) {
+		inputFile = clp->getInput();
+		cout << "inputFile: " << inputFile << "Te" << endl;
+	} else {
+		LOG(INFOLog, logLEVEL1) << "No input file specified, aborting.";
+		return -1;
+	}	
+		
+	//setup debugging output.	
+	if(clp->isDebugLexST()) {
+		cout << "3" << endl;
+		scanner_out = fopen("scanner.out", "w");
+		if(scanner_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file scanner.out";
+			return -1;
+		}
+				
+		symbol_out = fopen("symbol.out", "w");
+		if(symbol_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file symbol.out";
+			return -1;
+		}		
+		
+		SET_OUTPUT(SCANNERLog, scanner_out);	
+		SET_OUTPUT(SymbolDump, symbol_out);		
+	} else if (clp->isDebugLex()) {
+		cout << "1" << endl;
+		scanner_out = fopen("scanner.out", "w");
+		if(scanner_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file scanner.out";
+			return -1;
+		}
+		SET_OUTPUT(SCANNERLog, scanner_out);	
+	} else if (clp->isDebugST()) {
+		cout << "2" << endl;
+		symbol_out = fopen("symbol.out", "w");
+		if(symbol_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file symbol.out";
+			return -1;
+		}		
+		SET_OUTPUT(SymbolDump, symbol_out);
+	}	
+	
+	if (clp->isScanner()) {
+		// Scan Mode	
+		scan_mode(inputFile.c_str());		
+	} else {		
+	
+		parser_out = fopen(fileName.c_str(), "w");
+		if(parser_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file " << fileName;
+			return -1;
+		}				
+		SET_OUTPUT(PARSERLog, parser_out);
+		
+		// Parse Mode
+		parse_mode(inputFile.c_str());	
+		
+		
+	}
+	
+	return 0;
 }
 
