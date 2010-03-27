@@ -22,6 +22,7 @@ OBJS += ./src/buffer/sourceBuffer.o
 OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
+OBJS += ./src/ast/ast.o
 
 SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
 
@@ -31,6 +32,7 @@ INCS += -I./src/logging
 INCS += -I./src/scanner
 INCS += -I./src/parser
 INCS += -I./src/comLineParser
+INCS += -I./src/ast
 INCS += -I./src/buffer
 INCS += -I./src/test
 INCS += -I./src/test/logging

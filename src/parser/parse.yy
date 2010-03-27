@@ -7,6 +7,7 @@
 %parse-param { NvPcomp::FlexScanner &scanner}
 %parse-param { sourceBuffer &buffer }
 %parse-param { symTable &table }
+%parse-param { astNode &ast }
 %lex-param   { NvPcomp::FlexScanner &scanner }
 %lex-param   { symTable &table }
 %locations
@@ -17,7 +18,7 @@
 	#include <sourceBuffer.h>
 	#include <NvPcomp_logger.h>
 	#include <symTable.h>
-	
+	#include <ast.h>
 	namespace NvPcomp {
 		class FlexScanner;
 	}
@@ -57,6 +58,7 @@
   double dval;
   int    ival;
   std::string *sval;
+  astNode *astval;
 }
 
 /* Reserved Keywords													*/
@@ -136,13 +138,19 @@
 %%
 
 translation_unit
-	: external_declaration
-	| translation_unit external_declaration
+	: external_declaration 							{ 
+															  REDUCTION(translation_unit:external_declaration)
+															  ast.addChild(new astNode("translation_unit"));
+															}
+	| translation_unit external_declaration	{ 
+												           REDUCTION(translation_unit:translation_unit external_declaration)
+															  ast.addChild(new astNode("translation_unit"));
+															}
 	;
 
 external_declaration
 	: function_definition 		{REDUCTION(external_declaration:function_definition)}
-	| declaration				{REDUCTION(external_declaration:declaration)}
+	| declaration				   {REDUCTION(external_declaration:declaration)}
 	;
 
 function_definition
@@ -153,8 +161,8 @@ function_definition
 	;
 
 declaration
-	: declaration_specifiers SEMICOLON_TK						{REDUCTION(declaration_specifiers SEMICOLON_TK)}
-	| declaration_specifiers init_declarator_list SEMICOLON_TK 	{REDUCTION(declaration_specifiers init_declarator_list SEMICOLON_TK)}
+	: declaration_specifiers SEMICOLON_TK						{REDUCTION(declaration:declaration_specifiers SEMICOLON_TK)}
+	| declaration_specifiers init_declarator_list SEMICOLON_TK 	{REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)}
 	;
 
 declaration_list

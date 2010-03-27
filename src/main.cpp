@@ -22,6 +22,7 @@
 #include <NvPcompParser.h>
 #include <sourceBuffer.h>
 #include <comLineParser.h>
+#include <ast.h>
 #include <iostream>
 #include <fstream>
 
@@ -32,6 +33,9 @@ void parse_mode(const char *fileName) {
 	NvPcomp::Parser *main_parser;
 	ifstream in;
 	
+	astNode *ast;
+	ast = new astNode("root");
+
 	cout << "Trying to open input file..." << endl;
 	
 	in.open(fileName, ifstream::in);
@@ -40,11 +44,13 @@ void parse_mode(const char *fileName) {
 		cout << "Bad input file." << endl;
 	} else {
 		cout << "Past input file open..." << endl;
-		scanner = new NvPcomp::FlexScanner(&in,"test.c");
-		main_parser = new NvPcomp::Parser(scanner, "test.c");
+		scanner = new NvPcomp::FlexScanner(&in,fileName);
+		main_parser = new NvPcomp::Parser(scanner, fileName, ast);
 		main_parser->parse();
 		in.close();
 	}
+	
+	ast->printNode();
 }
 
 void scan_mode(const char *fileName) {
@@ -85,6 +91,7 @@ int main( int argc, char* argv[] ) {
 	comLineParser *clp;
 	clp = new comLineParser(argc, argv);
 	string fileName = clp->getOutput();
+
 			
 	FILE* scanner_out;
 	FILE* symbol_out;
@@ -96,7 +103,7 @@ int main( int argc, char* argv[] ) {
 	
 	if(clp->isInput()) {
 		inputFile = clp->getInput();
-		cout << "inputFile: " << inputFile << "Te" << endl;
+		cout << "inputFile: " << inputFile << endl;
 	} else {
 		LOG(INFOLog, logLEVEL1) << "No input file specified, aborting.";
 		return -1;
