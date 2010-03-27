@@ -50,9 +50,9 @@ void astNode::printNode(int level) {
 	{
 		cout << " ";	
 	}	
-	cout << nodeType  << endl;
+	cout << nodeType << ":" << this << endl;
 	for (int i=0; i < children.size(); i++)
 	{
-		children[0]->printNode(level+1);
+		children[i]->printNode(level+1);
 	}
 }

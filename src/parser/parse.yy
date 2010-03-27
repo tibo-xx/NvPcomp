@@ -140,17 +140,23 @@
 translation_unit
 	: external_declaration 							{ 
 															  REDUCTION(translation_unit:external_declaration)
-															  ast.addChild(new astNode("translation_unit"));
+															  $<astval>$ = new astNode("translation_unit");
+															  ast.addChild($<astval>$);
+															  $<astval>$->addChild($<astval>1);
 															}
 	| translation_unit external_declaration	{ 
 												           REDUCTION(translation_unit:translation_unit external_declaration)
-															  ast.addChild(new astNode("translation_unit"));
+															  $<astval>$ = new astNode("translation_unit");
+															  ast.addChild($<astval>$);
+															  $<astval>$->addChild($<astval>2);
 															}
 	;
 
 external_declaration
-	: function_definition 		{REDUCTION(external_declaration:function_definition)}
-	| declaration				   {REDUCTION(external_declaration:declaration)}
+	: function_definition 		{REDUCTION(external_declaration:function_definition)
+										 $<astval>$ = new astNode("external_declaration(func)");}
+	| declaration				   {REDUCTION(external_declaration:declaration)
+									    $<astval>$ = new astNode("external_declaration(dec)");}
 	;
 
 function_definition
