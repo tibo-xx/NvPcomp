@@ -153,10 +153,8 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition 		{REDUCTION(external_declaration:function_definition)
-										 $<astval>$ = new astNode("external_declaration(func)");}
-	| declaration				   {REDUCTION(external_declaration:declaration)
-									    $<astval>$ = new astNode("external_declaration(dec)");}
+	: function_definition 		{REDUCTION(external_declaration:function_definition)}
+	| declaration				   {REDUCTION(external_declaration:declaration)}
 	;
 
 function_definition
@@ -168,7 +166,13 @@ function_definition
 
 declaration
 	: declaration_specifiers SEMICOLON_TK						{REDUCTION(declaration:declaration_specifiers SEMICOLON_TK)}
-	| declaration_specifiers init_declarator_list SEMICOLON_TK 	{REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)}
+	| declaration_specifiers init_declarator_list SEMICOLON_TK 	
+	  {
+	  	REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
+	  	$<astval>$ = new astNode("declaration");
+	  	$<astval>$->addChild($<astval>1);
+	  	$<astval>$->addChild($<astval>2);
+	  }
 	;
 
 declaration_list
@@ -179,7 +183,7 @@ declaration_list
 declaration_specifiers
 	: storage_class_specifier									{REDUCTION(declaration_specifiers:storage_class_specifier)}
 	| storage_class_specifier declaration_specifiers			{REDUCTION(declaration_specifiers:storage_class_specifier declaration_specifiers)}
-	| type_specifier											{REDUCTION(declaration_specifiers:type_specifier)}
+	| type_specifier	  											{REDUCTION(declaration_specifiers:type_specifier)}
 	| type_specifier declaration_specifiers						{REDUCTION(declaration_specifiers:type_specifier declaration_specifiers)}
 	| type_qualifier 											{REDUCTION(declaration_specifiers:type_qualifier)}
 	| type_qualifier declaration_specifiers						{REDUCTION(declaration_specifiers:type_qualifier declaration_specifiers)}
@@ -197,7 +201,11 @@ type_specifier
 	: VOID_TK							{REDUCTION(type_specifier:VOID_TK)}
 	| CHAR_TK							{REDUCTION(type_specifier:CHAR_TK)}
 	| SHORT_TK							{REDUCTION(type_specifier:SHORT_TK)}
-	| INT_TK							{REDUCTION(type_specifier:INT_TK)}
+	| INT_TK							
+	  {
+	  	REDUCTION(type_specifier:INT_TK)
+		$<astval>$ = new astNode("INT_TK");
+	  }
 	| LONG_TK							{REDUCTION(type_specifier:LONG_TK)}
 	| FLOAT_TK 							{REDUCTION(type_specifier:FLOAT_TK)}
 	| DOUBLE_TK							{REDUCTION(type_specifier:DOUBLE_TK)}
@@ -577,7 +585,8 @@ string
 	;
 
 identifier
-	: IDENTIFIER_TK						{REDUCTION(identifier:IDENTIFIER_TK)}
+	: IDENTIFIER_TK						{REDUCTION(identifier:IDENTIFIER_TK)
+												 $<astval>$ = new astNode("IDENTIFIER_TK");}
 	;
 
 comment
