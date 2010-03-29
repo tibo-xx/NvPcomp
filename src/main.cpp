@@ -49,8 +49,9 @@ void parse_mode(const char *fileName) {
 		main_parser->parse();
 		in.close();
 	}
-	
+	cout << "AST printing node" << endl;
 	ast->printNode();
+	cout << "AST finished printing node" << endl;
 }
 
 void scan_mode(const char *fileName) {
@@ -80,7 +81,6 @@ void scan_mode(const char *fileName) {
 		cout << endl << endl;
 		table->dump();
 		in.close();
-		
 	}
 	
 }
@@ -104,51 +104,35 @@ int main( int argc, char* argv[] ) {
 	if(clp->isInput()) {
 		inputFile = clp->getInput();
 		cout << "inputFile: " << inputFile << endl;
-	} else {
+	}
+	else {
 		LOG(INFOLog, logLEVEL1) << "No input file specified, aborting.";
 		return -1;
 	}	
 		
 	//setup debugging output.	
-	if(clp->isDebugLexST()) {
-		cout << "3" << endl;
-		scanner_out = fopen("scanner.out", "w");
-		if(scanner_out == NULL) {
-			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file scanner.out";
-			return -1;
-		}
-				
-		symbol_out = fopen("symbol.out", "w");
-		if(symbol_out == NULL) {
-			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file symbol.out";
-			return -1;
-		}		
-		
-		SET_OUTPUT(SCANNERLog, scanner_out);	
-		SET_OUTPUT(SymbolDump, symbol_out);		
-	} else if (clp->isDebugLex()) {
-		cout << "1" << endl;
+	if (clp->isLexer()) {
+		cout << "l" << endl;
 		scanner_out = fopen("scanner.out", "w");
 		if(scanner_out == NULL) {
 			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file scanner.out";
 			return -1;
 		}
 		SET_OUTPUT(SCANNERLog, scanner_out);	
-	} else if (clp->isDebugST()) {
-		cout << "2" << endl;
+	} 
+	else if (clp->isSymTab()) {
+		cout << "s" << endl;
 		symbol_out = fopen("symbol.out", "w");
 		if(symbol_out == NULL) {
 			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file symbol.out";
 			return -1;
 		}		
 		SET_OUTPUT(SymbolDump, symbol_out);
-	}	
-	
+	}		
 	if (clp->isScanner()) {
 		// Scan Mode	
 		scan_mode(inputFile.c_str());		
 	} else {		
-	
 		parser_out = fopen(fileName.c_str(), "w");
 		if(parser_out == NULL) {
 			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file " << fileName;
@@ -157,11 +141,8 @@ int main( int argc, char* argv[] ) {
 		SET_OUTPUT(PARSERLog, parser_out);
 		
 		// Parse Mode
-		parse_mode(inputFile.c_str());	
-		
-		
-	}
-	
+		parse_mode(inputFile.c_str());				
+	}	
 	return 0;
 }
 

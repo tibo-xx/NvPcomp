@@ -51,47 +51,49 @@ public:
 	comLineParser();
 	comLineParser(int argc, char* argv[]);	
 	~comLineParser();
-	bool isDebug();
-	bool isDebugLex();
-	bool isDebugST();
-	bool isDebugLexST();
+	bool isLexer();
+	bool isSymTab();
+	bool isParser();
+	bool isAST();
 	bool isScanner();
 	bool isOutput();
+	bool isIntCode();
+	bool isAsscode();
 	bool isInput();
 	std::string getOutput();
 	std::string getInput();
 	
 private:
 	//void errorCheck(int &argc, const char *&argv, void *argtable);
-	int clpDriver 	(int &d, int &dl, int &ds, int &dls, int &sc, int 
-					&o, const char *outfile, int &numTarget, const char 
-					**tarFiles);
-	/* -d command line argument */
-	struct arg_lit  *debug;
-	/* -dl command line argument */
-	struct arg_lit  *debugLex;
-	/* -ds command line argument */
-	struct arg_lit  *debugSymTab;
-	/* -dls command line argument */
-	struct arg_lit  *debugLexSym;
-	/* -c command line argument */
-	struct arg_lit  *scan;
+	int clpDriver 	(int &l, int &s, int &p, int &a, int &sc, int &o,
+					const char **outfile, int &tf, const char **tarFile);
+					
+					
+	/* -l command line argument */
+	struct arg_int  *lexer;
+	/* -s command line argument */
+	struct arg_int  *symtab;
+	/* -p command line argument */
+	struct arg_int  *parser;
+	/* -a command line argument */
+	struct arg_lit  *ast;
+	/* -scan command line argument */
+	struct arg_lit  *scanner;
 	/* -o command line argument (with or without <outputfile>) */
 	struct arg_file *output;
+	/* -q command line argument */
+	struct arg_lit  *intcode;
+	/* -S command line argument */
+	struct arg_lit  *asscode;
 	/* target files for NvPcomp */
-	struct arg_file *targetFiles;
+	struct arg_file *targetFile;
 	/* */
 	struct arg_end *end; 
 	int nerrors, exitcode;
 	
-	bool _debug;
-	bool _debugLex; 
-	bool _debugST;
-	bool _debugLexST;
-	bool _output;
-	bool _scanner;
-	
-	char *outputFN;
+	bool 	_lexer, _symtab, 	_parser, _ast, _scanner, _output, 
+			_intcode, _asscode;	
+	std::string outputFN;
 	char **targetFN;
 	int _numTargets;
 	 
