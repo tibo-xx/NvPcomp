@@ -55,7 +55,7 @@
 {
   double dval;
   int    ival;
-  std::string *sval;
+  char	*sval;
   astNode *astval;
   long	startLine;
   long	endLine;
@@ -165,7 +165,12 @@ external_declaration
 function_definition
 	: declarator compound_statement												{REDUCTION(function_definition:declarator compound_statement)}
 	| declarator declaration_list compound_statement							{REDUCTION(function_definition:declarator declaration_list compound_statement)}
-	| declaration_specifiers declarator compound_statement						{REDUCTION(function_definition:declaration_specifiers declarator compound_statement)}
+	| declaration_specifiers declarator compound_statement						{REDUCTION(function_definition:declaration_specifiers declarator compound_statement)
+							$<astval>$ = new astNode("function_definition");
+							$<astval>$->addChild($<astval>1);
+							$<astval>$->addChild($<astval>2);
+							$<astval>$->addChild($<astval>3);
+							}
 	| declaration_specifiers declarator declaration_list compound_statement		{REDUCTION(function_definition:declaration_specifiers declarator declaration_list compound_statement)}
 	;
 
@@ -182,14 +187,22 @@ declaration
 
 declaration_list
 	: declaration												{REDUCTION(declaration_list:declaration)}
-	| declaration_list declaration								{REDUCTION(declaration_list:declaration_list declaration)}
+	| declaration_list declaration								{REDUCTION(declaration_list:declaration_list declaration)
+					$<astval>$ = new astNode("declaration_list");
+					$<astval>$->addChild($<astval>1);
+					$<astval>$->addChild($<astval>2);
+					}
 	;
 
 declaration_specifiers
 	: storage_class_specifier									{REDUCTION(declaration_specifiers:storage_class_specifier)}
 	| storage_class_specifier declaration_specifiers			{REDUCTION(declaration_specifiers:storage_class_specifier declaration_specifiers)}
 	| type_specifier	  											{REDUCTION(declaration_specifiers:type_specifier)}
-	| type_specifier declaration_specifiers						{REDUCTION(declaration_specifiers:type_specifier declaration_specifiers)}
+	| type_specifier declaration_specifiers						{REDUCTION(declaration_specifiers:type_specifier declaration_specifiers)
+																					$<astval>$ = new astNode("declaration_specifiers");
+																					$<astval>$->addChild($<astval>1);
+																					$<astval>$->addChild($<astval>2);
+																				}
 	| type_qualifier 											{REDUCTION(declaration_specifiers:type_qualifier)}
 	| type_qualifier declaration_specifiers						{REDUCTION(declaration_specifiers:type_qualifier declaration_specifiers)}
 	;
@@ -203,19 +216,24 @@ storage_class_specifier
 	;
 
 type_specifier
-	: VOID_TK							{REDUCTION(type_specifier:VOID_TK)}
-	| CHAR_TK							{REDUCTION(type_specifier:CHAR_TK)}
-	| SHORT_TK							{REDUCTION(type_specifier:SHORT_TK)}
-	| INT_TK							
-	  {
-	  	REDUCTION(type_specifier:INT_TK)
-		$<astval>$ = new astNode("INT_TK");
-	  }
-	| LONG_TK							{REDUCTION(type_specifier:LONG_TK)}
-	| FLOAT_TK 							{REDUCTION(type_specifier:FLOAT_TK)}
-	| DOUBLE_TK							{REDUCTION(type_specifier:DOUBLE_TK)}
-	| SIGNED_TK							{REDUCTION(type_specifier:SIGNED_TK)}
-	| UNSIGNED_TK						{REDUCTION(type_specifier:UNSIGNED_TK)}
+	: VOID_TK							{REDUCTION(type_specifier:VOID_TK)
+										    $<astval>$ = new astNode("VOID_TK", yylval.sval);}
+	| CHAR_TK							{REDUCTION(type_specifier:CHAR_TK)
+										    $<astval>$ = new astNode("CHAR_TK", yylval.sval);}
+	| SHORT_TK							{REDUCTION(type_specifier:SHORT_TK)
+										    $<astval>$ = new astNode("SHORT_TK", yylval.sval);}
+	| INT_TK							   {REDUCTION(type_specifier:INT_TK)
+											 $<astval>$ = new astNode("INT_TK", yylval.sval);}
+	| LONG_TK							{REDUCTION(type_specifier:LONG_TK)
+										    $<astval>$ = new astNode("LONG_TK", yylval.sval);}
+	| FLOAT_TK 							{REDUCTION(type_specifier:FLOAT_TK)
+										    $<astval>$ = new astNode("FLOAT_TK", yylval.sval);}
+	| DOUBLE_TK							{REDUCTION(type_specifier:DOUBLE_TK)
+										    $<astval>$ = new astNode("DOUBLE_TK", yylval.sval);}
+	| SIGNED_TK							{REDUCTION(type_specifier:SIGNED_TK)
+										    $<astval>$ = new astNode("SIGNED_TK", yylval.sval);}
+	| UNSIGNED_TK						{REDUCTION(type_specifier:UNSIGNED_TK)
+										    $<astval>$ = new astNode("UNSIGNED_TK", yylval.sval);}
 	| struct_or_union_specifier			{REDUCTION(type_specifier:struct_or_union_specifier)}
 	| enum_specifier					{REDUCTION(type_specifier:enum_specifier)}
 	| TYPEDEF_NAME_TK					{REDUCTION(type_specifier:TYPEDEF_NAME_TK)}
@@ -246,12 +264,23 @@ struct_declaration_list
 
 init_declarator_list
 	: init_declarator									{REDUCTION(init_declarator_list:init_declarator)}
-	| init_declarator_list COMMA_TK init_declarator		{REDUCTION(init_declarator_list:init_declarator_list COMMA_TK init_declarator)}
+	| init_declarator_list COMMA_TK init_declarator		{REDUCTION(init_declarator_list:init_declarator_list COMMA_TK init_declarator)
+																		    $<astval>$ = new astNode("init_declarator_list");
+																		    $<astval>$->addChild($<astval>1);
+																		    $<astval>$->addChild($<astval>3);
+																			
+																		}
 	;
 
 init_declarator
 	: declarator							{REDUCTION(init_declarator:declarator)}
-	| declarator EQUAL_TK initializer		{REDUCTION(init_declarator:declarator EQUAL_TK initializer)}
+	| declarator EQUAL_TK initializer		
+		{REDUCTION(init_declarator:declarator EQUAL_TK initializer)
+			$<astval>$ = new astNode("init_declarator");
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild(new astNode("EQUAL_TK", "="));
+			$<astval>$->addChild($<astval>3);		
+		}
 	;
 
 struct_declaration
@@ -296,21 +325,48 @@ enumerator
 
 declarator
 	: direct_declarator					{REDUCTION(declarator:direct_declarator)}
-	| pointer direct_declarator			{REDUCTION(declarator:pointer direct_declarator)}
+	| pointer direct_declarator			{REDUCTION(declarator:pointer direct_declarator)
+													 $<astval>$ = new astNode("declarator");
+													 $<astval>$->addChild($<astval>1);
+													 $<astval>$->addChild($<astval>2);
+													 }
 	;
 
 direct_declarator
 	: identifier																{REDUCTION(direct_declarator:identifier)}
-	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK									{REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)}
-	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)}
-	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)}
-	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)}
-	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)}
-	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK			{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)}
+	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK									{REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>2);
+			}
+	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
+			}
+	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
+			}
+	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK							{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1);
+			}
+	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK		{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
+			}
+	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK			{REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)
+			$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
+			}
 	;
 
 pointer
-	: STAR_TK									{REDUCTION(pointer:STAR_TK)}
+	: STAR_TK									{REDUCTION(pointer:STAR_TK)
+													 $<astval>$ = new astNode("STAR_TK", $<sval>1);}
 	| STAR_TK type_qualifier_list				{REDUCTION(pointer:STAR_TK type_qualifier_list)}
 	| STAR_TK pointer							{REDUCTION(pointer:STAR_TK pointer)}
 	| STAR_TK type_qualifier_list pointer		{REDUCTION(pointer:STAR_TK type_qualifier_list pointer)}
@@ -332,7 +388,11 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers declarator					{REDUCTION(parameter_declaration:declaration_specifiers declarator)}
+	: declaration_specifiers declarator					{REDUCTION(parameter_declaration:declaration_specifiers declarator)
+					$<astval>$ = new astNode("parameter_declaration");
+					$<astval>$->addChild($<astval>1);
+					$<astval>$->addChild($<astval>2);
+					}
 	| declaration_specifiers							{REDUCTION(parameter_declaration:declaration_specifiers)}
 	| declaration_specifiers abstract_declarator		{REDUCTION(parameter_declaration:declaration_specifiers abstract_declarator)}
 	;
@@ -400,13 +460,21 @@ expression_statement
 
 compound_statement
 	: OPEN_BRACE_TK {SCOPE_PUSH()}
-				CLOSE_BRACE_TK											{REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); SCOPE_POP();}
+				CLOSE_BRACE_TK											{REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); SCOPE_POP();
+																		    $<astval>$ = new astNode("compound_statement");}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				statement_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); SCOPE_POP()}
+				statement_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); SCOPE_POP()
+																					$<astval>$ = new astNode("compound_statement");
+																					 $<astval>$->addChild($<astval>3);}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				declaration_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); SCOPE_POP();}
+				declaration_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); SCOPE_POP();
+																					 $<astval>$ = new astNode("compound_statement");
+																					 $<astval>$->addChild($<astval>3);}
 	| OPEN_BRACE_TK {SCOPE_PUSH()}
-				declaration_list statement_list CLOSE_BRACE_TK			{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK); SCOPE_POP();}
+				declaration_list statement_list CLOSE_BRACE_TK			{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK); SCOPE_POP();
+																					$<astval>$ = new astNode("compound_statement");
+																					 $<astval>$->addChild($<astval>3);
+																					 $<astval>$->addChild($<astval>4);}
 	;
 
 statement_list
@@ -415,8 +483,20 @@ statement_list
 	;
 
 selection_statement
-	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)}
-	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement			{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement)}
+	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement							{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)
+				$<astval>$ = new astNode("selection_statement");
+				$<astval>$->addChild(new astNode("IF_TK", "if"));
+				$<astval>$->addChild($<astval>3);
+				$<astval>$->addChild($<astval>5);
+				}
+	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement			{REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement)
+				$<astval>$ = new astNode("selection_statement");
+				$<astval>$->addChild(new astNode("IF_TK", "if"));
+				$<astval>$->addChild($<astval>3);
+				$<astval>$->addChild($<astval>5);
+				$<astval>$->addChild(new astNode("ELSE_TK", "else"));
+				$<astval>$->addChild($<astval>7);
+				}	
 	| SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement						{REDUCTION(selection_statement:SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)}
 	;
 
@@ -521,15 +601,40 @@ shift_expression
 
 additive_expression
 	: multiplicative_expression											{REDUCTION(additive_expression:multiplicative_expression)}
-	| additive_expression PLUS_TK multiplicative_expression				{REDUCTION(additive_expression:additive_expression PLUS_TK multiplicative_expression)}
-	| additive_expression MINUS_TK multiplicative_expression			{REDUCTION(additive_expression:additive_expression MINUS_TK multiplicative_expression)}
+	| additive_expression PLUS_TK multiplicative_expression				{REDUCTION(additive_expression:additive_expression PLUS_TK multiplicative_expression)
+										$<astval>$ = new astNode("additive_expression");											
+										$<astval>$->addChild($<astval>1);
+										$<astval>$->addChild(new astNode("PLUS_TK","+"));
+										$<astval>$->addChild($<astval>3);
+										}
+	| additive_expression MINUS_TK multiplicative_expression			{REDUCTION(additive_expression:additive_expression MINUS_TK multiplicative_expression)
+										$<astval>$ = new astNode("additive_expression");										
+										$<astval>$->addChild($<astval>1);
+										$<astval>$->addChild(new astNode("MINUS_TK","-"));
+										$<astval>$->addChild($<astval>3);
+										}
 	;
 
 multiplicative_expression
 	: cast_expression													{REDUCTION(multiplicative_expression:cast_expression)}
-	| multiplicative_expression STAR_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression STAR_TK cast_expression	)}
-	| multiplicative_expression DIV_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression DIV_TK cast_expression)}
-	| multiplicative_expression MOD_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression MOD_TK cast_expression)}
+	| multiplicative_expression STAR_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression STAR_TK cast_expression	)
+										$<astval>$ = new astNode("mutiplicative_expression");
+										$<astval>$->addChild($<astval>1);
+										$<astval>$->addChild(new astNode("STAR_TK","*"));
+										$<astval>$->addChild($<astval>3);
+										}
+	| multiplicative_expression DIV_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression DIV_TK cast_expression)
+										$<astval>$ = new astNode("mutiplicative_expression");
+										$<astval>$->addChild($<astval>1);
+										$<astval>$->addChild(new astNode("DIV_TK","/"));
+										$<astval>$->addChild($<astval>3);
+										}
+	| multiplicative_expression MOD_TK cast_expression					{REDUCTION(multiplicative_expression:multiplicative_expression MOD_TK cast_expression)
+										$<astval>$ = new astNode("mutiplicative_expression");
+										$<astval>$->addChild($<astval>1);
+										$<astval>$->addChild(new astNode("MOD_TK","%"));
+										$<astval>$->addChild($<astval>3);
+										}
 	;
 
 cast_expression
@@ -570,7 +675,8 @@ primary_expression
 	: identifier														{REDUCTION(primary_expression:identifier)}
 	| constant															{REDUCTION(primary_expression:constant)}
 	| string															{REDUCTION(primary_expression:string)}
-	| OPEN_PAREN_TK expression CLOSE_PAREN_TK							{REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)}
+	| OPEN_PAREN_TK expression CLOSE_PAREN_TK							{REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)
+																				    $<astval>$ = $<astval>2;}
 	;
 
 argument_expression_list
@@ -579,19 +685,24 @@ argument_expression_list
 	;
 
 constant
-	: INTEGER_CONSTANT_TK				{REDUCTION(constant:INTEGER_CONSTANT_TK)}
-	| CHARACTER_CONSTANT_TK				{REDUCTION(constant:CHARACTER_CONSTANT_TK)}
-	| FLOATING_CONSTANT_TK				{REDUCTION(constant:FLOATING_CONSTANT_TK)}
-	| ENUMERATION_CONSTANT_TK			{REDUCTION(constant:ENUMERATION_CONSTANT_TK)}
+	: INTEGER_CONSTANT_TK				{REDUCTION(constant:INTEGER_CONSTANT_TK)
+												 $<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval);}
+	| CHARACTER_CONSTANT_TK				{REDUCTION(constant:CHARACTER_CONSTANT_TK)
+												 $<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval);}
+	| FLOATING_CONSTANT_TK				{REDUCTION(constant:FLOATING_CONSTANT_TK)
+												 $<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval);}
+	| ENUMERATION_CONSTANT_TK			{REDUCTION(constant:ENUMERATION_CONSTANT_TK)
+												 $<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval);}
 	;
 
 string
-	: STRING_LITERAL_TK					{REDUCTION(string:STRING_LITERAL_TK)}
+	: STRING_LITERAL_TK					{REDUCTION(string:STRING_LITERAL_TK)
+												 $<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval);}
 	;
 
 identifier
 	: IDENTIFIER_TK						{REDUCTION(identifier:IDENTIFIER_TK)
-												 $<astval>$ = new astNode("IDENTIFIER_TK");}
+												 $<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval);}
 	;
 
 comment

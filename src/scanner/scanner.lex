@@ -14,6 +14,7 @@
 			LOG(SCANNERLog,logLEVEL1) << "Token: " << #x << " on line: " << yylineno; \
 			prev_token = x; \
 			str_prev_token = std::string(#x); \
+			yylval->sval = strdup(yytext); \
 			return(x)
 
 using namespace NvPcomp;
