@@ -27,16 +27,19 @@ class astNode {
 
 	public:
 		astNode();
-		astNode(string nodeType);
-		void printNode(int level = 0);	
+		astNode(string nodeType, string nodeString = "");
+		void printNode(bool printProductions = true, int level = 0);	
 		virtual void output3AC() {};
 		void addChild(astNode* child);
 		void setType(string nodeType);
+		void setString(string nodeString);
 		string getType();
 
 	private:
 		// Node type/lhs, i.e. iteration_statement, identifier, etc.
 		string nodeType;
+		// Node string value
+		string nodeString;
 		// List of appropriate RHS nodes
 		vector<astNode*> children;	
 };

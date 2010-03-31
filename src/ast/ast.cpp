@@ -25,9 +25,17 @@ using namespace std;
 
 astNode::astNode() {
 	nodeType = "empty";
+	nodeString = "";
 }
-astNode::astNode(string _nodeType) {
+astNode::astNode(string _nodeType, string _nodeString) {
 	nodeType = _nodeType;
+	nodeString = _nodeString;
+	cout << "===== Creating astNode ==== " << nodeType << " " << nodeString << endl;
+}
+
+void astNode::setString(string _nodeString)
+{
+	nodeString = _nodeString;
 }
 
 void astNode::addChild(astNode* child)
@@ -45,14 +53,25 @@ string astNode::getType()
 	return nodeType;
 }
 
-void astNode::printNode(int level) {
+void astNode::printNode(bool printProductions, int level) {
 	for (int i=0; i < level; i++)
 	{
 		cout << " ";	
 	}	
-	cout << nodeType << ":" << this << endl;
-	for (int i=0; i < children.size(); i++)
+	if (!(nodeString == "" && printProductions == false))
 	{
-		children[i]->printNode(level+1);
+		if (printProductions)
+			cout << nodeType << ":" << nodeString << endl;
+		else
+			cout << nodeString << endl;
+	}
+	else
+		cout << endl;
+	for (unsigned int i=0; i < children.size(); i++)
+	{
+		if(children[i])
+			children[i]->printNode(printProductions, level+1);
+		else
+			cerr << "!!!!!!!!!!!nil node found in AST!!!!!!!!!!!!"  << endl;
 	}
 }
