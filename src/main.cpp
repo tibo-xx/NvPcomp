@@ -115,27 +115,29 @@ int main( int argc, char* argv[] ) {
 		cout << "l" << endl;
 		scanner_out = fopen("scanner.out", "w");
 		if(scanner_out == NULL) {
-			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file scanner.out";
+			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file scanner.out";
 			return -1;
 		}
 		SET_OUTPUT(SCANNERLog, scanner_out);	
 	} 
-	else if (clp->isSymTab()) {
+	
+	if (clp->isSymTab()) {
 		cout << "s" << endl;
 		symbol_out = fopen("symbol.out", "w");
 		if(symbol_out == NULL) {
-			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file symbol.out";
+			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file symbol.out";
 			return -1;
 		}		
 		SET_OUTPUT(SymbolDump, symbol_out);
 	}		
+	
 	if (clp->isScanner()) {
 		// Scan Mode	
 		scan_mode(inputFile.c_str());		
 	} else {		
 		parser_out = fopen(fileName.c_str(), "w");
 		if(parser_out == NULL) {
-			LOG(INFOLog, logLEVEL1) << "Aborting Error opening output file " << fileName;
+			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file " << fileName;
 			return -1;
 		}				
 		SET_OUTPUT(PARSERLog, parser_out);

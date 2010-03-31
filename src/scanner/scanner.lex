@@ -20,6 +20,8 @@ using namespace NvPcomp;
 
 typedef NvPcomp::BParser::token token;
 
+int CallerLevel;
+
 %}
 
 %option nodefault yyclass="FlexScanner" noyywrap nounput c++ yylineno
@@ -34,6 +36,7 @@ DIGIT	[0-9]
 NUMBER	(-)?{DIGIT}+
 FLOAT	{DIGIT}+"."{DIGIT}*
 
+%x comment
 /************************************************************************/
 /* Rules																*/
 /* TODO:																*/
@@ -46,6 +49,17 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 {WS}		{ yylloc->step(); }
 [\n]+		{ yylloc->lines(yyleng);  yylloc->step();}
 "\t"		{ yylloc->columns (8);}
+
+"/*"					{	CallerLevel = YY_START;
+							BEGIN(comment); 
+							std::cout << "begin comment..." << std::endl;}
+<comment>[^*\n]*        {std::cout << "eat stuff..." << std::endl;}
+<comment>"*"+[^*/\n]*   {std::cout << "eat stars..." << std::endl;}
+<comment>\n             {yylloc->lines(yyleng); std::cout << "new line in comment..." << std::endl;}
+<comment>"*"+"/"        {std::cout << "end comment, begin initial level..." << std::endl; BEGIN(CallerLevel); RETURN(token::COMMENT_TK);}
+
+"!!$"					{table->dump();}
+<comment>"!!$"			{table->dump();}
 
 auto		{ RETURN(token::AUTO_TK); }
 break		{ RETURN(token::BREAK_TK); }
@@ -84,8 +98,6 @@ while		{ RETURN(token::WHILE_TK); }
 
 {NUMBER}	{return check_integer();}
 {FLOAT}		{return check_float();}
-
-"!!$"		{table->dump();}
 
 L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 
@@ -146,24 +158,31 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 /* Very basic INDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	InsertResult result;
-	
-	// We need to really check if adding to the symbol table is correct.
-	symNode *tempNode = new symNode(*yylloc, std::string(yytext), str_prev_token);	
-	
-	result = table->insert(std::string(yytext), tempNode);
-	if(result == INSERT_SUCCESS_W_SHADOW) {
-		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
-		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-		RETURN(token::ERROR_TK);
+	std::string key = std::string(yytext);
+	symNode *tempNode;
 		
-	} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
-		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
-		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-		RETURN(token::ERROR_TK);
-	} else {
+	if(table->search(key, tempNode, false) != -1) {
+		/* The node is already in the table. */
 		RETURN(token::IDENTIFIER_TK);
+	} else {
+		/* Insert the id into the symbol table. */
+		symNode *tempNode = new symNode(*yylloc, key, str_prev_token);	
+		
+		result = table->insert(key, tempNode);
+		
+		if(result == INSERT_SUCCESS_W_SHADOW) {
+			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+			RETURN(token::ERROR_TK);
+			
+		} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
+			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+			RETURN(token::ERROR_TK);
+		} else {
+			RETURN(token::IDENTIFIER_TK);
+		}	
 	}	
-	
 }
 
 /* Check integer bounds */

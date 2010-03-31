@@ -41,13 +41,11 @@
 	
 	#define SCOPE_PUSH() \
 		LOG(PARSERLog, logLEVEL2) << "BParser: Scope push"; \
-		table.push(); \
-		table.dump();
-		
+		table.push();
+				
 	#define SCOPE_POP() \
 		LOG(PARSERLog, logLEVEL2) << "BParser: Scope pop"; \
-		table.pop(); \
-		table.dump();
+		table.pop();
 }
 
 /************************************************************************/
@@ -59,6 +57,8 @@
   int    ival;
   std::string *sval;
   astNode *astval;
+  long	startLine;
+  long	endLine;
 }
 
 /* Reserved Keywords													*/
@@ -132,29 +132,34 @@
 /* Equality Testing														*/
 /*		==				!=												*/
 %token 	EQ_OP_TK 		NE_OP_TK
+
+%start translation_unit
 /************************************************************************/
 /* Grammar Rules														*/
 /************************************************************************/
 %%
 
 translation_unit
-	: external_declaration 							{ 
-															  REDUCTION(translation_unit:external_declaration)
-															  $<astval>$ = new astNode("translation_unit");
-															  ast.addChild($<astval>$);
-															  $<astval>$->addChild($<astval>1);
+	: external_declaration 									{ 
+																REDUCTION(translation_unit:external_declaration)
+																$<astval>$ = new astNode("translation_unit");
+																ast.addChild($<astval>$);
+																$<astval>$->addChild($<astval>1);
 															}
-	| translation_unit external_declaration	{ 
-												           REDUCTION(translation_unit:translation_unit external_declaration)
-															  $<astval>$ = new astNode("translation_unit");
-															  ast.addChild($<astval>$);
-															  $<astval>$->addChild($<astval>2);
+	| translation_unit external_declaration					{ 
+																REDUCTION(translation_unit:translation_unit external_declaration)
+																$<astval>$ = new astNode("translation_unit");
+																ast.addChild($<astval>$);
+																$<astval>$->addChild($<astval>2);
 															}
 	;
 
 external_declaration
-	: function_definition 		{REDUCTION(external_declaration:function_definition)}
-	| declaration				   {REDUCTION(external_declaration:declaration)}
+	: function_definition 			{REDUCTION(external_declaration:function_definition)}
+	| declaration					{REDUCTION(external_declaration:declaration)}
+	| comment						{	REDUCTION(external_declaration comment)
+										$<astval>$ = new astNode("COMMENT_TK");
+									} 
 	;
 
 function_definition
@@ -599,13 +604,11 @@ comment
 /************************************************************************/
 // Error Function Implementation
 void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
-	std::cerr << "Error: " << msg << " location: " << loc << std::endl;
+	std::cerr << "Error: " << msg << ": at location: " << loc << std::endl;
 }
 
 // Declare the Scanner and implement the yylex function
 #include "NvPcompScanner.h"
 static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner, NvPcomp::symTable &table) {
-	if(&table == 0) 
-		std::cout << "This sucks" << std::endl;
 	return scanner.yylex(yylval,loc, &table);
 }
