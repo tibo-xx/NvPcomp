@@ -433,7 +433,7 @@ identifier_list
 
 initializer
 	: assignment_expression									{REDUCTION(initializer:assignment_expression)}
-	| OPEN_BRACE_TK scope_push
+	| OPEN_BRACE_TK scope_push   
 				initializer_list CLOSE_BRACE_TK				{REDUCTION(initializer:OPEN_BRACE_TK initializer_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| OPEN_BRACE_TK scope_push
 				initializer_list COMMA_TK CLOSE_BRACE_TK	{REDUCTION(initializer:OPEN_BRACE_TK initializer_list COMMA_TK CLOSE_BRACE_TK); SCOPE_POP()}
@@ -612,11 +612,28 @@ iteration_statement
 	;
 
 jump_statement
-	: GOTO_TK identifier SEMICOLON_TK			{REDUCTION(jump_statement:GOTO_TK identifier SEMICOLON_TK)}
-	| CONTINUE_TK SEMICOLON_TK					{REDUCTION(jump_statement:CONTINUE_TK SEMICOLON_TK)}
-	| BREAK_TK SEMICOLON_TK						{REDUCTION(jump_statement:BREAK_TK SEMICOLON_TK)}
-	| RETURN_TK SEMICOLON_TK					{REDUCTION(jump_statement:RETURN_TK SEMICOLON_TK)}
-	| RETURN_TK expression SEMICOLON_TK			{REDUCTION(jump_statement:RETURN_TK expression SEMICOLON_TK)}
+	: GOTO_TK identifier SEMICOLON_TK			{REDUCTION(jump_statement:GOTO_TK identifier SEMICOLON_TK)
+	         $<astval>$ = new astNode("jump_statement");
+	         $<astval>$->addChild(new astNode("GOTO_TK", "goto"));
+	         $<astval>$->addChild($<astval>2);
+	         }	         
+	| CONTINUE_TK SEMICOLON_TK					{REDUCTION(jump_statement:CONTINUE_TK SEMICOLON_TK)
+	         $<astval>$ = new astNode("jump_statement");
+	         $<astval>$->addChild(new astNode("CONTINUE_TK", "continue"));
+	         }
+	| BREAK_TK SEMICOLON_TK						{REDUCTION(jump_statement:BREAK_TK SEMICOLON_TK)
+	         $<astval>$ = new astNode("jump_statement");
+	         $<astval>$->addChild(new astNode("BREAK_TK", "break"));
+	         }
+	| RETURN_TK SEMICOLON_TK					{REDUCTION(jump_statement:RETURN_TK SEMICOLON_TK)
+	         $<astval>$ = new astNode("jump_statement");
+	         $<astval>$->addChild(new astNode("RETURN_TK", "return"));
+	         }
+	| RETURN_TK expression SEMICOLON_TK			{REDUCTION(jump_statement:RETURN_TK expression SEMICOLON_TK)
+	         $<astval>$ = new astNode("jump_statement");
+	         $<astval>$->addChild(new astNode("RETURN_TK", "return"));
+	         $<astval>$->addChild($<astval>2);
+	         }
 	;
 
 expression
@@ -786,23 +803,64 @@ unary_expression
 	;
 
 unary_operator
-	: BIT_AND_TK				{REDUCTION(unary_operator:BIT_AND_TK)}
-	| STAR_TK					{REDUCTION(unary_operator:STAR_TK)}
-	| PLUS_TK					{REDUCTION(unary_operator:PLUS_TK)}
-	| MINUS_TK					{REDUCTION(unary_operator:MINUS_TK)}
-	| BIT_NOT_TK				{REDUCTION(unary_operator:BIT_NOT_TK)}
-	| NOT_TK					{REDUCTION(unary_operator:NOT_TK)}
+	: BIT_AND_TK				{REDUCTION(unary_operator:BIT_AND_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
+	| STAR_TK					{REDUCTION(unary_operator:STAR_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
+	| PLUS_TK					{REDUCTION(unary_operator:PLUS_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
+	| MINUS_TK					{REDUCTION(unary_operator:MINUS_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
+	| BIT_NOT_TK				{REDUCTION(unary_operator:BIT_NOT_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
+	| NOT_TK					{REDUCTION(unary_operator:NOT_TK)
+            $<astval>$ = new astNode("unary_operator", yylval.sval);
+            }
 	;
 
 postfix_expression
 	: primary_expression															{REDUCTION(postfix_expression:primary_expression)}
-	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK					{REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)}
-	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK								{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)}
-	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK		{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK)}
-	| postfix_expression PERIOD_TK identifier										{REDUCTION(postfix_expression:postfix_expression PERIOD_TK identifier)}
-	| postfix_expression PTR_OP_TK identifier										{REDUCTION(postfix_expression:postfix_expression PTR_OP_TK identifier)}
-	| postfix_expression INC_OP_TK													{REDUCTION(postfix_expression:postfix_expression INC_OP_TK)}
-	| postfix_expression DEC_OP_TK													{REDUCTION(postfix_expression:postfix_expression DEC_OP_TK)}
+	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK					{REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild($<astval>3);	         
+	         }
+	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK								{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            }
+	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK		{REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild($<astval>3);	         
+	         }
+	| postfix_expression PERIOD_TK identifier										{REDUCTION(postfix_expression:postfix_expression PERIOD_TK identifier)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild(new astNode("PERIOD_TK", "."));
+            $<astval>$->addChild($<astval>3);	         
+	         }
+	| postfix_expression PTR_OP_TK identifier										{REDUCTION(postfix_expression:postfix_expression PTR_OP_TK identifier)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild(new astNode("PTR_OP_TK", "->"));
+            $<astval>$->addChild($<astval>3);	         
+	         }
+	| postfix_expression INC_OP_TK													{REDUCTION(postfix_expression:postfix_expression INC_OP_TK)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild(new astNode("INC_OP_TK", "++"));	         
+	         }
+	| postfix_expression DEC_OP_TK													{REDUCTION(postfix_expression:postfix_expression DEC_OP_TK)
+	         $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1);
+            $<astval>$->addChild(new astNode("DEC_OP_TK", "--"));	         
+	         }
 	;
 
 primary_expression
