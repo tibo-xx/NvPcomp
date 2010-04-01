@@ -9,6 +9,8 @@
 
 #define YY_USER_ACTION yylloc->columns (yyleng);
 
+#define YY_USER_INIT yylval->commentFound = false;
+
 /* For logging */
 #define RETURN(x) \
 			LOG(SCANNERLog,logLEVEL1) << "Token: " << #x << " on line: " << yylineno; \
@@ -57,10 +59,12 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 <comment>[^*\n]*        {std::cout << "eat stuff..." << std::endl;}
 <comment>"*"+[^*/\n]*   {std::cout << "eat stars..." << std::endl;}
 <comment>\n             {yylloc->lines(yyleng); std::cout << "new line in comment..." << std::endl;}
-<comment>"*"+"/"        {std::cout << "end comment, begin initial level..." << std::endl; BEGIN(CallerLevel); RETURN(token::COMMENT_TK);}
+<comment>"*"+"/"        {	std::cout << "end comment, begin initial level..." << std::endl;
+							handleComment();
+							BEGIN(CallerLevel);
+						}
 
 "!!$"					{table->dump();}
-<comment>"!!$"			{table->dump();}
 
 auto		{ RETURN(token::AUTO_TK); }
 break		{ RETURN(token::BREAK_TK); }
@@ -237,6 +241,20 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
 	RETURN(token::ERROR_TK);
 }
 
+// Deal with comments
+void NvPcomp::FlexScanner::handleComment() {
 
+	if(yylval->commentFound) {
+		/* 	
+		 * 	We already have a comment that hasn't been added.
+		 * 	so add it to the end of the last comment's location
+		 */
+		yylval->comment_loc.end.line = yylloc->end.line;
+		yylval->comment_loc.end.column = yylloc->end.column;
+	} else {
+		/* This is a new comment that needs to be added. */
+		yylval->commentFound = true;
+		yylval->comment_loc = *yylloc;
+	}
 
-
+}

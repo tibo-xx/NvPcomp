@@ -22,6 +22,17 @@
 	namespace NvPcomp {
 		class FlexScanner;
 	}
+			
+	typedef struct{
+		double dval;
+		int    ival;
+		char	*sval;
+		astNode *astval;
+		bool commentFound;
+		NvPcomp::location comment_loc;
+	} YYSTYPE;
+	
+	extern YYSTYPE yylval;
 }
 
 %code {
@@ -33,6 +44,11 @@
 	unsigned int BP_lastLine = 0;
 	
 	#define REDUCTION(spot) \
+		if(yylval.commentFound) { \
+			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
+			yylval.commentFound = false; \
+			/*LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \*/ \
+		} \
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		} \
@@ -51,15 +67,7 @@
 /************************************************************************/
 /* Definitions															*/
 /************************************************************************/
-%union
-{
-  double dval;
-  int    ival;
-  char	*sval;
-  astNode *astval;
-  long	startLine;
-  long	endLine;
-}
+/*%union*/
 
 /* Reserved Keywords													*/
 %token 	AUTO_TK			BREAK_TK 		CASE_TK 		CHAR_TK
@@ -133,7 +141,6 @@
 /*		==				!=												*/
 %token 	EQ_OP_TK 		NE_OP_TK
 
-%start translation_unit
 /************************************************************************/
 /* Grammar Rules														*/
 /************************************************************************/
@@ -157,9 +164,6 @@ translation_unit
 external_declaration
 	: function_definition 			{REDUCTION(external_declaration:function_definition)}
 	| declaration					{REDUCTION(external_declaration:declaration)}
-	| comment						{	REDUCTION(external_declaration comment)
-										$<astval>$ = new astNode("COMMENT_TK");
-									} 
 	;
 
 function_definition
@@ -279,7 +283,7 @@ init_declarator
 			$<astval>$ = new astNode("init_declarator");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("EQUAL_TK", "="));
-			$<astval>$->addChild($<astval>3);		
+			$<astval>$->addChild($<astval>3);
 		}
 	;
 
@@ -703,10 +707,6 @@ string
 identifier
 	: IDENTIFIER_TK						{REDUCTION(identifier:IDENTIFIER_TK)
 												 $<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval);}
-	;
-
-comment
-	: COMMENT_TK						{REDUCTION(comment:COMMENT_TK)}
 	;
 
 %%

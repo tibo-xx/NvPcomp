@@ -44,14 +44,14 @@ void parse_mode(const char *fileName) {
 		cout << "Bad input file." << endl;
 	} else {
 		cout << "Past input file open..." << endl;
-		scanner = new NvPcomp::FlexScanner(&in,fileName);
+		scanner = new NvPcomp::FlexScanner(&in,fileName, ast);
 		main_parser = new NvPcomp::Parser(scanner, fileName, ast);
 		main_parser->parse();
 		in.close();
 	}
-	cout << "AST printing node" << endl;
-	ast->printNode();
-	cout << "AST finished printing node" << endl;
+	//cout << "AST printing node" << endl;
+	//ast->printNode();
+	//cout << "AST finished printing node" << endl;
 }
 
 void scan_mode(const char *fileName) {
@@ -64,6 +64,9 @@ void scan_mode(const char *fileName) {
 	NvPcomp::BParser::location_type loc;
 	table = new NvPcomp::symTable();
 	
+	astNode *ast;
+	ast = new astNode("root");	
+	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;
 	in.open(fileName, ifstream::in);
@@ -71,7 +74,7 @@ void scan_mode(const char *fileName) {
 	if(!in.good()) {
 		cout << "Bad input file." << endl;
 	} else {
-		scanner = new NvPcomp::FlexScanner(&in, fileName);
+		scanner = new NvPcomp::FlexScanner(&in, fileName, ast);
 		
 		table->dump();
 		
@@ -135,7 +138,7 @@ int main( int argc, char* argv[] ) {
 		// Scan Mode	
 		scan_mode(inputFile.c_str());		
 	} else {		
-		parser_out = fopen(fileName.c_str(), "w");
+		parser_out = fopen("parse.out", "w");
 		if(parser_out == NULL) {
 			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file " << fileName;
 			return -1;

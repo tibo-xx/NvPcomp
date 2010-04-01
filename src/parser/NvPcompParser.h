@@ -20,11 +20,9 @@ namespace NvPcomp {
 		NvPcomp::FlexScanner *scanner;
 		NvPcomp::BParser parser;
 		astNode *ast;
-		
 		// Symbol Table
 		NvPcomp::symTable table;
 		// Source code buffer.
 		sourceBuffer buffer;
-								
 	};
 }

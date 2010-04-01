@@ -23,13 +23,19 @@
 #include <parse.hh>
 #include <sourceBuffer.h>
 #include <symTable.h>
+#include <ast.h>
 
 namespace NvPcomp {
 	class FlexScanner : public yyFlexLexer {
 	public:
-		FlexScanner(std::istream* arg_yyin = 0, std::ostream* arg_yyout = 0, const char *filename = 0) : yyFlexLexer(arg_yyin, arg_yyout) {buffer.openFile(filename);}
+		FlexScanner(std::istream* arg_yyin = 0, \ 
+					std::ostream* arg_yyout = 0, \
+					const char *filename = 0, \
+					astNode * astIn = 0) : yyFlexLexer(arg_yyin, arg_yyout) {buffer.openFile(filename); ast = astIn;}
 																																								
-		FlexScanner(std::istream* arg_yyin = 0, const char *filename = 0): yyFlexLexer(arg_yyin) {buffer.openFile(filename);};
+		FlexScanner(std::istream* arg_yyin = 0, \
+					const char *filename = 0, \
+					astNode *astIn = 0): yyFlexLexer(arg_yyin) {buffer.openFile(filename); ast = astIn;};
 		
 		// save the pointer to yylval so we can change it, and invoke scanner
 		int yylex(NvPcomp::BParser::semantic_type * lval, \
@@ -51,11 +57,14 @@ namespace NvPcomp {
 		// Check the bounds of the given integer.
 		NvPcomp::BParser::token::yytokentype check_integer();
 		
-			// Check the bounds of the given float.
+		// Check the bounds of the given float.
 		NvPcomp::BParser::token::yytokentype check_float();
 		
 		// There was an unkown identifier
 		NvPcomp::BParser::token::yytokentype id_error();
+		
+		// Handle comments appropriately.
+		void handleComment();
 
 	private:
 
@@ -76,6 +85,9 @@ namespace NvPcomp {
 
 		// Source code buffer.
 		sourceBuffer buffer;
+		
+		// AST pointer
+		astNode *ast;
 
 	};	
 }
