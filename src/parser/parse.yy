@@ -333,7 +333,7 @@ struct_declarator
 
 enum_specifier
 	: ENUM_TK OPEN_BRACE_TK {SCOPE_PUSH()}
-							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK g_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
+							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| ENUM_TK identifier OPEN_BRACE_TK {SCOPE_PUSH()}
 							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK identifier OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| ENUM_TK identifier												{REDUCTION(enum_specifier:)}
@@ -433,9 +433,9 @@ identifier_list
 
 initializer
 	: assignment_expression									{REDUCTION(initializer:assignment_expression)}
-	| OPEN_BRACE_TK {SCOPE_PUSH()}
+	| OPEN_BRACE_TK scope_push
 				initializer_list CLOSE_BRACE_TK				{REDUCTION(initializer:OPEN_BRACE_TK initializer_list CLOSE_BRACE_TK); SCOPE_POP();}
-	| OPEN_BRACE_TK {SCOPE_PUSH()}
+	| OPEN_BRACE_TK scope_push
 				initializer_list COMMA_TK CLOSE_BRACE_TK	{REDUCTION(initializer:OPEN_BRACE_TK initializer_list COMMA_TK CLOSE_BRACE_TK); SCOPE_POP()}
 	;
 
