@@ -333,7 +333,7 @@ struct_declarator
 
 enum_specifier
 	: ENUM_TK OPEN_BRACE_TK {SCOPE_PUSH()}
-							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
+							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK g_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| ENUM_TK identifier OPEN_BRACE_TK {SCOPE_PUSH()}
 							enumerator_list CLOSE_BRACE_TK				{REDUCTION(enum_specifier:ENUM_TK identifier OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); SCOPE_POP();}
 	| ENUM_TK identifier												{REDUCTION(enum_specifier:)}
@@ -483,23 +483,33 @@ labeled_statement
 	;
 
 expression_statement
-	: SEMICOLON_TK							{REDUCTION(expression_statement:SEMICOLON_TK)}
-	| expression SEMICOLON_TK				{REDUCTION(expression_statement:expression SEMICOLON_TK)}
+	: SEMICOLON_TK							{REDUCTION(expression_statement:SEMICOLON_TK)
+	         $<astval>$ = new astNode("SEMICOLON_TK", ";");
+	         }
+	| expression SEMICOLON_TK				{REDUCTION(expression_statement:expression SEMICOLON_TK)
+	         $<astval>$ = new astNode("expression_statement");
+	         $<astval>$->addChild($<astval>1);
+	         $<astval>$->addChild(new astNode("SEMICOLON_TK", ";"));
+	         }
 	;
 
+
+scope_push
+   : {SCOPE_PUSH()}
+
 compound_statement
-	: OPEN_BRACE_TK {SCOPE_PUSH()}
+	: OPEN_BRACE_TK scope_push
 				CLOSE_BRACE_TK											{REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); SCOPE_POP();
 																		    $<astval>$ = new astNode("compound_statement");}
-	| OPEN_BRACE_TK {SCOPE_PUSH()}
+	| OPEN_BRACE_TK scope_push
 				statement_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); SCOPE_POP()
 																					$<astval>$ = new astNode("compound_statement");
 																					 $<astval>$->addChild($<astval>3);}
-	| OPEN_BRACE_TK {SCOPE_PUSH()}
+	| OPEN_BRACE_TK scope_push
 				declaration_list CLOSE_BRACE_TK							{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); SCOPE_POP();
 																					 $<astval>$ = new astNode("compound_statement");
 																					 $<astval>$->addChild($<astval>3);}
-	| OPEN_BRACE_TK {SCOPE_PUSH()}
+	| OPEN_BRACE_TK scope_push
 				declaration_list statement_list CLOSE_BRACE_TK			{REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK); SCOPE_POP();
 																					$<astval>$ = new astNode("compound_statement");
 																					 $<astval>$->addChild($<astval>3);
@@ -616,21 +626,37 @@ expression
 
 assignment_expression
 	: conditional_expression											{REDUCTION(assignment_expression:conditional_expression)}
-	| unary_expression assignment_operator assignment_expression		{REDUCTION(assignment_expression:unary_expression assignment_operator assignment_expression)}
+	| unary_expression assignment_operator assignment_expression		{REDUCTION(assignment_expression:unary_expression assignment_operator assignment_expression)
+               $<astval>$ = new astNode("assignment_expression");
+               $<astval>$->addChild($<astval>1);
+               $<astval>$->addChild($<astval>2);
+               $<astval>$->addChild($<astval>3);	            
+	            }
 	;
 
 assignment_operator
-	: EQUAL_TK					{REDUCTION(assignment_operator:EQUAL_TK)}
-	| MUL_ASSIGN_TK				{REDUCTION(assignment_operator:MUL_ASSIGN_TK)}
-	| DIV_ASSIGN_TK				{REDUCTION(assignment_operator:DIV_ASSIGN_TK)}
-	| MOD_ASSIGN_TK				{REDUCTION(assignment_operator:MOD_ASSIGN_TK)}
-	| ADD_ASSIGN_TK				{REDUCTION(assignment_operator:ADD_ASSIGN_TK)}
-	| SUB_ASSIGN_TK				{REDUCTION(assignment_operator:SUB_ASSIGN_TK)}
-	| LEFT_ASSIGN_TK			{REDUCTION(assignment_operator:LEFT_ASSIGN_TK)}
-	| RIGHT_ASSIGN_TK			{REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)}
-	| AND_ASSIGN_TK				{REDUCTION(assignment_operator:AND_ASSIGN_TK)}
-	| XOR_ASSIGN_TK				{REDUCTION(assignment_operator:XOR_ASSIGN_TK)}
-	| OR_ASSIGN_TK				{REDUCTION(assignment_operator:OR_ASSIGN_TK)}
+	: EQUAL_TK					{REDUCTION(assignment_operator:EQUAL_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| MUL_ASSIGN_TK				{REDUCTION(assignment_operator:MUL_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| DIV_ASSIGN_TK				{REDUCTION(assignment_operator:DIV_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| MOD_ASSIGN_TK				{REDUCTION(assignment_operator:MOD_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| ADD_ASSIGN_TK				{REDUCTION(assignment_operator:ADD_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| SUB_ASSIGN_TK				{REDUCTION(assignment_operator:SUB_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| LEFT_ASSIGN_TK			{REDUCTION(assignment_operator:LEFT_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| RIGHT_ASSIGN_TK			{REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| AND_ASSIGN_TK				{REDUCTION(assignment_operator:AND_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| XOR_ASSIGN_TK				{REDUCTION(assignment_operator:XOR_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
+	| OR_ASSIGN_TK				{REDUCTION(assignment_operator:OR_ASSIGN_TK)
+	         $<astval>$ = new astNode("assignment_operator", yylval.sval);}
 	;
 
 conditional_expression
