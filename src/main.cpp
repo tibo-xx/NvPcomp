@@ -103,6 +103,7 @@ int main( int argc, char* argv[] ) {
 	SET_OUTPUT(INFOLog, stdout);
 	SET_OUTPUT(DEBUGLog, stdout);
 	SET_OUTPUT(WARNINGLog, stdout);
+	SET_OUTPUT(ERRORLog, stderr);
 	
 	if(clp->isInput()) {
 		inputFile = clp->getInput();

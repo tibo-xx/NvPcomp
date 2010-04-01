@@ -47,7 +47,6 @@
 		if(yylval.commentFound) { \
 			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
 			yylval.commentFound = false; \
-			/*LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \*/ \
 		} \
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
@@ -849,7 +848,8 @@ identifier
 /************************************************************************/
 // Error Function Implementation
 void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
-	std::cerr << "Error: " << msg << ": at location: " << loc << std::endl;
+	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLineNoCR(loc.begin.line, loc.end.line);
+	LOG(ERRORLog, logLEVEL1) << std::string(loc.begin.column - 1, ' ') <<"^-Error: " << msg << ": at location: " << loc << std::endl;
 }
 
 // Declare the Scanner and implement the yylex function

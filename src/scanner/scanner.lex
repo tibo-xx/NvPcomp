@@ -55,15 +55,14 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 
 "/*"					{	CallerLevel = YY_START;
 							BEGIN(comment); 
-							std::cout << "begin comment..." << std::endl;}
-<comment>[^*\n]*        {std::cout << "eat stuff..." << std::endl;}
-<comment>"*"+[^*/\n]*   {std::cout << "eat stars..." << std::endl;}
-<comment>\n             {yylloc->lines(yyleng); std::cout << "new line in comment..." << std::endl;}
-<comment>"*"+"/"        {	std::cout << "end comment, begin initial level..." << std::endl;
+						}
+<comment>[^*\n]*        {}
+<comment>"*"+[^*/\n]*   {}
+<comment>\n             {yylloc->lines(yyleng);}
+<comment>"*"+"/"        {
 							handleComment();
 							BEGIN(CallerLevel);
 						}
-
 "!!$"					{table->dump();}
 
 auto		{ RETURN(token::AUTO_TK); }
@@ -234,10 +233,9 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_float() {
 
 // Unrecognized Character Error
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
-	
-	std::cout << buffer.bufferGetLine(yylineno, yylineno);
-	std::cout << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
-	std::cout << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLine(yylineno, yylineno);
+	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
+	LOG(ERRORLog, logLEVEL1) << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
 	RETURN(token::ERROR_TK);
 }
 
