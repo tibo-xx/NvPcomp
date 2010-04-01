@@ -110,10 +110,10 @@ int NvPcomp::symTable::search(const string key, symNode* &Node, bool ignoreFirst
 					Node = (*map_iter).second;
 					retVal = level;
 					found = true;
-					LOG(DEBUGLog, logLEVEL3) << SYMLOG_START << "Found key: " << key << " on level " << level << endl;
+					LOG(DEBUGLog, logLEVEL5) << SYMLOG_START << "Found key: " << key << " on level " << level << endl;
 				} else {
 					retVal = -2;
-					LOG(DEBUGLog, logLEVEL3) << SYMLOG_START << "key: " << key << "is shadowed on level " << level <<  endl;				
+					LOG(DEBUGLog, logLEVEL5) << SYMLOG_START << "key: " << key << "is shadowed on level " << level <<  endl;				
 				}
 			}
 		}

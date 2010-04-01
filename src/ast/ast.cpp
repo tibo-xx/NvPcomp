@@ -30,7 +30,7 @@ astNode::astNode() {
 astNode::astNode(string _nodeType, string _nodeString) {
 	nodeType = _nodeType;
 	nodeString = _nodeString;
-	cout << "===== Creating astNode ==== " << nodeType << " " << nodeString << endl;
+	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
 void astNode::setString(string _nodeString)
@@ -54,24 +54,22 @@ string astNode::getType()
 }
 
 void astNode::printNode(bool printProductions, int level) {
-	for (int i=0; i < level; i++)
-	{
-		cout << " ";	
-	}	
+		
 	if (!(nodeString == "" && printProductions == false))
 	{
 		if (printProductions)
-			cout << nodeType << ":" << nodeString << endl;
+			LOG(ASTLog, logLEVEL1) << string(level, ' ') << nodeType << ":" << nodeString;
 		else
-			cout << nodeString << endl;
+			LOG(ASTLog, logLEVEL1) << string(level, ' ') << nodeString;
 	}
 	else
-		cout << endl;
+		LOG(ASTLog, logLEVEL1) << " ";
+		
 	for (unsigned int i=0; i < children.size(); i++)
 	{
 		if(children[i])
 			children[i]->printNode(printProductions, level+1);
 		else
-			cerr << "!!!!!!!!!!!nil node found in AST!!!!!!!!!!!!"  << endl;
+			LOG(ERRORLog, logLEVEL1) << "!!!!!!!!!!!nil node found in AST!!!!!!!!!!!!";
 	}
 }

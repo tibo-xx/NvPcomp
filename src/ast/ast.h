@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <NvPcomp_logger.h>
 
 using namespace std;
 

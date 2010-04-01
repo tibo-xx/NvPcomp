@@ -49,9 +49,9 @@ void parse_mode(const char *fileName) {
 		main_parser->parse();
 		in.close();
 	}
-	//cout << "AST printing node" << endl;
-	//ast->printNode();
-	//cout << "AST finished printing node" << endl;
+	cout << "AST printing node" << endl;
+	ast->printNode();
+	cout << "AST finished printing node" << endl;
 }
 
 void scan_mode(const char *fileName) {
@@ -133,6 +133,16 @@ int main( int argc, char* argv[] ) {
 			return -1;
 		}		
 		SET_OUTPUT(SymbolDump, symbol_out);
+	}	
+	
+	if (clp->isAST()) {
+		cout << "a" << endl;
+		symbol_out = fopen("AST.out", "w");
+		if(symbol_out == NULL) {
+			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file symbol.out";
+			return -1;
+		}		
+		SET_OUTPUT(ASTLog, symbol_out);
 	}		
 	
 	if (clp->isScanner()) {

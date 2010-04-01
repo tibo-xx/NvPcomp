@@ -34,7 +34,7 @@ int CallerLevel;
 /************************************************************************/
 DELIM	[ \f]
 WS		{DELIM}+
-LETTER	[A-Za-z]
+LETTER	[A-Za-z_]
 DIGIT	[0-9]
 NUMBER	(-)?{DIGIT}+
 FLOAT	{DIGIT}+"."{DIGIT}*
@@ -51,7 +51,7 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 
 {WS}		{ yylloc->step(); }
 [\n]+		{ yylloc->lines(yyleng);  yylloc->step();}
-"\t"		{ yylloc->columns (8);}
+"\t"		{ yylloc->columns(7); yylloc->step(); }
 
 "/*"					{	CallerLevel = YY_START;
 							BEGIN(comment); 
@@ -151,7 +151,7 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 "^="		{ RETURN(token::XOR_ASSIGN_TK); }
 "|="		{ RETURN(token::OR_ASSIGN_TK); }
 "..."		{ RETURN(token::ELIPSIS_TK); }
-.			{ 	id_error();}
+.			{ id_error();}
 
 %%
 
@@ -164,7 +164,9 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	InsertResult result;
 	std::string key = std::string(yytext);
 	symNode *tempNode;
-		
+	
+	
+			
 	if(table->search(key, tempNode, false) != -1) {
 		/* The node is already in the table. */
 		RETURN(token::IDENTIFIER_TK);
@@ -177,8 +179,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 		if(result == INSERT_SUCCESS_W_SHADOW) {
 			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
 			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-			RETURN(token::ERROR_TK);
-			
+			RETURN(token::ERROR_TK);		
 		} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
 			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
 			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;

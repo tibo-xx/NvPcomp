@@ -234,6 +234,7 @@ LOG2FILE(WARNINGLog_2File);
 LOG2FILE(ERRORLog_2File);
 LOG2FILE(SCANNERLog_2File);
 LOG2FILE(PARSERLog_2File);
+LOG2FILE(ASTLog_2File);
 LOG2FILE(SymbolDump_2File);
 
 // Definition of the seperate log classes.
@@ -243,6 +244,7 @@ class SCANNERLog : public NvPcomp_logger<SCANNERLog_2File> {};
 class WARNINGLog : public NvPcomp_logger<WARNINGLog_2File> {};
 class PARSERLog : public NvPcomp_logger<PARSERLog_2File> {};
 class ERRORLog : public NvPcomp_logger<ERRORLog_2File> {};
+class ASTLog : public NvPcomp_logger<ASTLog_2File> {};
 class SymbolDump : public NvPcomp_logger<SymbolDump_2File> {};
 /**********************************************************************/
 
