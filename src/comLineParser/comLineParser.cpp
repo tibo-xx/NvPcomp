@@ -16,9 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 	
  *  Program description:
- * 	-l[1-8]*<filename>*	Output lexer
- * 	-s[1-8]*<filename>*	Output symbol table
- * 	-p[1-8]*<filename>*	Output parser
+ * 	-l[1-8]				Output lexer
+ * 	-s[1-8]				Output symbol table
+ * 	-p[1-8]				Output parser
  * 	-a					Output abstract syntax tree
  * 	-scan				Put into scanner mode'
  * 	-c 					Compile and assemble the input !IGNORE! 
@@ -33,7 +33,16 @@
 
 using namespace std;
 
-comLineParser::comLineParser() { }
+comLineParser::comLineParser() {
+	_lexer 		= false;
+	_symtab 	= false; 
+	_parser 	= false;
+	_ast 		= false;
+	_scanner 	= false;
+	_output 	= false;
+	_intcode	= false;
+	_asscode	= false;  
+}
 comLineParser::comLineParser(int argc, char* argv[]) {
 	_lexer 		= false;
 	_symtab 	= false; 
@@ -90,26 +99,33 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						
 	nerrors = arg_parse(argc, argv, argtable);
 	
-	exitcode = clpDriver(lexer->count, symtab->count, parser->count,
+	exitcode = clpDriver(lexer->count, lexer->ival[0],  symtab->count, 
+						symtab->ival[0], parser->count, parser->ival[0],
 						ast->count, scanner->count, output->count,
 						output->filename, targetFile->count, 
 						targetFile->filename);
-	
 }
 
 comLineParser::~comLineParser() {
 	//arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
 }
 
-int comLineParser::clpDriver	(int &l, int &s, int &p, int &a, int
-								&sc, int &o, const char **outfile, int 
-								&tf, const char **tarFile) {
-	if (l > 0) 			
+int comLineParser::clpDriver	(int &l, int lLvl, int &s, int sLvl, int
+								&p, int pLvl, int &a, int &sc, int &o, 
+								const char **outfile, int &tf, const 
+								char **tarFile) {
+	if (l > 0) {
+		_lexLevel = lLvl;		
 		_lexer = true; 
-	if (s > 0) 
+	}
+	if (s > 0) {
+		_symTabLevel = sLvl;
 		_symtab = true;
-	if (p > 0)
+	}
+	if (p > 0) {
+		_parseLevel = pLvl;
 		_parser = true;
+	}
 	if (a > 0)
 		_ast = true;
 	if (sc > 0)
@@ -174,4 +190,16 @@ bool comLineParser::isInput(){
 } 
 string comLineParser::getInput() {
 	return inputFile;
+}
+int comLineParser::getLexLevel () {
+	if (_lexer) return _lexLevel;
+	return 0;
+}
+int comLineParser::getSymTabLevel () {
+	if (_symtab) return _symTabLevel;
+	return 0;
+}
+int comLineParser::getParseLevel () {
+	if (_parser) return _parseLevel;
+	return 0;
 }

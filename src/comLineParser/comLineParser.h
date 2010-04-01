@@ -60,13 +60,17 @@ public:
 	bool isIntCode();
 	bool isAsscode();
 	bool isInput();
+	int getLexLevel ();
+	int getSymTabLevel ();
+	int getParseLevel ();
 	std::string getOutput();
 	std::string getInput();
 	
 private:
 	//void errorCheck(int &argc, const char *&argv, void *argtable);
-	int clpDriver 	(int &l, int &s, int &p, int &a, int &sc, int &o,
-					const char **outfile, int &tf, const char **tarFile);
+	int clpDriver 	(int &l, int lLvl, int &s, int sLvl, int &p, int 
+					pLvl, int &a, int &sc, int &o, const char **outfile,
+					int &tf, const char **tarFile);
 					
 					
 	/* -l command line argument */
@@ -91,11 +95,12 @@ private:
 	struct arg_end *end; 
 	int nerrors, exitcode;
 	
-	bool 	_lexer, _symtab, 	_parser, _ast, _scanner, _output, 
+	bool 	_lexer, _symtab, _parser, _ast, _scanner, _output, 
 			_intcode, _asscode;	
 	std::string outputFN;
 	char **targetFN;
 	int _numTargets;
+	int _lexLevel, _symTabLevel, _parseLevel; 
 	 
 	std::string inputFile;
 	
