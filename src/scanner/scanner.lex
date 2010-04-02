@@ -192,7 +192,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string 
 	symNode *tempNode = new symNode(*yylloc, key, "");	
 	/******************************************************************/
 	/* Just here until the parser adds it. */
-	// tempNode->addType((int)prev_token);
+	//tempNode->addType((int)prev_token);
 	/******************************************************************/	
 	InsertResult result = table->insert(key, tempNode);
 

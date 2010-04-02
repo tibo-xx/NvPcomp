@@ -205,11 +205,7 @@ declaration
 			$<astval>$ = new astNode("declaration");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
-			
-			cout << $<astval>2->nodeType << endl;
-			cout << $<astval>1->nodeType << endl;
-			cout << $<astval>1->nodeToken << endl;
-						
+
          if ( $<astval>2->nodeType == "IDENTIFIER_TK")
          {
    			// Set identifier type

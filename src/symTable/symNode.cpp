@@ -37,6 +37,7 @@ bool NvPcomp::symNode::hasType()
 {
    return !_type.empty();
 }
+
 void NvPcomp::symNode::addType(int type) {
 	_type.push_back(type);
 }
