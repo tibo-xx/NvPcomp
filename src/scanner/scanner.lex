@@ -163,7 +163,7 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertTypedef(std::string key) {
 
-	symNode *tempNode = new symNode(*yylloc, key, "typedef");
+	symNode *tempNode = new symNode(*yylloc, key, "token::TYPEDEF_NAME_TK", (int)token::TYPEDEF_NAME_TK);
 	InsertResult result = table->insert(key, tempNode);
 	
 	if(result == INSERT_SUCCESS_W_SHADOW) {
@@ -183,7 +183,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertTypedef(std::st
 
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string key) {
 	/* Insert the id into the symbol table. */
-	symNode *tempNode = new symNode(*yylloc, key, str_prev_token);	
+	symNode *tempNode = new symNode(*yylloc, key, str_prev_token, (int)prev_token);	
 	InsertResult result = table->insert(key, tempNode);
 
 	if(result == INSERT_SUCCESS_W_SHADOW) {
@@ -213,9 +213,8 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 			return(typedefError());
 			
 		} else {
-			
-			/* For now just check the string to see if this is a type*/
-			if(tempNode->_strType == "typedef") {
+						
+			if(tempNode->getTopType() == (int)token::TYPEDEF_NAME_TK) {
 				RETURN(token::TYPEDEF_NAME_TK);
 			} else {
 				RETURN(token::IDENTIFIER_TK);

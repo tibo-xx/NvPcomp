@@ -30,7 +30,7 @@ void symNodeTest::setUp()
 	tok = NvPcomp::BParser::token::IDENTIFIER_TK;
 	NvPcomp::BParser::location_type loc;
 	
-	node1 = new symNode(loc," ", " ");
+	node1 = new symNode(loc," ", " ", 1);
 }
 
 void symNodeTest::tearDown()
