@@ -27,6 +27,7 @@ astNode::astNode() {
 	nodeType = "empty";
 	nodeString = "";
 }
+
 astNode::astNode(string _nodeType, string _nodeString) {
 	nodeType = _nodeType;
 	nodeString = _nodeString;

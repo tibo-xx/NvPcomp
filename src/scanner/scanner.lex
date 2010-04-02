@@ -9,7 +9,8 @@
 
 #define YY_USER_ACTION yylloc->columns (yyleng);
 
-#define YY_USER_INIT yylval->commentFound = false;
+#define YY_USER_INIT yylval->commentFound = false; \
+					 typedefMode = false;
 
 /* For logging */
 #define RETURN(x) \
@@ -23,7 +24,8 @@ using namespace NvPcomp;
 
 typedef NvPcomp::BParser::token token;
 
-int CallerLevel;
+int 	CallerLevel;
+bool 	typedefMode;
 
 %}
 
@@ -91,7 +93,7 @@ sizeof		{ RETURN(token::SIZEOF_TK); }
 static		{ RETURN(token::STATIC_TK); }
 struct		{ RETURN(token::STRUCT_TK); }
 switch		{ RETURN(token::SWITCH_TK); }
-typedef		{ RETURN(token::TYPEDEF_TK); }
+typedef		{ typedefMode = true; RETURN(token::TYPEDEF_TK); }
 union		{ RETURN(token::UNION_TK); }
 unsigned	{ RETURN(token::UNSIGNED_TK); }
 void		{ RETURN(token::VOID_TK); }
@@ -159,34 +161,72 @@ L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 /* User Code															*/
 /************************************************************************/
 
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertTypedef(std::string key) {
+
+	symNode *tempNode = new symNode(*yylloc, key, "typedef");
+	InsertResult result = table->insert(key, tempNode);
+	
+	if(result == INSERT_SUCCESS_W_SHADOW) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::ERROR_TK);		
+	} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::ERROR_TK);
+	} else {
+		typedefMode = false;
+		RETURN(token::TYPEDEF_NAME_TK);
+	}	
+	
+}
+
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string key) {
+	/* Insert the id into the symbol table. */
+	symNode *tempNode = new symNode(*yylloc, key, str_prev_token);	
+	InsertResult result = table->insert(key, tempNode);
+
+	if(result == INSERT_SUCCESS_W_SHADOW) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::ERROR_TK);		
+	} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
+		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::ERROR_TK);
+	} else {
+		RETURN(token::IDENTIFIER_TK);
+	}	
+}
+
 /* Very basic INDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
-	InsertResult result;
 	std::string key = std::string(yytext);
 	symNode *tempNode;
 	
-	
-			
+	// we now have an identifier that is used in typedefs
 	if(table->search(key, tempNode, false) != -1) {
-		/* The node is already in the table. */
-		RETURN(token::IDENTIFIER_TK);
-	} else {
-		/* Insert the id into the symbol table. */
-		symNode *tempNode = new symNode(*yylloc, key, str_prev_token);	
 		
-		result = table->insert(key, tempNode);
-		
-		if(result == INSERT_SUCCESS_W_SHADOW) {
-			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
-			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-			RETURN(token::ERROR_TK);		
-		} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
-			LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
-			LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-			RETURN(token::ERROR_TK);
+		if(typedefMode) {
+			
+			/* The node is already in the table but should not be. */
+			return(typedefError());
+			
 		} else {
-			RETURN(token::IDENTIFIER_TK);
+			
+			/* For now just check the string to see if this is a type*/
+			if(tempNode->_strType == "typedef") {
+				RETURN(token::TYPEDEF_NAME_TK);
+			} else {
+				RETURN(token::IDENTIFIER_TK);
+			}
 		}	
+	} else {
+		if(typedefMode) {
+			return(insertTypedef(key));
+		} else {
+			return(insertID(key));				
+		}
 	}	
 }
 
@@ -236,6 +276,14 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_float() {
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
 	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLine(yylineno, yylineno);
 	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
+	LOG(ERRORLog, logLEVEL1) << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	RETURN(token::ERROR_TK);
+}
+
+// error defining new type.
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::typedefError() {
+	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLine(yylineno, yylineno);
+	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Redefined identifier";
 	LOG(ERRORLog, logLEVEL1) << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
 	RETURN(token::ERROR_TK);
 }

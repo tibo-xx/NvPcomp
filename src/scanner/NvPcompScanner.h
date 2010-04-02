@@ -63,6 +63,13 @@ namespace NvPcomp {
 		// There was an unkown identifier
 		NvPcomp::BParser::token::yytokentype id_error();
 		
+		// A typedef was defined for an exsisting identifier.
+		NvPcomp::BParser::token::yytokentype typedefError();
+		
+		NvPcomp::BParser::token::yytokentype insertTypedef(std::string key);
+		
+		NvPcomp::BParser::token::yytokentype insertID(std::string key);
+		
 		// Handle comments appropriately.
 		void handleComment();
 
