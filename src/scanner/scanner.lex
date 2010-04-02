@@ -218,7 +218,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	if(table->search(key, tempNode, false) != -1) {
 		
 		if(typedefMode) {
-			
+
 			/* The node is already in the table but should not be. */
 			return(typedefError());
 			
@@ -284,8 +284,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_float() {
 // Unrecognized Character Error
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
 	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLine(yylineno, yylineno);
-	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character ";
-	LOG(ERRORLog, logLEVEL1) << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Unrecognized character: " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
 	RETURN(token::ERROR_TK);
 }
 
