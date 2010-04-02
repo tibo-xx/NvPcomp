@@ -206,8 +206,10 @@ declaration
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			
-			//cout << $<astval>2->nodeType << endl;
-			
+			cout << $<astval>2->nodeType << endl;
+			cout << $<astval>1->nodeType << endl;
+			cout << $<astval>1->nodeToken << endl;
+						
          if ( $<astval>2->nodeType == "IDENTIFIER_TK")
          {
    			// Set identifier type
@@ -315,47 +317,47 @@ type_specifier
 	: VOID_TK
 		{
 			REDUCTION(type_specifier:VOID_TK)
-			$<astval>$ = new astNode("VOID_TK", yylval.sval);
+			$<astval>$ = new astNode("VOID_TK", yylval.sval, yylval.tval);
 		}
 	| CHAR_TK
 		{
 			REDUCTION(type_specifier:CHAR_TK)
-			$<astval>$ = new astNode("CHAR_TK", yylval.sval);
+			$<astval>$ = new astNode("CHAR_TK", yylval.sval, yylval.tval);
 		}
 	| SHORT_TK
 		{
 			REDUCTION(type_specifier:SHORT_TK)
-			$<astval>$ = new astNode("SHORT_TK", yylval.sval);
+			$<astval>$ = new astNode("SHORT_TK", yylval.sval, yylval.tval);
 		}
 	| INT_TK
 		{
 			REDUCTION(type_specifier:INT_TK)
-			$<astval>$ = new astNode("INT_TK", yylval.sval);
+			$<astval>$ = new astNode("INT_TK", yylval.sval, yylval.tval);
 		}
 	| LONG_TK
 		{
 			REDUCTION(type_specifier:LONG_TK)
-			$<astval>$ = new astNode("LONG_TK", yylval.sval);
+			$<astval>$ = new astNode("LONG_TK", yylval.sval, yylval.tval);
 		}
 	| FLOAT_TK
 		{
 			REDUCTION(type_specifier:FLOAT_TK)
-			$<astval>$ = new astNode("FLOAT_TK", yylval.sval);
+			$<astval>$ = new astNode("FLOAT_TK", yylval.sval, yylval.tval);
 		}
 	| DOUBLE_TK
 		{
 			REDUCTION(type_specifier:DOUBLE_TK)
-			$<astval>$ = new astNode("DOUBLE_TK", yylval.sval);
+			$<astval>$ = new astNode("DOUBLE_TK", yylval.sval, yylval.tval);
 		}
 	| SIGNED_TK
 		{
 			REDUCTION(type_specifier:SIGNED_TK)
-			$<astval>$ = new astNode("SIGNED_TK", yylval.sval);
+			$<astval>$ = new astNode("SIGNED_TK", yylval.sval, yylval.tval);
 		}
 	| UNSIGNED_TK
 		{
 			REDUCTION(type_specifier:UNSIGNED_TK)
-			$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval);
+			$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval, yylval.tval);
 		}
 	| struct_or_union_specifier			
 		{
@@ -368,6 +370,7 @@ type_specifier
 	| TYPEDEF_NAME_TK
 		{
 			REDUCTION(type_specifier:TYPEDEF_NAME_TK)
+			$<astval>$ = new astNode("TYPEDEF_NAME_TK", yylval.sval, yylval.tval);
 		}
 	;
 
