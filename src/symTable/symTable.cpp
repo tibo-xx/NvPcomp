@@ -157,7 +157,7 @@ bool NvPcomp::symTable::push() {
 
 bool NvPcomp::symTable::pop() {
 	bool retVal = true;
-	
+			
 	if(_level > 0) {
 		map<string, symNode *>::iterator map_iter;
 		map<string, symNode *> *mapPtr = _table.back();

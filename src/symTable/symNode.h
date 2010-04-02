@@ -34,8 +34,7 @@ namespace NvPcomp {
 	public:
 		symNode(NvPcomp::location loc, \
 				std::string key, \
-				std::string strType, \
-				int type);
+				std::string strType);
 		~symNode();
 	};
 }
