@@ -18,6 +18,7 @@
 			prev_token = x; \
 			str_prev_token = std::string(#x); \
 			yylval->sval = strdup(yytext); \
+			yylval->tval = (int)x; \
 			return(x)
 
 using namespace NvPcomp;
@@ -183,16 +184,15 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertTypedef(std::st
 	} else {
 		typedefMode = false;
 		RETURN(token::TYPEDEF_NAME_TK);
-	}	
-	
+	}
 }
 
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string key) {
 	/* Insert the id into the symbol table. */
-	symNode *tempNode = new symNode(*yylloc, key, str_prev_token);	
+	symNode *tempNode = new symNode(*yylloc, key, "");	
 	/******************************************************************/
 	/* Just here until the parser adds it. */
-	tempNode->addType((int)prev_token);
+	// tempNode->addType((int)prev_token);
 	/******************************************************************/	
 	InsertResult result = table->insert(key, tempNode);
 

@@ -23,6 +23,7 @@ namespace NvPcomp {
 		void addType(int);
 		int getTopType();
 		int popType();
+		bool hasType();
 	public:
 		std::string	_key;	
 		std::string	_strType;

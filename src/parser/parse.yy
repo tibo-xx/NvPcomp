@@ -27,6 +27,7 @@
 		double dval;
 		int    ival;
 		char	*sval;
+		int    tval;
 		astNode *astval;
 		bool commentFound;
 		NvPcomp::location comment_loc;
@@ -204,6 +205,31 @@ declaration
 			$<astval>$ = new astNode("declaration");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
+			
+			//cout << $<astval>2->nodeType << endl;
+			
+         if ( $<astval>2->nodeType == "IDENTIFIER_TK")
+         {
+   			// Set identifier type
+            symNode* st_node = table.search_top($<astval>2->nodeString);
+            if (st_node->hasType())
+               NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + st_node->_key + "' already declared");
+            else
+               st_node->addType($<astval>1->nodeToken);
+         } 
+         else if ($<astval>2->nodeType == "init_declarator")
+         {
+               if ( $<astval>2->children[0]->nodeType == "IDENTIFIER_TK")
+               {
+         			// Set identifier type
+                  symNode* st_node = table.search_top($<astval>2->children[0]->nodeString);
+                  if (st_node->hasType())
+                     NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + st_node->_key + "' already declared!");
+                  else
+                     st_node->addType($<astval>1->nodeToken);
+               } 
+
+         }
 		}
 	;
 
@@ -1450,22 +1476,24 @@ constant
 	: INTEGER_CONSTANT_TK				
 		{
 			REDUCTION(constant:INTEGER_CONSTANT_TK)
-			$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval);
+			$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval, yylval.tval);
+			$<astval>$->nodeInt = yylval.dval;
 		}
 	| CHARACTER_CONSTANT_TK
 		{
 			REDUCTION(constant:CHARACTER_CONSTANT_TK)
-			$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval);
+			$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval, yylval.tval);
 		}
 	| FLOATING_CONSTANT_TK
 		{
 			REDUCTION(constant:FLOATING_CONSTANT_TK)
-			$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval);
+			$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval, yylval.tval);
+			$<astval>$->nodeDouble = yylval.dval;
 		}
 	| ENUMERATION_CONSTANT_TK
 		{
 			REDUCTION(constant:ENUMERATION_CONSTANT_TK)
-			$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval);
+			$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval, yylval.tval);
 		}
 	;
 
@@ -1473,7 +1501,7 @@ string
 	: STRING_LITERAL_TK
 		{
 			REDUCTION(string:STRING_LITERAL_TK)
-			$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval);
+			$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval, yylval.tval);
 		}
 	;
 
@@ -1481,7 +1509,7 @@ identifier
 	: IDENTIFIER_TK
 		{
 			REDUCTION(identifier:IDENTIFIER_TK)
-			$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval);
+			$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval, yylval.tval);
 		}
 	;
 

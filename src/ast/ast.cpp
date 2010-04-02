@@ -28,10 +28,12 @@ astNode::astNode() {
 	nodeString = "";
 }
 
-astNode::astNode(string _nodeType, string _nodeString) {
+astNode::astNode(string _nodeType, string _nodeString, int _nodeToken) {
 	nodeType = _nodeType;
 	nodeString = _nodeString;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
+	nodeToken = _nodeToken;
+	nodeComment = "";
 }
 
 void astNode::setString(string _nodeString)
