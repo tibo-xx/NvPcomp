@@ -29,6 +29,8 @@ astNode::astNode() {
 }
 
 astNode::astNode(string _nodeType, string _nodeString, int _nodeToken) {
+	// TODO: remove nodeType?
+	// Add location
 	nodeType = _nodeType;
 	nodeString = _nodeString;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;

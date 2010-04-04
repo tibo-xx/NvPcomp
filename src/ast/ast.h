@@ -28,6 +28,7 @@ class astNode {
 
 	public:
 		astNode();
+		// astNode(string nodeString = "", location, );
 		astNode(string nodeType, string nodeString = "", int nodeToken = -1);
 		void printNode(bool printProductions = true, int level = 0);	
 		virtual void output3AC() {};
@@ -48,9 +49,12 @@ class astNode {
 		// List of appropriate RHS nodes
 		vector<astNode*> children;	
 		// Node token value
+		// Remove
 		int nodeToken;
 		// Comment if present
 		string nodeComment;
+		// Location
+		NvPcomp::BParser::location_type loc;
 };
 
 #endif /* AST_H_ */
