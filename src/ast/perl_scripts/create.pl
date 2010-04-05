@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
-	use Template;
-	my $tt = Template->new;
-	my $classname_u = " ";
-	my @classdata;	
-	my %data = ( classname => " ",
-		     classname_upper => " ");
+use Template;
+my $tt = Template->new;
+my $classname_u = " ";
+my @classdata;	
+my %data = ( classname => " ",
+	     classname_upper => " ");
 
 open (classList, "classlist.txt");
 
@@ -29,6 +29,10 @@ while ($record = <classList>) {
 
 # Create the Makefile
 	$tt->process('makefile.tmp', \%makefileData, "../Makefile")
+      			|| die $tt->error;
+
+# Create the Includes File
+	$tt->process('include.tmp', \%makefileData, "../src/ast_include.h")
       			|| die $tt->error;
 
 close(classList);

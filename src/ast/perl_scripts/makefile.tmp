@@ -12,7 +12,7 @@ CXX = g++
 ########################################################################
 SRC =  	file1.cpp file2.cpp file3.cpp
 
-SRC = 	[% FOREACH class = classdata -%] src/[% class %].cpp [% END %]
+SRC = 	[% FOREACH class = classdata -%] src/[% class %]_ast.cpp [% END %]
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -43,3 +43,4 @@ dep:
 
 clean:
 	rm -f $(OBJ) $(TARGET)
+

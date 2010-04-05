@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+//#include <location.hh>
+//#include <position.hh>
 #include <NvPcomp_logger.h>
 
 using namespace std;
@@ -54,7 +56,7 @@ class astNode {
 		// Comment if present
 		string nodeComment;
 		// Location
-		NvPcomp::BParser::location_type loc;
+		//NvPcomp::location _loc;
 };
 
 #endif /* AST_H_ */

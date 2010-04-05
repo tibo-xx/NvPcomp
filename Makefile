@@ -33,6 +33,7 @@ INCS += -I./src/scanner
 INCS += -I./src/parser
 INCS += -I./src/comLineParser
 INCS += -I./src/ast
+#INCS += -I./src/ast/src/
 INCS += -I./src/buffer
 INCS += -I./src/test
 INCS += -I./src/test/logging
@@ -118,8 +119,16 @@ parser: ./src/parser/parse.yy
 	mv *.hh ./src/parser/
 	$(CXX) $(CXXFLAGS) $(INCS) -c ./src/parser/parse.cc -o ./src/parser/parse.o
 ########################################################################
+# AST Library
+########################################################################
+ast_lib:
+	@echo "\nMaking AST Library...\n"
+	cd src/ast/; make;
+
+########################################################################
 # Clean up (more of a clobber really)
 ########################################################################
 clean:
 	@echo "\nCleaning up...\n"
-	rm -f $(TEST_TARGET) $(TARGET) $(OBJS) $(TEST_OBJS) $(LOG_TEST_OBJS) $(SCAN_OUTPUT) $(PARSE_OUTPUT) ./bin/log_test ./src/*.o
+	rm -f $(TEST_TARGET) $(TARGET) $(OBJS) $(TEST_OBJS) $(LOG_TEST_OBJS) $(SCAN_OUTPUT) $(PARSE_OUTPUT) ./bin/log_test ./src/*.o;
+	cd src/ast/; make clean;
