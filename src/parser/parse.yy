@@ -149,16 +149,16 @@ translation_unit
 	: external_declaration 									
 		{ 
 			REDUCTION(translation_unit:external_declaration)
-			$<astval>$ = new astNode("translation_unit");
+		/*	$<astval>$ = new astNode("translation_unit");
 			ast.addChild($<astval>$);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>1); */
 		}
 	| translation_unit external_declaration					
 		{ 
 			REDUCTION(translation_unit:translation_unit external_declaration)
-			$<astval>$ = new astNode("translation_unit");
+		/*	$<astval>$ = new astNode("translation_unit");
 			ast.addChild($<astval>$);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -185,10 +185,10 @@ function_definition
 	| declaration_specifiers declarator compound_statement						
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator compound_statement)
-			$<astval>$ = new astNode("function_definition");
+		/*	$<astval>$ = new astNode("function_definition");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	| declaration_specifiers declarator declaration_list compound_statement		
 		{
@@ -204,11 +204,11 @@ declaration
 	| declaration_specifiers init_declarator_list SEMICOLON_TK 	
 		{
 			REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
-			$<astval>$ = new astNode("declaration");
+		/*	$<astval>$ = new astNode("declaration");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 
-         if ( $<astval>2->nodeType == "IDENTIFIER_TK")
+    /*     if ( $<astval>2->nodeType == "IDENTIFIER_TK")
          {
    			// Set identifier type
             symNode* st_node = table.search_top($<astval>2->nodeString);
@@ -228,9 +228,8 @@ declaration
                   else
                      st_node->addType($<astval>1->nodeToken);
                } 
-
+*/
          }
-		}
 	;
 
 declaration_list
@@ -241,9 +240,9 @@ declaration_list
 	| declaration_list declaration								
 		{
 			REDUCTION(declaration_list:declaration_list declaration)
-			$<astval>$ = new astNode("declaration_list");
+		/*	$<astval>$ = new astNode("declaration_list");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -255,9 +254,9 @@ declaration_specifiers
 	| storage_class_specifier declaration_specifiers
 		{
 			REDUCTION(declaration_specifiers:storage_class_specifier declaration_specifiers)
-			$<astval>$ = new astNode("declaration_specifiers");
+		/*	$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	| type_specifier
 		{
@@ -266,9 +265,9 @@ declaration_specifiers
 	| type_specifier declaration_specifiers						
 		{
 			REDUCTION(declaration_specifiers:type_specifier declaration_specifiers)
-			$<astval>$ = new astNode("declaration_specifiers");
+	/*		$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	| type_qualifier
 		{
@@ -277,9 +276,9 @@ declaration_specifiers
 	| type_qualifier declaration_specifiers
 		{
 			REDUCTION(declaration_specifiers:type_qualifier declaration_specifiers)
-			$<astval>$ = new astNode("declaration_specifiers");
+		/*	$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -287,27 +286,27 @@ storage_class_specifier
 	: AUTO_TK				
 		{
 			REDUCTION(storage_class_specifier:AUTO_TK)
-			$<astval>$ = new astNode("AUTO_TK", yylval.sval);
+		/*	$<astval>$ = new astNode("AUTO_TK", yylval.sval); */
 	    }
 	| REGISTER_TK			
 		{
 			REDUCTION(storage_class_specifier:REGISTER_TK)
-            $<astval>$ = new astNode("REGISTER_TK", yylval.sval);
+        /*    $<astval>$ = new astNode("REGISTER_TK", yylval.sval); */
 	    }
 	| STATIC_TK
 		{
 			REDUCTION(storage_class_specifier:STATIC_TK)
-            $<astval>$ = new astNode("STATIC_TK", yylval.sval);
+       /*     $<astval>$ = new astNode("STATIC_TK", yylval.sval); */
 	    }
 	| EXTERN_TK
 		{
 			REDUCTION(storage_class_specifier:EXTERN_TK)
-            $<astval>$ = new astNode("EXTERN_TK", yylval.sval);
+        /*    $<astval>$ = new astNode("EXTERN_TK", yylval.sval); */
 	    }
 	| TYPEDEF_TK
 		{
 			REDUCTION(storage_class_specifier:TYPEDEF_TK)
-	        $<astval>$ = new astNode("TYPEDEF_TK", yylval.sval);
+	  /*      $<astval>$ = new astNode("TYPEDEF_TK", yylval.sval); */
 	    }
 	;
 
@@ -315,47 +314,65 @@ type_specifier
 	: VOID_TK
 		{
 			REDUCTION(type_specifier:VOID_TK)
-			$<astval>$ = new astNode("VOID_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("VOID_TK", yylval.sval); */
+
+
 		}
 	| CHAR_TK
 		{
 			REDUCTION(type_specifier:CHAR_TK)
-			$<astval>$ = new astNode("CHAR_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("CHAR_TK", yylval.sval); */
 		}
 	| SHORT_TK
 		{
 			REDUCTION(type_specifier:SHORT_TK)
-			$<astval>$ = new astNode("SHORT_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("SHORT_TK", yylval.sval); */
+
 		}
 	| INT_TK
 		{
 			REDUCTION(type_specifier:INT_TK)
-			$<astval>$ = new astNode("INT_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("INT_TK", yylval.sval); */
+
 		}
 	| LONG_TK
 		{
 			REDUCTION(type_specifier:LONG_TK)
-			$<astval>$ = new astNode("LONG_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("LONG_TK", yylval.sval); */
+
 		}
 	| FLOAT_TK
 		{
 			REDUCTION(type_specifier:FLOAT_TK)
-			$<astval>$ = new astNode("FLOAT_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("FLOAT_TK", yylval.sval); */
+
 		}
 	| DOUBLE_TK
 		{
 			REDUCTION(type_specifier:DOUBLE_TK)
-			$<astval>$ = new astNode("DOUBLE_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("DOUBLE_TK", yylval.sval); */
+
 		}
 	| SIGNED_TK
 		{
 			REDUCTION(type_specifier:SIGNED_TK)
-			$<astval>$ = new astNode("SIGNED_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("SIGNED_TK", yylval.sval); */
+
 		}
 	| UNSIGNED_TK
 		{
 			REDUCTION(type_specifier:UNSIGNED_TK)
-			$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval); */
+
 		}
 	| struct_or_union_specifier			
 		{
@@ -376,12 +393,12 @@ type_qualifier
 	: CONST_TK							
 		{
 			REDUCTION(type_qualifier:CONST_TK)
-			$<astval>$ = new astNode("CONST_TK", yylval.sval);
+		/*	$<astval>$ = new astNode("CONST_TK", yylval.sval); */
 		}
 	| VOLATILE_TK
 		{
 			REDUCTION(type_qualifier:VOLATILE_TK)
-			$<astval>$ = new astNode("VOLATILE_TK", yylval.sval);
+		/*	$<astval>$ = new astNode("VOLATILE_TK", yylval.sval); */
 		}
 	;
 
@@ -432,9 +449,9 @@ init_declarator_list
 	| init_declarator_list COMMA_TK init_declarator
 		{
 			REDUCTION(init_declarator_list:init_declarator_list COMMA_TK init_declarator)
-			$<astval>$ = new astNode("init_declarator_list");
+		/*	$<astval>$ = new astNode("init_declarator_list");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -446,10 +463,10 @@ init_declarator
 	| declarator EQUAL_TK initializer		
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
-			$<astval>$ = new astNode("init_declarator");
+	/*		$<astval>$ = new astNode("init_declarator");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("EQUAL_TK", "="));
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -552,9 +569,9 @@ declarator
 	| pointer direct_declarator
 		{
 			REDUCTION(declarator:pointer direct_declarator)
-			$<astval>$ = new astNode("declarator");
+		/*	$<astval>$ = new astNode("declarator");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -566,41 +583,41 @@ direct_declarator
 	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)
-			$<astval>$ = new astNode("direct_declarator");
-			$<astval>$->addChild($<astval>2);
+		/*	$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>2); */
 		}
 	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)
-			$<astval>$ = new astNode("direct_declarator");
-			$<astval>$->addChild($<astval>1);
+	/*		$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1); */
 		}
 	| direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK		
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK)
-			$<astval>$ = new astNode("direct_declarator");
+	/*		$<astval>$ = new astNode("direct_declarator");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)
-			$<astval>$ = new astNode("direct_declarator");
-			$<astval>$->addChild($<astval>1);
+		/*	$<astval>$ = new astNode("direct_declarator");
+			$<astval>$->addChild($<astval>1); */
 		}
 	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)
-			$<astval>$ = new astNode("direct_declarator");
+	/*		$<astval>$ = new astNode("direct_declarator");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)
-			$<astval>$ = new astNode("direct_declarator");
+	/*		$<astval>$ = new astNode("direct_declarator");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -608,7 +625,7 @@ pointer
 	: STAR_TK									
 		{
 			REDUCTION(pointer:STAR_TK)
-			$<astval>$ = new astNode("STAR_TK", $<sval>1);
+		/*	$<astval>$ = new astNode("STAR_TK", $<sval>1); */
 		}
 	| STAR_TK type_qualifier_list
 		{
@@ -654,9 +671,9 @@ parameter_list
 	| parameter_list COMMA_TK parameter_declaration
 		{
 			REDUCTION(parameter_list:parameter_list COMMA_TK parameter_declaration)
-			$<astval>$ = new astNode("parameter_list");
+		/*	$<astval>$ = new astNode("parameter_list");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -664,9 +681,9 @@ parameter_declaration
 	: declaration_specifiers declarator
 		{
 			REDUCTION(parameter_declaration:declaration_specifiers declarator)
-			$<astval>$ = new astNode("parameter_declaration");
+		/*	$<astval>$ = new astNode("parameter_declaration");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>2); */
 		}
 	| declaration_specifiers
 		{
@@ -826,15 +843,15 @@ labeled_statement
 expression_statement
 	: SEMICOLON_TK
 		{
-			REDUCTION(expression_statement:SEMICOLON_TK)
-	        $<astval>$ = new astNode("SEMICOLON_TK", ";");
+			REDUCTION(expression_statement:SEMICOLON_TK) 
+	   /*     $<astval>$ = new astNode("SEMICOLON_TK", ";"); */
 		}
 	| expression SEMICOLON_TK
 		{
 			REDUCTION(expression_statement:expression SEMICOLON_TK)
-	        $<astval>$ = new astNode("expression_statement");
+	   /*     $<astval>$ = new astNode("expression_statement");
 	        $<astval>$->addChild($<astval>1);
-	        $<astval>$->addChild(new astNode("SEMICOLON_TK", ";"));
+	        $<astval>$->addChild(new astNode("SEMICOLON_TK", ";")); */
 		}
 	;
 
@@ -845,29 +862,30 @@ compound_statement
 	: OPEN_BRACE_TK scope_push CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); SCOPE_POP();
-			$<astval>$ = new astNode("compound_statement");
+	/*		$<astval>$ = new astNode("compound_statement"); */
 		}
 	| OPEN_BRACE_TK scope_push statement_list CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); 
 			SCOPE_POP()
-			$<astval>$ = new astNode("compound_statement");
-			$<astval>$->addChild($<astval>3);
+	/*		$<astval>$ = new astNode("compound_statement");
+			$<astval>$->addChild($<astval>3); */
 		}
 	| OPEN_BRACE_TK scope_push declaration_list CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
-			$<astval>$ = new astNode("compound_statement");
-			$<astval>$->addChild($<astval>3);
+	/*		$<astval>$ = new astNode("compound_statement");
+			$<astval>$->addChild($<astval>3); */
+
 		}
 	| OPEN_BRACE_TK scope_push declaration_list statement_list CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK);
 			SCOPE_POP();
-			$<astval>$ = new astNode("compound_statement");
+	/*		$<astval>$ = new astNode("compound_statement");
 			$<astval>$->addChild($<astval>3);
-			$<astval>$->addChild($<astval>4);
+			$<astval>$->addChild($<astval>4); */
 		}
 	;
 
@@ -879,9 +897,9 @@ statement_list
 	| statement_list statement
 		{
 			REDUCTION(statement_list:statement_list statement)
-	        $<astval>$ = new astNode("statement_list");
+	    /*    $<astval>$ = new astNode("statement_list");
 	        $<astval>$->addChild($<astval>1);
-	        $<astval>$->addChild($<astval>2);
+	        $<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -889,20 +907,20 @@ selection_statement
 	: IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
 		{
 			REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("selection_statement");
+	/*		$<astval>$ = new astNode("selection_statement");
 			$<astval>$->addChild(new astNode("IF_TK", "if"));
 			$<astval>$->addChild($<astval>3);
-			$<astval>$->addChild($<astval>5);
+			$<astval>$->addChild($<astval>5); */
 		}
 	| IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement
 		{
 			REDUCTION(selection_statement:IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement)
-			$<astval>$ = new astNode("selection_statement");
+		/*	$<astval>$ = new astNode("selection_statement");
 			$<astval>$->addChild(new astNode("IF_TK", "if"));
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>5);
 			$<astval>$->addChild(new astNode("ELSE_TK", "else"));
-			$<astval>$->addChild($<astval>7);
+			$<astval>$->addChild($<astval>7); */
 		}	
 	| SWITCH_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
 		{
@@ -914,87 +932,87 @@ iteration_statement
 	: WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("WHILE_TK", "while"));
 			$<astval>$->addChild($<astval>3);
-			$<astval>$->addChild($<astval>5);	      
+			$<astval>$->addChild($<astval>5);	 */      
 	     }
 	| DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK
 		{
 			REDUCTION(iteration_statement:DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("DO_TK", "do"));
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>5);	      
+			$<astval>$->addChild($<astval>5);	  */    
 	     }
 
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
-			$<astval>$->addChild($<astval>6);	      
+			$<astval>$->addChild($<astval>6);	*/      
 	    }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement							
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+	/*		$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>5);
-			$<astval>$->addChild($<astval>7);
+			$<astval>$->addChild($<astval>7);*/
          }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+	/*		$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>4);
-			$<astval>$->addChild($<astval>7);
+			$<astval>$->addChild($<astval>7); */
          }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>4);
 			$<astval>$->addChild($<astval>6);
-			$<astval>$->addChild($<astval>8);
+			$<astval>$->addChild($<astval>8); */
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>3);
-			$<astval>$->addChild($<astval>7);	      
+			$<astval>$->addChild($<astval>7);	      */
 		}
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>6);
-			$<astval>$->addChild($<astval>8);
+			$<astval>$->addChild($<astval>8); */
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+	/*		$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>5);
-			$<astval>$->addChild($<astval>8);
+			$<astval>$->addChild($<astval>8); */
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
 			REDUCTION(iteration_statement:FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement)
-			$<astval>$ = new astNode("iteration_statement");
+		/*	$<astval>$ = new astNode("iteration_statement");
 			$<astval>$->addChild(new astNode("FOR_TK", "for"));
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>5);
 			$<astval>$->addChild($<astval>7);
-			$<astval>$->addChild($<astval>9);
+			$<astval>$->addChild($<astval>9); */
          }
 	;
 
@@ -1002,34 +1020,34 @@ jump_statement
 	: GOTO_TK identifier SEMICOLON_TK			
 		{
 			REDUCTION(jump_statement:GOTO_TK identifier SEMICOLON_TK)
-	        $<astval>$ = new astNode("jump_statement");
+	  /*      $<astval>$ = new astNode("jump_statement");
 	        $<astval>$->addChild(new astNode("GOTO_TK", "goto"));
-	        $<astval>$->addChild($<astval>2);
-		}	         
+	        $<astval>$->addChild($<astval>2); */
+		}	          
 	| CONTINUE_TK SEMICOLON_TK
 		{
 			REDUCTION(jump_statement:CONTINUE_TK SEMICOLON_TK)
-	        $<astval>$ = new astNode("jump_statement");
-	        $<astval>$->addChild(new astNode("CONTINUE_TK", "continue"));
+	 /*       $<astval>$ = new astNode("jump_statement");
+	        $<astval>$->addChild(new astNode("CONTINUE_TK", "continue")); */
 		}
 	| BREAK_TK SEMICOLON_TK
 		{
 			REDUCTION(jump_statement:BREAK_TK SEMICOLON_TK)
-	        $<astval>$ = new astNode("jump_statement");
-	        $<astval>$->addChild(new astNode("BREAK_TK", "break"));
+	   /*     $<astval>$ = new astNode("jump_statement");
+	        $<astval>$->addChild(new astNode("BREAK_TK", "break")); */
 		}
 	| RETURN_TK SEMICOLON_TK
 		{
 			REDUCTION(jump_statement:RETURN_TK SEMICOLON_TK)
-	        $<astval>$ = new astNode("jump_statement");
-	        $<astval>$->addChild(new astNode("RETURN_TK", "return"));
+	 /*       $<astval>$ = new astNode("jump_statement");
+	        $<astval>$->addChild(new astNode("RETURN_TK", "return")); */
 		}
 	| RETURN_TK expression SEMICOLON_TK
 		{
 			REDUCTION(jump_statement:RETURN_TK expression SEMICOLON_TK)
-	        $<astval>$ = new astNode("jump_statement");
+	  /*      $<astval>$ = new astNode("jump_statement");
 	        $<astval>$->addChild(new astNode("RETURN_TK", "return"));
-	        $<astval>$->addChild($<astval>2);
+	        $<astval>$->addChild($<astval>2); */
 		}
 	;
 
@@ -1052,10 +1070,10 @@ assignment_expression
 	| unary_expression assignment_operator assignment_expression
 		{
 			REDUCTION(assignment_expression:unary_expression assignment_operator assignment_expression)
-            $<astval>$ = new astNode("assignment_expression");
+      /*      $<astval>$ = new astNode("assignment_expression");
             $<astval>$->addChild($<astval>1);
             $<astval>$->addChild($<astval>2);
-            $<astval>$->addChild($<astval>3);	            
+            $<astval>$->addChild($<astval>3);	 */            
 		}
 	;
 
@@ -1063,57 +1081,57 @@ assignment_operator
 	: EQUAL_TK
 		{
 			REDUCTION(assignment_operator:EQUAL_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| MUL_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MUL_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| DIV_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:DIV_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	    /*    $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| MOD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MOD_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| ADD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:ADD_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	    /*    $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| SUB_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:SUB_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	     /*   $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| LEFT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:LEFT_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| RIGHT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	    /*    $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| AND_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:AND_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| XOR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:XOR_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	| OR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:OR_ASSIGN_TK)
-	        $<astval>$ = new astNode("assignment_operator", yylval.sval);
+	   /*     $<astval>$ = new astNode("assignment_operator", yylval.sval); */
 		}
 	;
 
@@ -1251,18 +1269,18 @@ additive_expression
 	| additive_expression PLUS_TK multiplicative_expression				
 		{
 			REDUCTION(additive_expression:additive_expression PLUS_TK multiplicative_expression)
-			$<astval>$ = new astNode("additive_expression");											
+		/*	$<astval>$ = new astNode("additive_expression");											
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("PLUS_TK","+"));
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	| additive_expression MINUS_TK multiplicative_expression
 		{
 			REDUCTION(additive_expression:additive_expression MINUS_TK multiplicative_expression)
-			$<astval>$ = new astNode("additive_expression");										
+	/*		$<astval>$ = new astNode("additive_expression");										
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("MINUS_TK","-"));
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -1274,26 +1292,26 @@ multiplicative_expression
 	| multiplicative_expression STAR_TK cast_expression
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression STAR_TK cast_expression)
-			$<astval>$ = new astNode("mutiplicative_expression");
+		/*	$<astval>$ = new astNode("mutiplicative_expression");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("STAR_TK","*"));
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	| multiplicative_expression DIV_TK cast_expression					
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression DIV_TK cast_expression)
-			$<astval>$ = new astNode("mutiplicative_expression");
+	/*		$<astval>$ = new astNode("mutiplicative_expression");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("DIV_TK","/"));
-			$<astval>$->addChild($<astval>3);
-		}
+			$<astval>$->addChild($<astval>3); */
+		} 
 	| multiplicative_expression MOD_TK cast_expression
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression MOD_TK cast_expression)
-			$<astval>$ = new astNode("mutiplicative_expression");
+		/*	$<astval>$ = new astNode("mutiplicative_expression");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("MOD_TK","%"));
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -1316,37 +1334,37 @@ unary_expression
 	| INC_OP_TK unary_expression
 		{
 			REDUCTION(unary_expression:INC_OP_TK unary_expression)
-	        $<astval>$ = new astNode("unary_expression");
+	   /*     $<astval>$ = new astNode("unary_expression");
 	        $<astval>$->addChild(new astNode("INC_OP_TK", "++"));
-	        $<astval>$->addChild($<astval>2);	         
+	        $<astval>$->addChild($<astval>2);	 */        
 		}
 	| DEC_OP_TK unary_expression										
 		{
 			REDUCTION(unary_expression:DEC_OP_TK unary_expression)
-			$<astval>$ = new astNode("unary_expression");
+	/*		$<astval>$ = new astNode("unary_expression");
 			$<astval>$->addChild(new astNode("DEC_OP_TK", "--"));
-			$<astval>$->addChild($<astval>2);	         
+			$<astval>$->addChild($<astval>2);	       */  
 		}
 	| unary_operator cast_expression
 		{
 			REDUCTION(unary_expression:unary_operator cast_expression)
-	        $<astval>$ = new astNode("unary_expression");
+	     /*   $<astval>$ = new astNode("unary_expression");
 	        $<astval>$->addChild($<astval>1);
-	        $<astval>$->addChild($<astval>2);	         
+	        $<astval>$->addChild($<astval>2);	   */      
 		}
 	| SIZEOF_TK unary_expression
 		{
 			REDUCTION(unary_expression:SIZEOF_TK unary_expression)
-	        $<astval>$ = new astNode("unary_expression");
+	    /*    $<astval>$ = new astNode("unary_expression");
 	        $<astval>$->addChild(new astNode("SIZEOF_TK", "sizeof"));
-	        $<astval>$->addChild($<astval>2);	         
+	        $<astval>$->addChild($<astval>2);	    */     
 		}
 	| SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK
 		{
 			REDUCTION(unary_expression:SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK)
-	        $<astval>$ = new astNode("unary_expression");
+	   /*     $<astval>$ = new astNode("unary_expression");
 	        $<astval>$->addChild(new astNode("SIZEOF_TK", "sizeof"));
-	        $<astval>$->addChild($<astval>3);	         
+	        $<astval>$->addChild($<astval>3);	    */     
 		}
 	;
 
@@ -1354,32 +1372,32 @@ unary_operator
 	: BIT_AND_TK
 		{
 			REDUCTION(unary_operator:BIT_AND_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+        /*   $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	| STAR_TK
 		{
 			REDUCTION(unary_operator:STAR_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+    /*        $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	| PLUS_TK
 		{
 			REDUCTION(unary_operator:PLUS_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+       /*     $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	| MINUS_TK
 		{
 			REDUCTION(unary_operator:MINUS_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+     /*       $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	| BIT_NOT_TK
 		{
 			REDUCTION(unary_operator:BIT_NOT_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+        /*    $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	| NOT_TK
 		{
 			REDUCTION(unary_operator:NOT_TK)
-            $<astval>$ = new astNode("unary_operator", yylval.sval);
+        /*    $<astval>$ = new astNode("unary_operator", yylval.sval); */
 		}
 	;
 
@@ -1391,52 +1409,52 @@ postfix_expression
 	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)
-	        $<astval>$ = new astNode("postfix_expression");
+	    /*    $<astval>$ = new astNode("postfix_expression");
             $<astval>$->addChild($<astval>1);
-            $<astval>$->addChild($<astval>3);	         
+            $<astval>$->addChild($<astval>3);	         */
 		}
 	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)
-	        $<astval>$ = new astNode("postfix_expression");
-            $<astval>$->addChild($<astval>1);
+	   /*     $<astval>$ = new astNode("postfix_expression");
+            $<astval>$->addChild($<astval>1); */
 		}
 	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK)
-	        $<astval>$ = new astNode("postfix_expression");
+	   /*     $<astval>$ = new astNode("postfix_expression");
             $<astval>$->addChild($<astval>1);
-            $<astval>$->addChild($<astval>3);	         
+            $<astval>$->addChild($<astval>3);	*/         
 		}
 	| postfix_expression PERIOD_TK identifier
 		{
 			REDUCTION(postfix_expression:postfix_expression PERIOD_TK identifier)
-	        $<astval>$ = new astNode("postfix_expression");
+	   /*     $<astval>$ = new astNode("postfix_expression");
             $<astval>$->addChild($<astval>1);
             $<astval>$->addChild(new astNode("PERIOD_TK", "."));
-            $<astval>$->addChild($<astval>3);	         
+            $<astval>$->addChild($<astval>3); */	         
 		}
 	| postfix_expression PTR_OP_TK identifier
 		{
 			REDUCTION(postfix_expression:postfix_expression PTR_OP_TK identifier)
-	        $<astval>$ = new astNode("postfix_expression");
+	   /*     $<astval>$ = new astNode("postfix_expression");
             $<astval>$->addChild($<astval>1);
             $<astval>$->addChild(new astNode("PTR_OP_TK", "->"));
-            $<astval>$->addChild($<astval>3);	         
+            $<astval>$->addChild($<astval>3);	    */      
 		}
 	| postfix_expression INC_OP_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression INC_OP_TK)
-			$<astval>$ = new astNode("postfix_expression");
+	/*		$<astval>$ = new astNode("postfix_expression");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild(new astNode("INC_OP_TK", "++"));	         
+			$<astval>$->addChild(new astNode("INC_OP_TK", "++"));	 */       
 		}
 	| postfix_expression DEC_OP_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression DEC_OP_TK)
-			$<astval>$ = new astNode("postfix_expression");
+	/*		$<astval>$ = new astNode("postfix_expression");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild(new astNode("DEC_OP_TK", "--"));	         
+			$<astval>$->addChild(new astNode("DEC_OP_TK", "--"));	  */       
 		}
 	;
 
@@ -1456,7 +1474,7 @@ primary_expression
 	| OPEN_PAREN_TK expression CLOSE_PAREN_TK
 		{
 			REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)
-			$<astval>$ = $<astval>2;
+		/*	$<astval>$ = $<astval>2; */
 		}
 	;
 
@@ -1468,9 +1486,9 @@ argument_expression_list
 	| argument_expression_list COMMA_TK assignment_expression
 		{
 			REDUCTION(argument_expression_list:argument_expression_list COMMA_TK assignment_expression)
-			$<astval>$ = new astNode("argument_expression_list");
+		/*	$<astval>$ = new astNode("argument_expression_list");
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>3); */
 		}
 	;
 
@@ -1478,24 +1496,30 @@ constant
 	: INTEGER_CONSTANT_TK				
 		{
 			REDUCTION(constant:INTEGER_CONSTANT_TK)
-			$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval, yylval.tval);
-			$<astval>$->nodeInt = yylval.dval;
+
+		/*	$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval); */
+
 		}
 	| CHARACTER_CONSTANT_TK
 		{
 			REDUCTION(constant:CHARACTER_CONSTANT_TK)
-			$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval, yylval.tval);
+
+	/*		$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval); */
+
 		}
 	| FLOATING_CONSTANT_TK
 		{
 			REDUCTION(constant:FLOATING_CONSTANT_TK)
-			$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval, yylval.tval);
-			$<astval>$->nodeDouble = yylval.dval;
+
+		/*	$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval); */
+
 		}
 	| ENUMERATION_CONSTANT_TK
 		{
 			REDUCTION(constant:ENUMERATION_CONSTANT_TK)
-			$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval); */
+
 		}
 	;
 
@@ -1503,7 +1527,9 @@ string
 	: STRING_LITERAL_TK
 		{
 			REDUCTION(string:STRING_LITERAL_TK)
-			$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval); */
+
 		}
 	;
 
@@ -1511,7 +1537,9 @@ identifier
 	: IDENTIFIER_TK
 		{
 			REDUCTION(identifier:IDENTIFIER_TK)
-			$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval, yylval.tval);
+
+		/*	$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval); */
+
 		}
 	;
 
