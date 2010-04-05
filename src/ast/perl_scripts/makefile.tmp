@@ -1,0 +1,46 @@
+########################################################################
+#
+# basic Makefile for AST class library
+#
+########################################################################
+# Tool Defines
+########################################################################
+CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0
+CXX = g++
+########################################################################
+# Sources
+########################################################################
+SRC =  	file1.cpp file2.cpp file3.cpp
+
+SRC = 	[% FOREACH class = classdata -%] src/[% class %]_ast.cpp [% END %]
+
+OBJ = $(SRC:.cpp=.o)
+
+TARGET = astlib.a
+
+INCS = -I. -I../include/ 
+INCS += -I./src/
+INCS += -I./../parser
+INCS += -I./../logging
+
+# library paths
+LIBS = -lstdc++
+
+.SUFFIXES: .cpp
+
+default: $(TARGET)
+
+.cpp.o:
+	$(CXX) $(INCS) $(CCFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJ)
+	ar rcs $(TARGET) $(OBJ)
+
+depend: dep
+
+dep:
+	makedepend -- $(CXXFLAGS) -- $(INCS) $(SRC)
+
+clean:
+	rm -f $(OBJ) $(TARGET)
+

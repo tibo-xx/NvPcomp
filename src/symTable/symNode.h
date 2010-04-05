@@ -23,6 +23,7 @@ namespace NvPcomp {
 		void addType(int);
 		int getTopType();
 		int popType();
+		bool hasType();
 	public:
 		std::string	_key;	
 		std::string	_strType;
@@ -34,8 +35,7 @@ namespace NvPcomp {
 	public:
 		symNode(NvPcomp::location loc, \
 				std::string key, \
-				std::string strType, \
-				int type);
+				std::string strType);
 		~symNode();
 	};
 }

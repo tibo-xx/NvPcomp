@@ -95,8 +95,8 @@ void symTableTest::testInsertSearch_1() {
 	string strNode1 = "Node1";
 	string strNode2 = "Node2";
 
-	node1 = new symNode(loc," ", " ", 1);
-	node2 = new symNode(loc," ", " ", 1);
+	node1 = new symNode(loc," ", " ");
+	node2 = new symNode(loc," ", " ");
 
 	_table->insert(strNode1, node1);
 	_table->push();
@@ -128,8 +128,8 @@ void symTableTest::testInsertSearch_2() {
 	string strNode1 = "Node1";
 	string strNode2 = "Node2";
 
-	node1 = new symNode(loc," ", " ", 1);
-	node2 = new symNode(loc," ", " ", 1);
+	node1 = new symNode(loc," ", " ");
+	node2 = new symNode(loc," ", " ");
 	
 	_table->insert(strNode1, node1);
 	_table->push();
@@ -169,13 +169,13 @@ void symTableTest::testInsertSearch_3() {
 	string strNode5 = "Node5";
 	string strNode6 = "Node6";
 
-	node1 = new symNode(loc," ", " ", 1);
-	node1_2 = new symNode(loc," ", " ", 1);
-	node2 = new symNode(loc," ", " ", 1);
-	node3 = new symNode(loc," ", " ", 1);
-	node4 = new symNode(loc," ", " ", 1);
-	node5 = new symNode(loc," ", " ", 1);
-	node6 = new symNode(loc," ", " ", 1);		
+	node1 = new symNode(loc," ", " ");
+	node1_2 = new symNode(loc," ", " ");
+	node2 = new symNode(loc," ", " ");
+	node3 = new symNode(loc," ", " ");
+	node4 = new symNode(loc," ", " ");
+	node5 = new symNode(loc," ", " ");
+	node6 = new symNode(loc," ", " ");		
 	
 	result = _table->insert(strNode1, node1);
 	CPPUNIT_ASSERT(result == INSERT_SUCCESS);
@@ -236,12 +236,12 @@ void symTableTest::testOutput() {
 	string strNode1 = "Node1";
 	string strNode2 = "Node2";
 
-	node1 = new symNode(loc," ", " ", 1);
-	node2 = new symNode(loc," ", " ", 1);
-	node3 = new symNode(loc," ", " ", 1);
-	node4 = new symNode(loc," ", " ", 1);
-	node5 = new symNode(loc," ", " ", 1);
-	node6 = new symNode(loc," ", " ", 1);	
+	node1 = new symNode(loc," ", " ");
+	node2 = new symNode(loc," ", " ");
+	node3 = new symNode(loc," ", " ");
+	node4 = new symNode(loc," ", " ");
+	node5 = new symNode(loc," ", " ");
+	node6 = new symNode(loc," ", " ");	
 	
 	table->insert(strNode1, node1);
 	table->push();

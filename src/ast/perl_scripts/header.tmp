@@ -1,0 +1,30 @@
+/**********************************************************************/
+//! ASTNode [% classname %]_ast implementation for NvPcomp
+/*!
+* \class [% classname %]_ast
+*
+* Description: The [% classname %]_ast implementation for Abstract Syntax Tree in NvPcomp
+*
+* \author CMT, DRJ & BFB
+*
+*/
+/**********************************************************************/
+#ifndef [% classname_upper %]_AST_H_
+#define [% classname_upper %]_AST_H_
+
+#include <ast.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <NvPcomp_logger.h>
+
+class [% classname %]_ast:public astNode {
+public:
+	[% classname %]_ast();
+	[% classname %]_ast(std::string nodeType, std::string nodeString = "", int nodeToken = -1);
+	~[% classname %]_ast();
+};
+
+#endif /* [% classname_upper %]_AST_H_ */

@@ -22,13 +22,10 @@ using namespace std;
 
 NvPcomp::symNode::symNode(NvPcomp::location loc, \
 							string key, \
-							string strType, \
-							int type) {
+							string strType) {
 	_loc = loc;
 	_key = key;
-	_strType = strType;
-	_type.push_back(type);
-	
+	_strType = strType;	
 }
 
 NvPcomp::symNode::~symNode() 
@@ -36,12 +33,23 @@ NvPcomp::symNode::~symNode()
 	
 }
 
+bool NvPcomp::symNode::hasType()
+{
+   return !_type.empty();
+}
+
 void NvPcomp::symNode::addType(int type) {
 	_type.push_back(type);
 }
 
 int NvPcomp::symNode::getTopType() {
-	return _type.front();
+	
+	int retVal = -1;
+	if(!_type.empty()) {
+		retVal = _type.front();
+	}
+	
+	return  retVal;
 }
 
 int NvPcomp::symNode::popType() {
