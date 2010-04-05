@@ -204,12 +204,9 @@ declaration
 			REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
 		/*	$<astval>$ = new astNode("declaration");
 			$<astval>$->addChild($<astval>1);
-<<<<<<< HEAD:src/parser/parse.yy
 			$<astval>$->addChild($<astval>2); */
-=======
-			$<astval>$->addChild($<astval>2);
 
-         if ( $<astval>2->nodeType == "IDENTIFIER_TK")
+    /*     if ( $<astval>2->nodeType == "IDENTIFIER_TK")
          {
    			// Set identifier type
             symNode* st_node = table.search_top($<astval>2->nodeString);
@@ -229,10 +226,8 @@ declaration
                   else
                      st_node->addType($<astval>1->nodeToken);
                } 
-
+*/
          }
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
-		}
 	;
 
 declaration_list
@@ -317,83 +312,65 @@ type_specifier
 	: VOID_TK
 		{
 			REDUCTION(type_specifier:VOID_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("VOID_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("VOID_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
+
 		}
 	| CHAR_TK
 		{
 			REDUCTION(type_specifier:CHAR_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("CHAR_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("CHAR_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
 		}
 	| SHORT_TK
 		{
 			REDUCTION(type_specifier:SHORT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("SHORT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("SHORT_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| INT_TK
 		{
 			REDUCTION(type_specifier:INT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("INT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("INT_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| LONG_TK
 		{
 			REDUCTION(type_specifier:LONG_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("LONG_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("LONG_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| FLOAT_TK
 		{
 			REDUCTION(type_specifier:FLOAT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("FLOAT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("FLOAT_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| DOUBLE_TK
 		{
 			REDUCTION(type_specifier:DOUBLE_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("DOUBLE_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("DOUBLE_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| SIGNED_TK
 		{
 			REDUCTION(type_specifier:SIGNED_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("SIGNED_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("SIGNED_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| UNSIGNED_TK
 		{
 			REDUCTION(type_specifier:UNSIGNED_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("UNSIGNED_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| struct_or_union_specifier			
 		{
@@ -896,13 +873,9 @@ compound_statement
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
-<<<<<<< HEAD:src/parser/parse.yy
 	/*		$<astval>$ = new astNode("compound_statement");
 			$<astval>$->addChild($<astval>3); */
-=======
-			$<astval>$ = new astNode("compound_statement");
-			$<astval>$->addChild($<astval>3);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| OPEN_BRACE_TK scope_push declaration_list statement_list CLOSE_BRACE_TK
 		{
@@ -1521,40 +1494,30 @@ constant
 	: INTEGER_CONSTANT_TK				
 		{
 			REDUCTION(constant:INTEGER_CONSTANT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("INTEGER_CONSTANT_TK", yylval.sval, yylval.tval);
-			$<astval>$->nodeInt = yylval.dval;
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| CHARACTER_CONSTANT_TK
 		{
 			REDUCTION(constant:CHARACTER_CONSTANT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 	/*		$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("CHARACTER_CONSTANT_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| FLOATING_CONSTANT_TK
 		{
 			REDUCTION(constant:FLOATING_CONSTANT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("FLOATING_CONSTANT_TK", yylval.sval, yylval.tval);
-			$<astval>$->nodeDouble = yylval.dval;
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	| ENUMERATION_CONSTANT_TK
 		{
 			REDUCTION(constant:ENUMERATION_CONSTANT_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("ENUMERATION_CONSTANT_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	;
 
@@ -1562,11 +1525,9 @@ string
 	: STRING_LITERAL_TK
 		{
 			REDUCTION(string:STRING_LITERAL_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("STRING_LITERAL_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	;
 
@@ -1574,11 +1535,9 @@ identifier
 	: IDENTIFIER_TK
 		{
 			REDUCTION(identifier:IDENTIFIER_TK)
-<<<<<<< HEAD:src/parser/parse.yy
+
 		/*	$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval); */
-=======
-			$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval, yylval.tval);
->>>>>>> 8ad2983c660200160b9614fde7ab87d0c5e16adc:src/parser/parse.yy
+
 		}
 	;
 
