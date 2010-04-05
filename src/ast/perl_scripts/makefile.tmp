@@ -10,8 +10,6 @@ CXX = g++
 ########################################################################
 # Sources
 ########################################################################
-SRC =  	file1.cpp file2.cpp file3.cpp
-
 SRC = 	[% FOREACH class = classdata -%] src/[% class %]_ast.cpp [% END %]
 
 OBJ = $(SRC:.cpp=.o)
@@ -20,8 +18,8 @@ TARGET = astlib.a
 
 INCS = -I. -I../include/ 
 INCS += -I./src/
-INCS += -I./../parser
-INCS += -I./../logging
+INCS += -I./../parser/
+INCS += -I./../logging/
 
 # library paths
 LIBS = -lstdc++

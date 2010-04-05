@@ -20,43 +20,48 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-//#include <location.hh>
-//#include <position.hh>
+#include <location.hh>
+#include <position.hh>
 #include <NvPcomp_logger.h>
-
-using namespace std;
 
 class astNode {
 
 	public:
 		astNode();
-		// astNode(string nodeString = "", location, );
-		astNode(string nodeType, string nodeString = "", int nodeToken = -1);
-		void printNode(bool printProductions = true, int level = 0);	
-		virtual void output3AC() {};
+		astNode(std::string nodeString, NvPcomp::location loc);
+		astNode(std::string nodeType, std::string nodeString = "", int nodeToken = -1);
+	public:
+		virtual void printNode(bool printProductions = true, int level = 0);	
+		//virtual void output3AC() = 0;
+		
 		void addChild(astNode* child);
-		void setType(string nodeType);
-		void setString(string nodeString);
-		string getType();
+		void setType(std::string nodeType);
+		void setString(std::string nodeString);
+
+		std::string getType();
+		NvPcomp::location getLocation();
 
 // LAZY	private:
-		// Node type/lhs, i.e. iteration_statement, identifier, etc.
-		string nodeType;
 		// Node string value
-		string nodeString;
+		std::string nodeString;
 		// Node string value
 		int nodeInt;
 		// Node string value
 		double nodeDouble;
 		// List of appropriate RHS nodes
-		vector<astNode*> children;	
+		std::vector<astNode*> children;	
+		
 		// Node token value
 		// Remove
-		int nodeToken;
-		// Comment if present
-		string nodeComment;
+		int nodeToken;		
+		
 		// Location
-		//NvPcomp::location _loc;
+		NvPcomp::location loc;
+	
+	//protected:
+		// Node type/lhs, i.e. iteration_statement, identifier, etc.
+		std::string nodeType;
+		
 };
 
 #endif /* AST_H_ */

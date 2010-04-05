@@ -5,6 +5,8 @@
 #include <parse.hh>
 #include <NvPcomp_logger.h>
 #include <NvPcompScanner.h>
+#include <ast.h>
+#include <ast_include.h>
 #include <defines.h>
 
 #define YY_USER_ACTION yylloc->columns (yyleng);
@@ -19,6 +21,7 @@
 			str_prev_token = std::string(#x); \
 			yylval->sval = strdup(yytext); \
 			yylval->tval = (int)x; \
+			yylval->astval = new astNode(std::string(#x), *yylloc); \
 			return(x)
 
 using namespace NvPcomp;

@@ -28,6 +28,12 @@ astNode::astNode() {
 	nodeString = "";
 }
 
+astNode::astNode(string _nodeString, NvPcomp::location _loc) {
+	loc = _loc;
+	nodeString = _nodeString;
+		
+}
+
 astNode::astNode(string _nodeType, string _nodeString, int _nodeToken) {
 	// TODO: remove nodeType?
 	// Add location
@@ -35,7 +41,6 @@ astNode::astNode(string _nodeType, string _nodeString, int _nodeToken) {
 	nodeString = _nodeString;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 	nodeToken = _nodeToken;
-	nodeComment = "";
 }
 
 void astNode::setString(string _nodeString)
@@ -56,6 +61,10 @@ void astNode::setType(string _nodeType)
 string astNode::getType()
 {
 	return nodeType;
+}
+
+NvPcomp::location astNode::getLocation() {
+	return loc;
 }
 
 void astNode::printNode(bool printProductions, int level) {

@@ -19,6 +19,8 @@
 	#include <NvPcomp_logger.h>
 	#include <symTable.h>
 	#include <ast.h>
+	#include <ast_include.h>
+	
 	namespace NvPcomp {
 		class FlexScanner;
 	}

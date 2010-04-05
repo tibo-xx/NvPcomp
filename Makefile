@@ -24,7 +24,8 @@ OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 OBJS += ./src/ast/ast.o
 
-SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
+SHARED_OBJS =  ./lib/argtable2-12/lib/libargtable2.a
+SHARED_OBJS += ./src/ast/astlib.a
 
 INCS =	-I./src/
 INCS += -I./src/symTable
@@ -33,7 +34,7 @@ INCS += -I./src/scanner
 INCS += -I./src/parser
 INCS += -I./src/comLineParser
 INCS += -I./src/ast
-#INCS += -I./src/ast/src/
+INCS += -I./src/ast/src/
 INCS += -I./src/buffer
 INCS += -I./src/test
 INCS += -I./src/test/logging
@@ -76,7 +77,7 @@ TEST_LIBS = $(LIBS) -lcppunit -ldl
 ########################################################################
 # Multiples
 ########################################################################
-all: parser scanner NvPcomp test
+all: parser scanner ast_lib NvPcomp test
 test: test_logging UnitTest
 
 ########################################################################

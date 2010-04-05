@@ -18,13 +18,17 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <position.hh>
+#include <location.hh>
 #include <NvPcomp_logger.h>
 
 class [% classname %]_ast:public astNode {
 public:
 	[% classname %]_ast();
-	[% classname %]_ast(std::string nodeType, std::string nodeString = "", int nodeToken = -1);
+	[% classname %]_ast(std::string _nodeString, NvPcomp::location _loc);
 	~[% classname %]_ast();
+public:
+	virtual void output3AC();
 };
 
 #endif /* [% classname_upper %]_AST_H_ */

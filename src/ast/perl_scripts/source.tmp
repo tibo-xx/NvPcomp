@@ -23,8 +23,15 @@
 using namespace std;
 
 [% classname %]_ast::[% classname %]_ast()
-	:astNode() {}
+	:astNode() {
+	nodeType = "[% classname %]";
+}
 
-[% classname %]_ast::[% classname %]_ast(string _nodeType, string _nodeString, int _nodeToken)
-	:astNode(_nodeType, _nodeString, _nodeToken) {}
+[% classname %]_ast::[% classname %]_ast(std::string _nodeString, NvPcomp::location _loc)
+	:astNode(_nodeString, _loc) {
+	nodeType = "[% classname %]";
+	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
+}
+
+void [% classname %]_ast::output3AC() {}
 
