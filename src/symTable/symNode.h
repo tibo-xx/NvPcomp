@@ -4,7 +4,7 @@
  *
  * Description
  *
- * \author CMT & DRJ
+ * \author CMT, DRJ & BFB
  *
  */
 #ifndef SYMNODE_H_

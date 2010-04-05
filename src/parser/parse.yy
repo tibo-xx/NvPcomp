@@ -46,11 +46,13 @@
 	// The last line printed to the output file.
 	unsigned int BP_lastLine = 0;
 	
-	#define REDUCTION(spot) \
-		if(yylval.commentFound) { \
+	/*
+	if(yylval.commentFound) { \
 			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
 			yylval.commentFound = false; \
 		} \	
+	*/
+	#define REDUCTION(spot) \
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		} \
@@ -149,6 +151,7 @@ translation_unit
 	: external_declaration 									
 		{ 
 			REDUCTION(translation_unit:external_declaration)
+			$<astval>$ = $<astval>1;
 		/*	$<astval>$ = new astNode("translation_unit");
 			ast.addChild($<astval>$);
 			$<astval>$->addChild($<astval>1); */
@@ -385,7 +388,9 @@ type_specifier
 	| TYPEDEF_NAME_TK
 		{
 			REDUCTION(type_specifier:TYPEDEF_NAME_TK)
-			$<astval>$ = new astNode("TYPEDEF_NAME_TK", yylval.sval, yylval.tval);
+			
+			/*$<astval>$ = *new astNode("TYPEDEF_NAME_TK", yylval.sval, yylval.tval);*/
+			
 		}
 	;
 

@@ -5,7 +5,7 @@
  *
  * Description: The Symbol Table implementation for NvPcomp
  *
- * \author CMT & DRJ
+ * \author CMT, DRJ & BFB
  *
  */
 /**********************************************************************/

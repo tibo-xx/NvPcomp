@@ -29,10 +29,9 @@ class astNode {
 	public:
 		astNode();
 		astNode(std::string nodeString, NvPcomp::location loc);
-		astNode(std::string nodeType, std::string nodeString = "", int nodeToken = -1);
 	public:
 		virtual void printNode(bool printProductions = true, int level = 0);	
-		//virtual void output3AC() = 0;
+		virtual void output3AC() = 0;
 		
 		void addChild(astNode* child);
 		void setType(std::string nodeType);
@@ -41,7 +40,7 @@ class astNode {
 		std::string getType();
 		NvPcomp::location getLocation();
 
-// LAZY	private:
+	protected:
 		// Node string value
 		std::string nodeString;
 		// Node string value
@@ -50,15 +49,11 @@ class astNode {
 		double nodeDouble;
 		// List of appropriate RHS nodes
 		std::vector<astNode*> children;	
-		
 		// Node token value
 		// Remove
-		int nodeToken;		
-		
+		int nodeToken;
 		// Location
 		NvPcomp::location loc;
-	
-	//protected:
 		// Node type/lhs, i.e. iteration_statement, identifier, etc.
 		std::string nodeType;
 		

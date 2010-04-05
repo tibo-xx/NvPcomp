@@ -18,10 +18,10 @@ while ($record = <classList>) {
 
 	push(@classdata, $record);
 
-	$tt->process('source.tmp', \%data, "../src/".$record."_ast.cpp")
+	$tt->process('source.tmp', \%data, "../src/".$record."_astNode.cpp")
       			|| die $tt->error;
 
-	$tt->process('header.tmp', \%data, "../src/".$record."_ast.h")
+	$tt->process('header.tmp', \%data, "../src/".$record."_astNode.h")
       			|| die $tt->error;
 }
 

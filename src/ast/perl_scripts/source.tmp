@@ -1,5 +1,5 @@
 /***********************************************************************
-* [% classname %]_ast - Syntax Tree Node
+* [% classname %]_astNode - Syntax Tree Node
 * Copyright (C) 2010 CMT & DRJ & BFB
 *
 * This program is free software: you can redistribute it and/or modify
@@ -18,20 +18,20 @@
 * \author CMT, DRJ & BFB
 **********************************************************************/
 
-#include <[% classname %]_ast.h>
+#include <[% classname %]_astNode.h>
 
 using namespace std;
 
-[% classname %]_ast::[% classname %]_ast()
+[% classname %]_astNode::[% classname %]_astNode()
 	:astNode() {
 	nodeType = "[% classname %]";
 }
 
-[% classname %]_ast::[% classname %]_ast(std::string _nodeString, NvPcomp::location _loc)
+[% classname %]_astNode::[% classname %]_astNode(std::string _nodeString, NvPcomp::location _loc)
 	:astNode(_nodeString, _loc) {
 	nodeType = "[% classname %]";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void [% classname %]_ast::output3AC() {}
+void [% classname %]_astNode::output3AC() {}
 

@@ -24,9 +24,6 @@ OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 OBJS += ./src/ast/ast.o
 
-SHARED_OBJS =  ./lib/argtable2-12/lib/libargtable2.a
-SHARED_OBJS += ./src/ast/astlib.a
-
 INCS =	-I./src/
 INCS += -I./src/symTable
 INCS += -I./src/logging
@@ -41,7 +38,7 @@ INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
 INCS += -I./lib/argtable2-12/include
-LIBS = -lstdc++ -lfl -lm
+LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last -L./lib/argtable2-12/lib/ -largtable2
 
 ########################################################################
 # Scanner and Parser

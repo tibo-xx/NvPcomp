@@ -24,23 +24,13 @@
 using namespace std;
 
 astNode::astNode() {
-	nodeType = "empty";
-	nodeString = "";
+	nodeString = "empty";
 }
 
 astNode::astNode(string _nodeString, NvPcomp::location _loc) {
 	loc = _loc;
 	nodeString = _nodeString;
 		
-}
-
-astNode::astNode(string _nodeType, string _nodeString, int _nodeToken) {
-	// TODO: remove nodeType?
-	// Add location
-	nodeType = _nodeType;
-	nodeString = _nodeString;
-	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
-	nodeToken = _nodeToken;
 }
 
 void astNode::setString(string _nodeString)

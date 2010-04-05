@@ -1,6 +1,6 @@
 /***********************************************************************
  *   
- *   Copyright (C) 2010  CMT & DRJ
+ *   Copyright (C) 2010  CMT, DRJ & BFB
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <NvPcompParser.h>
 #include <sourceBuffer.h>
 #include <comLineParser.h>
+#include <ast_include.h>
 #include <ast.h>
 #include <iostream>
 #include <fstream>
@@ -31,10 +32,11 @@ using namespace std;
 void parse_mode(const char *fileName) {
 	NvPcomp::FlexScanner *scanner;
 	NvPcomp::Parser *main_parser;
+	NvPcomp::BParser::location_type loc;
 	ifstream in;
 	
 	astNode *ast;
-	ast = new astNode("root");
+	ast = new root_astNode("root", loc);
 
 	cout << "Trying to open input file..." << endl;
 	
@@ -65,7 +67,7 @@ void scan_mode(const char *fileName) {
 	table = new NvPcomp::symTable();
 	
 	astNode *ast;
-	ast = new astNode("root");	
+	ast = new root_astNode("root", loc);	
 	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;

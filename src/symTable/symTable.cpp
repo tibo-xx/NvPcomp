@@ -1,6 +1,6 @@
 /***********************************************************************
  *   symTable - Symbol table implementation for NvPcomp
- *   Copyright (C) 2010  CMT & DRJ
+ *   Copyright (C) 2010  CMT, DRJ & BFB
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
