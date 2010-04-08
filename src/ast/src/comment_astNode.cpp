@@ -27,11 +27,13 @@ comment_astNode::comment_astNode()
 	nodeType = "comment";
 }
 
-comment_astNode::comment_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+comment_astNode::comment_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "comment";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void comment_astNode::output3AC() {}
+void comment_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

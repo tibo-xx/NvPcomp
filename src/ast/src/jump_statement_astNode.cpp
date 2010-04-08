@@ -27,11 +27,13 @@ jump_statement_astNode::jump_statement_astNode()
 	nodeType = "jump_statement";
 }
 
-jump_statement_astNode::jump_statement_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+jump_statement_astNode::jump_statement_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "jump_statement";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void jump_statement_astNode::output3AC() {}
+void jump_statement_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

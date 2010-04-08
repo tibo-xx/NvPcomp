@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class equality_expression_astNode:public astNode {
 public:
 	equality_expression_astNode();
-	equality_expression_astNode(std::string _nodeString, NvPcomp::location _loc);
+	equality_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~equality_expression_astNode();
 public:
 	virtual void output3AC();

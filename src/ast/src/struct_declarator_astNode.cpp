@@ -27,11 +27,13 @@ struct_declarator_astNode::struct_declarator_astNode()
 	nodeType = "struct_declarator";
 }
 
-struct_declarator_astNode::struct_declarator_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+struct_declarator_astNode::struct_declarator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "struct_declarator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void struct_declarator_astNode::output3AC() {}
+void struct_declarator_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

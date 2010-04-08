@@ -27,11 +27,13 @@ expression_statement_astNode::expression_statement_astNode()
 	nodeType = "expression_statement";
 }
 
-expression_statement_astNode::expression_statement_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+expression_statement_astNode::expression_statement_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "expression_statement";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void expression_statement_astNode::output3AC() {}
+void expression_statement_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class enum_specifier_astNode:public astNode {
 public:
 	enum_specifier_astNode();
-	enum_specifier_astNode(std::string _nodeString, NvPcomp::location _loc);
+	enum_specifier_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~enum_specifier_astNode();
 public:
 	virtual void output3AC();

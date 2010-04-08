@@ -27,11 +27,13 @@ initializer_list_astNode::initializer_list_astNode()
 	nodeType = "initializer_list";
 }
 
-initializer_list_astNode::initializer_list_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+initializer_list_astNode::initializer_list_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "initializer_list";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void initializer_list_astNode::output3AC() {}
+void initializer_list_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

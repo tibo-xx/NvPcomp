@@ -27,11 +27,13 @@ using namespace std;
 	nodeType = "[% classname %]";
 }
 
-[% classname %]_astNode::[% classname %]_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+[% classname %]_astNode::[% classname %]_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "[% classname %]";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void [% classname %]_astNode::output3AC() {}
+void [% classname %]_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

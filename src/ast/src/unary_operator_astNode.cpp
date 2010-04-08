@@ -27,11 +27,13 @@ unary_operator_astNode::unary_operator_astNode()
 	nodeType = "unary_operator";
 }
 
-unary_operator_astNode::unary_operator_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+unary_operator_astNode::unary_operator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "unary_operator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void unary_operator_astNode::output3AC() {}
+void unary_operator_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

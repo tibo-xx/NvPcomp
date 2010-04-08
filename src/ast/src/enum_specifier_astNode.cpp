@@ -27,11 +27,13 @@ enum_specifier_astNode::enum_specifier_astNode()
 	nodeType = "enum_specifier";
 }
 
-enum_specifier_astNode::enum_specifier_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+enum_specifier_astNode::enum_specifier_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "enum_specifier";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void enum_specifier_astNode::output3AC() {}
+void enum_specifier_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

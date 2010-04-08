@@ -27,10 +27,10 @@ astNode::astNode() {
 	nodeString = "empty";
 }
 
-astNode::astNode(string _nodeString, NvPcomp::location _loc) {
+astNode::astNode(string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree) {
 	loc = _loc;
 	nodeString = _nodeString;
-		
+	acTree = tree;
 }
 
 void astNode::setString(string _nodeString)
@@ -55,6 +55,10 @@ string astNode::getType()
 
 NvPcomp::location astNode::getLocation() {
 	return loc;
+}
+
+NvPcomp::tacTree *astNode::gettacTree() {
+	return acTree;
 }
 
 void astNode::printNode(bool printProductions, int level) {

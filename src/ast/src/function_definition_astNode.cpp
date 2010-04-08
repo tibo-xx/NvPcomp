@@ -27,11 +27,13 @@ function_definition_astNode::function_definition_astNode()
 	nodeType = "function_definition";
 }
 
-function_definition_astNode::function_definition_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+function_definition_astNode::function_definition_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "function_definition";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void function_definition_astNode::output3AC() {}
+void function_definition_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

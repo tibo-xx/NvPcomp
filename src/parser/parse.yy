@@ -8,8 +8,10 @@
 %parse-param { sourceBuffer &buffer }
 %parse-param { symTable &table }
 %parse-param { astNode &ast }
+%parse-param { NvPcomp::tacTree &acTree }
 %lex-param   { NvPcomp::FlexScanner &scanner }
 %lex-param   { symTable &table }
+%lex-param   { NvPcomp::tacTree &acTree }
 %locations
 %debug
 
@@ -19,6 +21,7 @@
 	#include <NvPcomp_logger.h>
 	#include <symTable.h>
 	#include <ast.h>
+	#include <tacTree.h>
 	#include <ast_include.h>
 	
 	namespace NvPcomp {
@@ -41,18 +44,16 @@
 %code {
 			
 	// Prototype for the yylex function
-	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner, NvPcomp::symTable &table);
+	static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner, NvPcomp::symTable &table, NvPcomp::tacTree &acTree);
 	
 	// The last line printed to the output file.
 	unsigned int BP_lastLine = 0;
 	
-	/*
-	if(yylval.commentFound) { \
+	#define REDUCTION(spot) \
+		if(yylval.commentFound) { \
 			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
 			yylval.commentFound = false; \
 		} \	
-	*/
-	#define REDUCTION(spot) \
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		} \
@@ -1560,6 +1561,6 @@ void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const s
 
 // Declare the Scanner and implement the yylex function
 #include "NvPcompScanner.h"
-static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner, NvPcomp::symTable &table) {
-	return scanner.yylex(yylval,loc, &table);
+static int yylex(NvPcomp::BParser::semantic_type * yylval, NvPcomp::BParser::location_type *loc, NvPcomp::FlexScanner &scanner, NvPcomp::symTable &table, NvPcomp::tacTree &acTree) {
+	return scanner.yylex(yylval,loc, &table, &acTree);
 }

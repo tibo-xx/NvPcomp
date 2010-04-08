@@ -27,11 +27,13 @@ translation_unit_astNode::translation_unit_astNode()
 	nodeType = "translation_unit";
 }
 
-translation_unit_astNode::translation_unit_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+translation_unit_astNode::translation_unit_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "translation_unit";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void translation_unit_astNode::output3AC() {}
+void translation_unit_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

@@ -21,7 +21,7 @@
 			str_prev_token = std::string(#x); \
 			yylval->sval = strdup(yytext); \
 			yylval->tval = (int)x; \
-			yylval->astval = new leaf_astNode(std::string(#x), *yylloc); \
+			/*yylval->astval = new leaf_astNode(std::string(#x), *yylloc, acTree); \*/ \
 			return(x)
 
 using namespace NvPcomp;

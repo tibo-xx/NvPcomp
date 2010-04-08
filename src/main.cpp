@@ -24,6 +24,7 @@
 #include <comLineParser.h>
 #include <ast_include.h>
 #include <ast.h>
+#include <tacTree.h>
 #include <iostream>
 #include <fstream>
 
@@ -33,11 +34,13 @@ void parse_mode(const char *fileName) {
 	NvPcomp::FlexScanner *scanner;
 	NvPcomp::Parser *main_parser;
 	NvPcomp::BParser::location_type loc;
+	NvPcomp::tacTree acTree;
 	ifstream in;
 	
 	astNode *ast;
-	ast = new root_astNode("root", loc);
-
+	ast = new root_astNode("root", loc, &acTree);
+	ast->output3AC();
+	
 	cout << "Trying to open input file..." << endl;
 	
 	in.open(fileName, ifstream::in);
@@ -64,10 +67,11 @@ void scan_mode(const char *fileName) {
 	NvPcomp::BParser::token::yytokentype token;
 	NvPcomp::BParser::semantic_type lval;
 	NvPcomp::BParser::location_type loc;
+	NvPcomp::tacTree acTree;
 	table = new NvPcomp::symTable();
 	
 	astNode *ast;
-	ast = new root_astNode("root", loc);	
+	ast = new root_astNode("root", loc, &acTree);	
 	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;
@@ -80,7 +84,7 @@ void scan_mode(const char *fileName) {
 		
 		table->dump();
 		
-		while(scanner->yylex(&lval, &loc, table));
+		while(scanner->yylex(&lval, &loc, table, &acTree));
 		
 		scanner->table->dump();
 		cout << endl << endl;

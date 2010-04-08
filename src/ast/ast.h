@@ -6,9 +6,6 @@
  * Description: Basic node of the Abstract Syntax Tree
  *
  * \author CMT, DRJ & BFB
- *  This file uses the argtable2 library.
- *	Copyright (C) 1998-2001,2003-2010 Stewart Heitmann
- *	sheitmann@users.sourceforge.net
  *
  */
 /**********************************************************************/
@@ -22,13 +19,14 @@
 #include <vector>
 #include <location.hh>
 #include <position.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class astNode {
 
 	public:
 		astNode();
-		astNode(std::string nodeString, NvPcomp::location loc);
+		astNode(std::string nodeString, NvPcomp::location loc, NvPcomp::tacTree *tree);
 	public:
 		virtual void printNode(bool printProductions = true, int level = 0);	
 		virtual void output3AC() = 0;
@@ -39,6 +37,8 @@ class astNode {
 
 		std::string getType();
 		NvPcomp::location getLocation();
+		
+		NvPcomp::tacTree *gettacTree();
 
 	protected:
 		// Node string value
@@ -56,6 +56,8 @@ class astNode {
 		NvPcomp::location loc;
 		// Node type/lhs, i.e. iteration_statement, identifier, etc.
 		std::string nodeType;
+		// tacTree
+		NvPcomp::tacTree *acTree;
 		
 };
 

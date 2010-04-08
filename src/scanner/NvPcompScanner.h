@@ -23,6 +23,7 @@
 #include <parse.hh>
 #include <sourceBuffer.h>
 #include <symTable.h>
+#include <tacTree.h>
 #include <ast.h>
 
 namespace NvPcomp {
@@ -40,11 +41,15 @@ namespace NvPcomp {
 		// save the pointer to yylval so we can change it, and invoke scanner
 		int yylex(NvPcomp::BParser::semantic_type * lval, \
 				  NvPcomp::BParser::location_type *loc, \
-				  NvPcomp::symTable *_table) \
-				  { yylval = lval; yylloc = loc; table = _table; return yylex();}
+				  NvPcomp::symTable *_table, \
+				  NvPcomp::tacTree *_acTree) \
+				  { yylval = lval; yylloc = loc; table = _table; acTree = _acTree; return yylex();}
 
 		// Symbol Table
 		NvPcomp::symTable *table;
+		
+		// tacTree pointer
+		NvPcomp::tacTree *acTree;
 		
 	private:
 		// Scanning function created by Flex; make this private to force usage
@@ -95,6 +100,6 @@ namespace NvPcomp {
 		
 		// AST pointer
 		astNode *ast;
-
+		
 	};	
 }

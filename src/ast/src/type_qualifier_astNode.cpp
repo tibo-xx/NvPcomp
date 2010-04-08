@@ -27,11 +27,13 @@ type_qualifier_astNode::type_qualifier_astNode()
 	nodeType = "type_qualifier";
 }
 
-type_qualifier_astNode::type_qualifier_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+type_qualifier_astNode::type_qualifier_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "type_qualifier";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void type_qualifier_astNode::output3AC() {}
+void type_qualifier_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

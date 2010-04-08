@@ -27,11 +27,13 @@ shift_expression_astNode::shift_expression_astNode()
 	nodeType = "shift_expression";
 }
 
-shift_expression_astNode::shift_expression_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+shift_expression_astNode::shift_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "shift_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void shift_expression_astNode::output3AC() {}
+void shift_expression_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

@@ -27,11 +27,13 @@ direct_abstract_declarator_astNode::direct_abstract_declarator_astNode()
 	nodeType = "direct_abstract_declarator";
 }
 
-direct_abstract_declarator_astNode::direct_abstract_declarator_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+direct_abstract_declarator_astNode::direct_abstract_declarator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "direct_abstract_declarator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void direct_abstract_declarator_astNode::output3AC() {}
+void direct_abstract_declarator_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

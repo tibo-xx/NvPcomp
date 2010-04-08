@@ -27,11 +27,13 @@ additive_expression_astNode::additive_expression_astNode()
 	nodeType = "additive_expression";
 }
 
-additive_expression_astNode::additive_expression_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+additive_expression_astNode::additive_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "additive_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void additive_expression_astNode::output3AC() {}
+void additive_expression_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

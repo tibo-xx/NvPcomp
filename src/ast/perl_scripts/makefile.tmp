@@ -14,12 +14,13 @@ SRC = 	[% FOREACH class = classdata -%] src/[% class %]_astNode.cpp [% END %]
 
 OBJ = $(SRC:.cpp=.o)
 
-TARGET = astlib.a
+TARGET = libast.a
 
 INCS = -I. -I../include/ 
 INCS += -I./src/
 INCS += -I./../parser/
 INCS += -I./../logging/
+INCS += -I./../tac/
 
 # library paths
 LIBS = -lstdc++

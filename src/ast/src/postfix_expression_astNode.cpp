@@ -27,11 +27,13 @@ postfix_expression_astNode::postfix_expression_astNode()
 	nodeType = "postfix_expression";
 }
 
-postfix_expression_astNode::postfix_expression_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+postfix_expression_astNode::postfix_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "postfix_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void postfix_expression_astNode::output3AC() {}
+void postfix_expression_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

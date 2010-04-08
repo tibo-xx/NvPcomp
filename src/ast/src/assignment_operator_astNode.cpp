@@ -27,11 +27,13 @@ assignment_operator_astNode::assignment_operator_astNode()
 	nodeType = "assignment_operator";
 }
 
-assignment_operator_astNode::assignment_operator_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+assignment_operator_astNode::assignment_operator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "assignment_operator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void assignment_operator_astNode::output3AC() {}
+void assignment_operator_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

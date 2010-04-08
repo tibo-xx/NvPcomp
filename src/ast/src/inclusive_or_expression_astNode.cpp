@@ -27,11 +27,13 @@ inclusive_or_expression_astNode::inclusive_or_expression_astNode()
 	nodeType = "inclusive_or_expression";
 }
 
-inclusive_or_expression_astNode::inclusive_or_expression_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+inclusive_or_expression_astNode::inclusive_or_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "inclusive_or_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void inclusive_or_expression_astNode::output3AC() {}
+void inclusive_or_expression_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

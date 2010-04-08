@@ -27,11 +27,13 @@ declaration_specifiers_astNode::declaration_specifiers_astNode()
 	nodeType = "declaration_specifiers";
 }
 
-declaration_specifiers_astNode::declaration_specifiers_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+declaration_specifiers_astNode::declaration_specifiers_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "declaration_specifiers";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void declaration_specifiers_astNode::output3AC() {}
+void declaration_specifiers_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

@@ -27,11 +27,13 @@ struct_or_union_specifier_astNode::struct_or_union_specifier_astNode()
 	nodeType = "struct_or_union_specifier";
 }
 
-struct_or_union_specifier_astNode::struct_or_union_specifier_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+struct_or_union_specifier_astNode::struct_or_union_specifier_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "struct_or_union_specifier";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void struct_or_union_specifier_astNode::output3AC() {}
+void struct_or_union_specifier_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

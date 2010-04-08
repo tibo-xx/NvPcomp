@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class struct_or_union_specifier_astNode:public astNode {
 public:
 	struct_or_union_specifier_astNode();
-	struct_or_union_specifier_astNode(std::string _nodeString, NvPcomp::location _loc);
+	struct_or_union_specifier_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~struct_or_union_specifier_astNode();
 public:
 	virtual void output3AC();

@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class type_qualifier_list_astNode:public astNode {
 public:
 	type_qualifier_list_astNode();
-	type_qualifier_list_astNode(std::string _nodeString, NvPcomp::location _loc);
+	type_qualifier_list_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~type_qualifier_list_astNode();
 public:
 	virtual void output3AC();

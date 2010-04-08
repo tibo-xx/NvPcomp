@@ -23,6 +23,10 @@ OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 OBJS += ./src/ast/ast.o
+OBJS += ./src/tac/tacNode.o
+OBJS += ./src/tac/tacTree.o
+
+SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
 
 INCS =	-I./src/
 INCS += -I./src/symTable
@@ -30,7 +34,8 @@ INCS += -I./src/logging
 INCS += -I./src/scanner
 INCS += -I./src/parser
 INCS += -I./src/comLineParser
-INCS += -I./src/ast
+INCS += -I./src/ast/
+INCS += -I./src/tac/
 INCS += -I./src/ast/src/
 INCS += -I./src/buffer
 INCS += -I./src/test
@@ -38,7 +43,7 @@ INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
 INCS += -I./lib/argtable2-12/include
-LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last -L./lib/argtable2-12/lib/ -largtable2
+LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last
 
 ########################################################################
 # Scanner and Parser

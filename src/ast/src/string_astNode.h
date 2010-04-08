@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class string_astNode:public astNode {
 public:
 	string_astNode();
-	string_astNode(std::string _nodeString, NvPcomp::location _loc);
+	string_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~string_astNode();
 public:
 	virtual void output3AC();

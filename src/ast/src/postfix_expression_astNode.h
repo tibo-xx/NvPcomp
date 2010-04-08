@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class postfix_expression_astNode:public astNode {
 public:
 	postfix_expression_astNode();
-	postfix_expression_astNode(std::string _nodeString, NvPcomp::location _loc);
+	postfix_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~postfix_expression_astNode();
 public:
 	virtual void output3AC();

@@ -27,11 +27,13 @@ primary_expression_astNode::primary_expression_astNode()
 	nodeType = "primary_expression";
 }
 
-primary_expression_astNode::primary_expression_astNode(std::string _nodeString, NvPcomp::location _loc)
-	:astNode(_nodeString, _loc) {
+primary_expression_astNode::primary_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+	:astNode(_nodeString, _loc, tree) {
 	nodeType = "primary_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
-void primary_expression_astNode::output3AC() {}
+void primary_expression_astNode::output3AC() {
+	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+}
 

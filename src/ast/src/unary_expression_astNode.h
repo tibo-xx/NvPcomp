@@ -20,12 +20,13 @@
 #include <vector>
 #include <position.hh>
 #include <location.hh>
+#include <tacTree.h>
 #include <NvPcomp_logger.h>
 
 class unary_expression_astNode:public astNode {
 public:
 	unary_expression_astNode();
-	unary_expression_astNode(std::string _nodeString, NvPcomp::location _loc);
+	unary_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
 	~unary_expression_astNode();
 public:
 	virtual void output3AC();

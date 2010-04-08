@@ -20,6 +20,7 @@ INCS = -I. -I../include/
 INCS += -I./src/
 INCS += -I./../parser/
 INCS += -I./../logging/
+INCS += -I./../tac/
 
 # library paths
 LIBS = -lstdc++
