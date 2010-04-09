@@ -27,9 +27,10 @@ leaf_astNode::leaf_astNode()
 	nodeType = "leaf";
 }
 
-leaf_astNode::leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+leaf_astNode::leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree, int _tokenType)
 	:astNode(_nodeString, _loc, tree) {
 	nodeType = "leaf";
+	tokenType = _tokenType;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
@@ -37,3 +38,6 @@ void leaf_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
+int leaf_astNode::getTokenType() {
+	return tokenType;
+}

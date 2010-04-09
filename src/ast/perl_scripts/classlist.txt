@@ -64,6 +64,5 @@ argument_expression_list
 constant
 string
 identifier
-leaf
 root
 comment

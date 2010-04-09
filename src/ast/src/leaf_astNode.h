@@ -26,10 +26,13 @@
 class leaf_astNode:public astNode {
 public:
 	leaf_astNode();
-	leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
+	leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree, int _tokenType);
 	~leaf_astNode();
+	int getTokenType();
 public:
 	virtual void output3AC();
+private:
+	int tokenType;
 };
 
 #endif /* LEAF_ASTNODE_H_ */
