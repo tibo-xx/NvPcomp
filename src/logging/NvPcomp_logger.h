@@ -45,7 +45,7 @@
  * 				Since this is a ostringstream you can also pass it the
  * 				same object types you would pipe to cout.
  * 
- * \author CMT & DRJ
+ * \author CMT, DRJ & BFB
  *
  */
 /**********************************************************************/
@@ -148,7 +148,7 @@ NvPcomp_logger<T>::~NvPcomp_logger()
     T::Output(os.str());
 }
 
-// Reorting Level
+// Reporting Level
 template <typename T>
 LogLevel& NvPcomp_logger<T>::ReportingLevel()
 {
