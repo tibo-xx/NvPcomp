@@ -24,6 +24,7 @@
 #include <comLineParser.h>
 #include <ast_include.h>
 #include <ast.h>
+#include <astNode.h>
 #include <tacTree.h>
 #include <iostream>
 #include <fstream>

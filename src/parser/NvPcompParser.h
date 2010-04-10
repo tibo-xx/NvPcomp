@@ -1,7 +1,7 @@
 #pragma once
 #include <symTable.h>
 #include <tacTree.h>
-#include <ast.h>
+#include <astNode.h>
 
 namespace NvPcomp {
 	class Parser {

@@ -12,7 +12,7 @@
 #ifndef DIRECT_ABSTRACT_DECLARATOR_ASTNODE_H_
 #define DIRECT_ABSTRACT_DECLARATOR_ASTNODE_H_
 
-#include <ast.h>
+#include <astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>

@@ -12,7 +12,7 @@
 #ifndef TYPE_SPECIFIER_ASTNODE_H_
 #define TYPE_SPECIFIER_ASTNODE_H_
 
-#include <ast.h>
+#include <astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>

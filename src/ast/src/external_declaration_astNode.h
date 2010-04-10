@@ -12,7 +12,7 @@
 #ifndef EXTERNAL_DECLARATION_ASTNODE_H_
 #define EXTERNAL_DECLARATION_ASTNODE_H_
 
-#include <ast.h>
+#include <astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>

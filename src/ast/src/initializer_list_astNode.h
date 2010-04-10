@@ -12,7 +12,7 @@
 #ifndef INITIALIZER_LIST_ASTNODE_H_
 #define INITIALIZER_LIST_ASTNODE_H_
 
-#include <ast.h>
+#include <astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
