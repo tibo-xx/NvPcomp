@@ -5,11 +5,12 @@
 ########################################################################
 # Tool Defines
 ########################################################################
-CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0
+# CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0
+CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0 -ansi
 CXX = g++
 LEX = flex++
-YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
-#YACC = bison
+# YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+YACC = bison
 LEXFLAGS = -+
 
 ########################################################################
@@ -27,7 +28,7 @@ OBJS += ./src/ast/astNode.o
 OBJS += ./src/tac/tacNode.o
 OBJS += ./src/tac/tacTree.o
 
-SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
+# SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
 
 INCS =	-I./src/
 INCS += -I./src/symTable
@@ -43,8 +44,9 @@ INCS += -I./src/test
 INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
-INCS += -I./lib/argtable2-12/include
-LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last
+# INCS += -I./lib/argtable2-12/include
+# LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last
+LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last -largtable2
 
 ########################################################################
 # Scanner and Parser
