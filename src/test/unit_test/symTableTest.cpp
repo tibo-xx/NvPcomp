@@ -1,6 +1,6 @@
 /***********************************************************************
- *   symTableTest - Symbol Table Test.
- *   Copyright (C) 2010 CMT & DRJ
+ *   symNode - Symbol Table Node.
+ *   Copyright (C) 2010 CMT, DRJ & BFB
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ void symTableTest::testConstructor() {
 	
 	const int ZERO = 0;
 	
-	cout << "Start Symble Table testConstructor." << endl;
+	cout << "Start Symbol Table testConstructor." << endl;
 	
 	//Create the new symbol table;
 	symTableAccess * table;	
@@ -45,26 +45,26 @@ void symTableTest::testConstructor() {
 	
 	// Check that the Level was set correctly.
 	CPPUNIT_ASSERT_EQUAL(ZERO, table->getCurrentLevel());
-	cout << "Finish Symble Table testConstructor." << endl;
+	cout << "Finish Symbol Table testConstructor." << endl;
 	
 	delete table;
 }
 
 void symTableTest::testPush() {
 	
-	cout << "Start Symble Table testPush." << endl;
+	cout << "Start Symbol Table testPush." << endl;
 	
 	_table->push();
 	CPPUNIT_ASSERT_EQUAL(1, _table->getCurrentLevel());
 	_table->push();
 	CPPUNIT_ASSERT_EQUAL(2, _table->getCurrentLevel());
 	
-	cout << "Finish Symble Table testPush." << endl;
+	cout << "Finish Symbol Table testPush." << endl;
 }
 
 void symTableTest::testPop() {
 	
-	cout << "Start Symble Table testPop." << endl;
+	cout << "Start Symbol Table testPop." << endl;
 	
 	_table->push();
 	CPPUNIT_ASSERT_EQUAL(1, _table->getCurrentLevel());
@@ -78,7 +78,7 @@ void symTableTest::testPop() {
 	
 	_table->pop();
 	
-	cout << "Finish Symble Table testPop." << endl;
+	cout << "Finish Symbol Table testPop." << endl;
 	
 }
 
@@ -87,21 +87,22 @@ void symTableTest::testInsertSearch_1() {
 	NvPcomp::BParser::token::yytokentype tok;
 	tok = NvPcomp::BParser::token::IDENTIFIER_TK;
 	NvPcomp::BParser::location_type loc;
-	cout << "Start Symble Table testInsertSearch_1." << endl;
+	cout << "Start Symbol Table testInsertSearch_1." << endl;
 
 	symNode * node1;
 	symNode * node2;
-
+	symNode *tempNode;
+	
 	string strNode1 = "Node1";
 	string strNode2 = "Node2";
 
-	node1 = new symNode(loc," ", " ");
-	node2 = new symNode(loc," ", " ");
+	node1 = new symNode(loc,"1 ", " ");
+	node2 = new symNode(loc,"2 ", " ");
 
 	_table->insert(strNode1, node1);
 	_table->push();
 	_table->insert(strNode2, node2);
-
+	
 	CPPUNIT_ASSERT(_table->search_top(strNode2) != NULL);
 	CPPUNIT_ASSERT(_table->search_top(strNode1) == NULL);
 	_table->pop();
@@ -111,7 +112,7 @@ void symTableTest::testInsertSearch_1() {
 	CPPUNIT_ASSERT(_table->search_top(strNode2) == NULL);
 	CPPUNIT_ASSERT(_table->search_top(strNode1) != NULL);
 	
-	cout << "Finish Symble Table testInsertSearch_1." << endl;
+	cout << "Finish Symbol Table testInsertSearch_1." << endl;
 
 }
 
