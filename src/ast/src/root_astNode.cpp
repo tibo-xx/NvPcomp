@@ -25,11 +25,19 @@ using namespace std;
 root_astNode::root_astNode()
 	:astNode() {
 	nodeType = "root";
+	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
 root_astNode::root_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
 	:astNode(_nodeString, _loc, tree) {
 	nodeType = "root";
+	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
+}
+
+root_astNode::root_astNode(std::string _nodeString)
+	:astNode() {
+	nodeType = "root";
+	nodeString = _nodeString;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 

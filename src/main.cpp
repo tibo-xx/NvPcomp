@@ -38,10 +38,9 @@ void parse_mode(const char *fileName) {
 	NvPcomp::tacTree acTree;
 	ifstream in;
 	
-	astNode *ast;
-	ast = new root_astNode("root", loc, &acTree);
-	ast->output3AC();
-	
+	ast *asTree;
+	asTree = new ast(&acTree);
+		
 	cout << "Trying to open input file..." << endl;
 	
 	in.open(fileName, ifstream::in);
@@ -50,14 +49,14 @@ void parse_mode(const char *fileName) {
 		cout << "Bad input file." << endl;
 	} else {
 		cout << "Past input file open..." << endl;
-		scanner = new NvPcomp::FlexScanner(&in,fileName, ast);
-		main_parser = new NvPcomp::Parser(scanner, fileName, ast);
+		scanner = new NvPcomp::FlexScanner(&in,fileName, asTree);
+		main_parser = new NvPcomp::Parser(scanner, fileName, asTree);
 		main_parser->parse();
 		in.close();
 	}
-	cout << "AST printing node" << endl;
-	ast->printNode();
-	cout << "AST finished printing node" << endl;
+	//cout << "AST printing node" << endl;
+	//ast->printNode();
+	//cout << "AST finished printing node" << endl;
 }
 
 void scan_mode(const char *fileName) {
@@ -71,8 +70,8 @@ void scan_mode(const char *fileName) {
 	NvPcomp::tacTree acTree;
 	table = new NvPcomp::symTable();
 	
-	astNode *ast;
-	ast = new root_astNode("root", loc, &acTree);	
+	ast *asTree;
+	asTree = new ast(&acTree);	
 	
 	cout << "Running in scanner mode:" << "..." << endl;
 	cout << "Trying to open input file " << fileName << "..." << endl;
@@ -81,7 +80,7 @@ void scan_mode(const char *fileName) {
 	if(!in.good()) {
 		cout << "Bad input file." << endl;
 	} else {
-		scanner = new NvPcomp::FlexScanner(&in, fileName, ast);
+		scanner = new NvPcomp::FlexScanner(&in, fileName, asTree);
 		
 		table->dump();
 		

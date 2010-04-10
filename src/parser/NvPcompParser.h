@@ -6,12 +6,12 @@
 namespace NvPcomp {
 	class Parser {
 	public:
-		Parser( NvPcomp::FlexScanner *arg_scanner, const char *fileName, astNode *_ast) : 	\
-				parser(*arg_scanner, buffer, table, *_ast, *(_ast->gettacTree())) 				\
+		Parser( NvPcomp::FlexScanner *arg_scanner, const char *fileName, ast *_astIn) : 	\
+				parser(*arg_scanner, buffer, table, *_astIn, *(_astIn->gettacTree())) 				\
 					{	scanner = arg_scanner; 							\
 						buffer.openFile(fileName);						\
-						ast = _ast;                                    	\
-						acTree = ast->gettacTree(); 					\
+						asTree = _astIn;                               	\
+						acTree = asTree->gettacTree(); 					\
 					}
 	
 		int parse() {
@@ -21,7 +21,7 @@ namespace NvPcomp {
 	private:
 		NvPcomp::FlexScanner *scanner;
 		NvPcomp::BParser parser;
-		astNode *ast;
+		ast *asTree;
 		// Symbol Table
 		NvPcomp::symTable table;
 		// AST Tree

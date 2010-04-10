@@ -18,16 +18,23 @@
  * 	\author CMT, DRJ & BFB
  **********************************************************************/
 #include <ast.h>
-#include <astNode.h>
-#include <string.h>
-#include <iostream>
 
 using namespace std;
 
-ast::ast() {
-
+ast::ast(NvPcomp::tacTree *tree) {
+	root = new root_astNode("root");
+	acTree = tree;
 }
 
 ast::~ast() {
-	
+	delete root;
+}
+
+
+astNode *ast::getRoot() {
+	return root;
+}
+
+NvPcomp::tacTree *ast::gettacTree() {
+	return acTree;
 }

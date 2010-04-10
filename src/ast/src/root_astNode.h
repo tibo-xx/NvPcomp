@@ -27,6 +27,7 @@ class root_astNode:public astNode {
 public:
 	root_astNode();
 	root_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
+	root_astNode(std::string _nodeString);
 	~root_astNode();
 public:
 	virtual void output3AC();
