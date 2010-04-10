@@ -21,6 +21,7 @@
 	#include <NvPcomp_logger.h>
 	#include <symTable.h>
 	#include <ast.h>
+	#include <astNode.h>
 	#include <tacTree.h>
 	#include <ast_include.h>
 	
@@ -53,7 +54,7 @@
 		if(yylval.commentFound) { \
 			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
 			yylval.commentFound = false; \
-		} \	
+		} \
 		if(BP_lastLine != yylloc.begin.line) {	\
 			LOG(PARSERLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylloc.begin.line, yylloc.end.line); \
 		} \

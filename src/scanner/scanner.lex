@@ -6,6 +6,7 @@
 #include <NvPcomp_logger.h>
 #include <NvPcompScanner.h>
 #include <ast.h>
+#include <astNode.h>
 #include <ast_include.h>
 #include <defines.h>
 
@@ -21,7 +22,7 @@
 			str_prev_token = std::string(#x); \
 			yylval->sval = strdup(yytext); \
 			yylval->tval = (int)x; \
-			yylval->astval = new leaf_astNode(std::string(#x), *yylloc, acTree, (int)x); \
+			/*yylval->astval = new leaf_astNode(std::string(#x), *yylloc, acTree, (int)x); \*/ \
 			return(x)
 
 using namespace NvPcomp;

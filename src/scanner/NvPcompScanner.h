@@ -24,7 +24,7 @@
 #include <sourceBuffer.h>
 #include <symTable.h>
 #include <tacTree.h>
-#include <ast.h>
+#include <astNode.h>
 
 namespace NvPcomp {
 	class FlexScanner : public yyFlexLexer {

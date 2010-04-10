@@ -1,5 +1,5 @@
 /***********************************************************************
- *   astNode - Syntax Tree Node
+ *   ast - Abstract Syntax Tree
  *   Copyright (C) 2010  CMT & DRJ & BFB
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -18,66 +18,16 @@
  * 	\author CMT, DRJ & BFB
  **********************************************************************/
 #include <ast.h>
+#include <astNode.h>
 #include <string.h>
 #include <iostream>
 
 using namespace std;
 
-astNode::astNode() {
-	nodeString = "empty";
+ast::ast() {
+
 }
 
-astNode::astNode(string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree) {
-	loc = _loc;
-	nodeString = _nodeString;
-	acTree = tree;
-}
-
-void astNode::setString(string _nodeString)
-{
-	nodeString = _nodeString;
-}
-
-void astNode::addChild(astNode* child)
-{
-	children.push_back(child);
-}
-
-void astNode::setType(string _nodeType)
-{
-	nodeType = _nodeType;
-}
-
-string astNode::getType()
-{
-	return nodeType;
-}
-
-NvPcomp::location astNode::getLocation() {
-	return loc;
-}
-
-NvPcomp::tacTree *astNode::gettacTree() {
-	return acTree;
-}
-
-void astNode::printNode(bool printProductions, int level) {
-		
-	if (!(nodeString == "" && printProductions == false))
-	{
-		if (printProductions)
-			LOG(ASTLog, logLEVEL1) << string(level, ' ') << nodeType << ":" << nodeString;
-		else
-			LOG(ASTLog, logLEVEL1) << string(level, ' ') << nodeString;
-	}
-	else
-		LOG(ASTLog, logLEVEL1) << " ";
-		
-	for (unsigned int i=0; i < children.size(); i++)
-	{
-		if(children[i])
-			children[i]->printNode(printProductions, level+1);
-		else
-			LOG(ERRORLog, logLEVEL1) << "!!!!!!!!!!!nil node found in AST!!!!!!!!!!!!";
-	}
+ast::~ast() {
+	
 }

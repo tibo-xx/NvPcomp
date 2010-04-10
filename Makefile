@@ -23,6 +23,7 @@ OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 OBJS += ./src/ast/ast.o
+OBJS += ./src/ast/astNode.o
 OBJS += ./src/tac/tacNode.o
 OBJS += ./src/tac/tacTree.o
 

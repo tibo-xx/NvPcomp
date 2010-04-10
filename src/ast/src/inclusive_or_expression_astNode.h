@@ -12,7 +12,7 @@
 #ifndef INCLUSIVE_OR_EXPRESSION_ASTNODE_H_
 #define INCLUSIVE_OR_EXPRESSION_ASTNODE_H_
 
-#include <ast.h>
+#include <astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>

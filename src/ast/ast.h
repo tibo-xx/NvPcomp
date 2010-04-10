@@ -1,9 +1,9 @@
 /**********************************************************************/
-//! Command Line Parser
+//! Abstract Syntax Tree
 /*!
- * \class astNode
+ * \class ast
  *
- * Description: Basic node of the Abstract Syntax Tree
+ * Description: Abstract Syntax Tree
  *
  * \author CMT, DRJ & BFB
  *
@@ -20,45 +20,14 @@
 #include <location.hh>
 #include <position.hh>
 #include <tacTree.h>
+#include <astNode.h>
 #include <NvPcomp_logger.h>
 
-class astNode {
+class ast {
 
 	public:
-		astNode();
-		astNode(std::string nodeString, NvPcomp::location loc, NvPcomp::tacTree *tree);
-	public:
-		virtual void printNode(bool printProductions = true, int level = 0);	
-		virtual void output3AC() = 0;
-		
-		void addChild(astNode* child);
-		void setType(std::string nodeType);
-		void setString(std::string nodeString);
-
-		std::string getType();
-		NvPcomp::location getLocation();
-		
-		NvPcomp::tacTree *gettacTree();
-
-	protected:
-		// Node string value
-		std::string nodeString;
-		// Node string value
-		int nodeInt;
-		// Node string value
-		double nodeDouble;
-		// List of appropriate RHS nodes
-		std::vector<astNode*> children;	
-		// Node token value
-		// Remove
-		int nodeToken;
-		// Location
-		NvPcomp::location loc;
-		// Node type/lhs, i.e. iteration_statement, identifier, etc.
-		std::string nodeType;
-		// tacTree
-		NvPcomp::tacTree *acTree;
-		
+		ast();
+		~ast();		
 };
 
 #endif /* AST_H_ */
