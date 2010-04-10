@@ -1,5 +1,5 @@
 /***********************************************************************
- *   symNode - Symbol Table Node.
+ *   symTableTest - Symbol Table Test.
  *   Copyright (C) 2010 CMT & DRJ
  *
  *   This program is free software: you can redistribute it and/or modify

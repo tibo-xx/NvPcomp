@@ -33,11 +33,11 @@ namespace NvPcomp {
 		FlexScanner(std::istream* arg_yyin = 0, \
 					std::ostream* arg_yyout = 0, \
 					const char *filename = 0, \
-					astNode * astIn = 0) : yyFlexLexer(arg_yyin, arg_yyout) {buffer.openFile(filename); ast = astIn;}
+					ast * astIn = 0) : yyFlexLexer(arg_yyin, arg_yyout) {buffer.openFile(filename); asTree = astIn;}
 																																								
 		FlexScanner(std::istream* arg_yyin = 0, \
 					const char *filename = 0, \
-					astNode *astIn = 0): yyFlexLexer(arg_yyin) {buffer.openFile(filename); ast = astIn;};
+					ast *astIn = 0): yyFlexLexer(arg_yyin) {buffer.openFile(filename); asTree = astIn;};
 		
 		// save the pointer to yylval so we can change it, and invoke scanner
 		int yylex(NvPcomp::BParser::semantic_type * lval, \
@@ -100,7 +100,7 @@ namespace NvPcomp {
 		sourceBuffer buffer;
 		
 		// AST pointer
-		astNode *ast;
+		ast *asTree;
 		
 	};	
 }

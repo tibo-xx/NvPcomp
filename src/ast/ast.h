@@ -21,13 +21,23 @@
 #include <position.hh>
 #include <tacTree.h>
 #include <astNode.h>
+#include <ast_include.h>
 #include <NvPcomp_logger.h>
+#include <variableTable.h>
 
 class ast {
-
 	public:
-		ast();
-		~ast();		
+		ast(NvPcomp::tacTree *tree);
+		~ast();
+		astNode *getRoot();
+		NvPcomp::tacTree *gettacTree();
+		variableTable getVariableTable();
+	private:
+		astNode *root;
+		// tacTree
+		NvPcomp::tacTree *acTree;
+		// Variable List
+		variableTable variables;
 };
 
 #endif /* AST_H_ */
