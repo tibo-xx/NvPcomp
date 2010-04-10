@@ -54,9 +54,9 @@ void parse_mode(const char *fileName) {
 		main_parser->parse();
 		in.close();
 	}
-	cout << "AST printing node" << endl;
-	(asTree->getRoot())->printNode();
-	cout << "AST finished printing node" << endl;
+	//cout << "AST printing node" << endl;
+	//ast->printNode();
+	//cout << "AST finished printing node" << endl;
 }
 
 void scan_mode(const char *fileName) {

@@ -154,13 +154,15 @@ translation_unit
 		{ 
 			REDUCTION(translation_unit:external_declaration)
 			$<astval>$ = $<astval>1;
-		/*	$<astval>$ = new astNode("translation_unit");
-			ast.addChild($<astval>$);
-			$<astval>$->addChild($<astval>1); */
+			$<astval>$ = new translation_unit_astNode("", yylloc, &acTree);
+			asTree.getRoot()->addChild($<astval>$);
+			$<astval>$->addChild($<astval>1);
 		}
 	| translation_unit external_declaration					
 		{ 
 			REDUCTION(translation_unit:translation_unit external_declaration)
+			$<astval>$ = $<astval>1;
+			$<astval>$->addChild($<astval>2);
 		/*	$<astval>$ = new astNode("translation_unit");
 			ast.addChild($<astval>$);
 			$<astval>$->addChild($<astval>2); */
@@ -209,6 +211,17 @@ declaration
 	| declaration_specifiers init_declarator_list SEMICOLON_TK 	
 		{
 			REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
+			$<astval>$ = new declaration_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1); // declaration_specifiers
+			$<astval>$->addChild($<astval>2); // init_declarator_list
+
+			// Assign Types to all declarations in the list
+			for (unsigned int i=0; i < $<astval>2->children.size(); i++)
+			{
+			  init_declarator_astNode* node = (init_declarator_astNode*) $<astval>2->children[i];
+			  node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table);
+			}
+			    
 		/*	$<astval>$ = new astNode("declaration");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2); */
@@ -255,6 +268,8 @@ declaration_specifiers
 	: storage_class_specifier
 		{
 			REDUCTION(declaration_specifiers:storage_class_specifier)
+			$<astval>$ = new declaration_specifiers_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| storage_class_specifier declaration_specifiers
 		{
@@ -262,10 +277,14 @@ declaration_specifiers
 		/*	$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2); */
+			$<astval>$ = $<astval>2;
+			$<astval>2->addChild($<astval>1);
 		}
 	| type_specifier
 		{
 			REDUCTION(declaration_specifiers:type_specifier)
+			$<astval>$ = new declaration_specifiers_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| type_specifier declaration_specifiers						
 		{
@@ -273,10 +292,14 @@ declaration_specifiers
 	/*		$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2); */
+			$<astval>$ = $<astval>2;
+			$<astval>2->addChild($<astval>1);
 		}
 	| type_qualifier
 		{
 			REDUCTION(declaration_specifiers:type_qualifier)
+			$<astval>$ = new declaration_specifiers_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| type_qualifier declaration_specifiers
 		{
@@ -284,6 +307,8 @@ declaration_specifiers
 		/*	$<astval>$ = new astNode("declaration_specifiers");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2); */
+			$<astval>$ = $<astval>2;
+			$<astval>2->addChild($<astval>1);
 		}
 	;
 
@@ -452,10 +477,14 @@ init_declarator_list
 	: init_declarator
 		{
 			REDUCTION(init_declarator_list:init_declarator)
+			$<astval>$ = new init_declarator_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| init_declarator_list COMMA_TK init_declarator
 		{
 			REDUCTION(init_declarator_list:init_declarator_list COMMA_TK init_declarator)
+			$<astval>$ = $<astval>1;
+			$<astval>1->addChild($<astval>3);
 		/*	$<astval>$ = new astNode("init_declarator_list");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>3); */
@@ -466,10 +495,13 @@ init_declarator
 	: declarator							
 		{
 			REDUCTION(init_declarator:declarator)
+			$<astval>$ = new init_declarator_astNode(":declarator", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| declarator EQUAL_TK initializer		
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
+			$<astval>$ = new init_declarator_astNode(":declarator EQUAL_TK initializer", yylloc, &acTree);
 	/*		$<astval>$ = new astNode("init_declarator");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("EQUAL_TK", "="));
@@ -572,10 +604,15 @@ declarator
 	: direct_declarator
 		{
 			REDUCTION(declarator:direct_declarator)
+			$<astval>$ = new declarator_astNode(":direct_declarator", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| pointer direct_declarator
 		{
 			REDUCTION(declarator:pointer direct_declarator)
+			$<astval>$ = new declarator_astNode(":pointer direct_declarator", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
 		/*	$<astval>$ = new astNode("declarator");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2); */
@@ -632,19 +669,28 @@ pointer
 	: STAR_TK									
 		{
 			REDUCTION(pointer:STAR_TK)
+			$<astval>$ = new pointer_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		/*	$<astval>$ = new astNode("STAR_TK", $<sval>1); */
 		}
 	| STAR_TK type_qualifier_list
 		{
 			REDUCTION(pointer:STAR_TK type_qualifier_list)
+			$<astval>$ = $<astval>2;
+			$<astval>$->addChild($<astval>1);
 		}
 	| STAR_TK pointer
 		{
 			REDUCTION(pointer:STAR_TK pointer)
+			$<astval>$ = $<astval>2;
+			$<astval>$->addChild($<astval>1);
 		}
 	| STAR_TK type_qualifier_list pointer
 		{
 			REDUCTION(pointer:STAR_TK type_qualifier_list pointer)
+			$<astval>$ = $<astval>3;
+			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>1);
 		}
 	;
 
@@ -652,10 +698,14 @@ type_qualifier_list
 	: type_qualifier							
 		{
 			REDUCTION(type_qualifier_list:type_qualifier)
+			$<astval>$ = new type_qualifier_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| type_qualifier_list type_qualifier
 		{
 			REDUCTION(type_qualifier_list:type_qualifier_list type_qualifier)
+			$<astval>$ = $<astval>1;
+			$<astval>$->addChild($<astval>2);
 		}
 	;
 
@@ -1544,7 +1594,7 @@ identifier
 	: IDENTIFIER_TK
 		{
 			REDUCTION(identifier:IDENTIFIER_TK)
-
+			$<astval>$->setString(yylval.sval);
 		/*	$<astval>$ = new astNode("IDENTIFIER_TK", yylval.sval); */
 
 		}

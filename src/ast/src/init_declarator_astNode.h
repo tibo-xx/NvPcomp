@@ -22,6 +22,8 @@
 #include <location.hh>
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
+#include <symTable.h>
+#include <ast_include.h>
 
 class init_declarator_astNode:public astNode {
 public:
@@ -30,6 +32,7 @@ public:
 	~init_declarator_astNode();
 public:
 	virtual void output3AC();
+	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table );
 };
 
 #endif /* INIT_DECLARATOR_ASTNODE_H_ */
