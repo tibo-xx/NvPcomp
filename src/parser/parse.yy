@@ -7,7 +7,7 @@
 %parse-param { NvPcomp::FlexScanner &scanner}
 %parse-param { sourceBuffer &buffer }
 %parse-param { symTable &table }
-%parse-param { ast &astIn }
+%parse-param { ast &asTree }
 %parse-param { NvPcomp::tacTree &acTree }
 %lex-param   { NvPcomp::FlexScanner &scanner }
 %lex-param   { symTable &table }

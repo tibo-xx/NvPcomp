@@ -25,8 +25,6 @@ OBJS += ./src/buffer/sourceBuffer.o
 OBJS += ./src/scanner/lex.yy.o
 OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
-OBJS += ./src/ast/ast.o
-OBJS += ./src/ast/astNode.o
 OBJS += ./src/tac/tacNode.o
 OBJS += ./src/tac/tacTree.o
 
@@ -69,6 +67,7 @@ TEST_TARGET = ./bin/UnitTest
 TEST_OBJS =  ./src/test/unit_test/NvPcompTestSuite.o
 TEST_OBJS += ./src/test/unit_test/symNodeTest.o
 TEST_OBJS += ./src/test/unit_test/symTableTest.o
+TEST_OBJS += ./src/test/unit_test/variableTableTest.o
 TEST_OBJS += $(OBJS)
 
 TEST_LIBS = $(LIBS) -lcppunit -ldl

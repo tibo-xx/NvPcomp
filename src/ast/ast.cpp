@@ -38,3 +38,7 @@ astNode *ast::getRoot() {
 NvPcomp::tacTree *ast::gettacTree() {
 	return acTree;
 }
+
+variableTable ast::getVariableTable() {
+	return variables;
+}

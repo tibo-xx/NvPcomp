@@ -25,7 +25,8 @@ NvPcomp::symNode::symNode(NvPcomp::location loc, \
 							string strType) {
 	_loc = loc;
 	_key = key;
-	_strType = strType;	
+	_strType = strType;
+	_mangledName = "";
 }
 
 NvPcomp::symNode::~symNode() 
@@ -66,7 +67,12 @@ int NvPcomp::symNode::popType() {
 	
 }
 
-
-
+void NvPcomp::symNode::setMangledName(string newName) {
+	_mangledName = newName;
+}
+	
+string NvPcomp::symNode::getMangledName() {
+	return _mangledName;
+}
 
 

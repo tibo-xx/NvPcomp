@@ -24,6 +24,8 @@ namespace NvPcomp {
 		int getTopType();
 		int popType();
 		bool hasType();
+		void setMangledName(std::string newName);
+		std::string getMangledName();
 	public:
 		std::string	_key;	
 		std::string	_strType;
@@ -31,6 +33,7 @@ namespace NvPcomp {
 		
 	private:
 		std::vector<int> _type;
+		std::string _mangledName;
 		
 	public:
 		symNode(NvPcomp::location loc, \
