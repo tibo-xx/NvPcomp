@@ -10,7 +10,7 @@ CXX = g++
 ########################################################################
 # Sources
 ########################################################################
-SRC = 	[% FOREACH class = classdata -%] src/[% class %]_astNode.cpp [% END %]
+SRC = 	[% FOREACH class = classdata -%] src/[% class %]_astNode.cpp [% END %] leaf_astNode.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

@@ -69,6 +69,6 @@
 #include <identifier_astNode.h>
 #include <root_astNode.h>
 #include <comment_astNode.h>
-
+#include <leaf_astNode.h>
 
 #endif /* AST_INCLUDE_H_ */
