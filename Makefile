@@ -9,9 +9,11 @@
 CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0 -ansi
 CXX = g++
 LEX = flex++
-# YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+#YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
 YACC = bison
 LEXFLAGS = -+
+
+ARCH =$(shell /bin/uname -m)
 
 ########################################################################
 # Main program declarations
@@ -28,8 +30,6 @@ OBJS += ./src/ast/astNode.o
 OBJS += ./src/tac/tacNode.o
 OBJS += ./src/tac/tacTree.o
 
-# SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
-
 INCS =	-I./src/
 INCS += -I./src/symTable
 INCS += -I./src/logging
@@ -44,9 +44,15 @@ INCS += -I./src/test
 INCS += -I./src/test/logging
 INCS += -I./src/test/unit_test
 INCS += -I/usr/include/cppunit
-# INCS += -I./lib/argtable2-12/include
-# LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last
-LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last -largtable2
+
+ifeq ($(ARCH),x86_64)
+	SHARED_OBJS = ./lib/argtable2-12/lib/libargtable2.a
+	INCS += -I./lib/argtable2-12/include
+	LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last
+else
+	
+	LIBS = -lstdc++ -lfl -lm -L./src/ast/ -last -largtable2
+endif
 
 ########################################################################
 # Scanner and Parser
