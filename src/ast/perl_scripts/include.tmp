@@ -1,0 +1,8 @@
+#ifndef AST_INCLUDE_H_
+#define AST_INCLUDE_H_
+
+[% FOREACH class = classdata -%] 
+#include <[% class %]_astNode.h>
+[% END %]
+#include <leaf_astNode.h>
+#endif /* AST_INCLUDE_H_ */
