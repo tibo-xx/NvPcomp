@@ -45,7 +45,7 @@ astInfoTable<OBJTYPE>::~astInfoTable() {
 	// Delete everything.
 	typename std::map< std::string, OBJTYPE* >::iterator map_iter;
 	// loop through and delete all of the map symNodes.
-	for(map_iter = _table.begin(); map_iter != _table->end(); map_iter++) {
+	for(map_iter = _table.begin(); map_iter != _table.end(); map_iter++) {
 		if((*map_iter).second != NULL) {
 			delete (*map_iter).second;
 		}
