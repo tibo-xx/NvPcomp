@@ -27,7 +27,7 @@ variableTable::variableTable() {
 variableTable::~variableTable() {}
 
 string variableTable::insert(std::string key, int memLocation) {
-	string retVal = "";
+	string retVal = key;
 	
 	return retVal;
 }
