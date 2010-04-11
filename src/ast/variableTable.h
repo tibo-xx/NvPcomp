@@ -12,6 +12,7 @@
 #ifndef VARIABLETABLE_H_
 #define VARIABLETABLE_H_
 
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <map>

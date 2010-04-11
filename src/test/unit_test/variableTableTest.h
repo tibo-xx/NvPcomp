@@ -21,10 +21,6 @@ variableTableAccess::variableTableAccess() : variableTable() {}
 
 variableTableAccess::~variableTableAccess() {}
 
-//std::string variableTableAccess::privateSearch(std::string key) {
-//	return this.search(key);
-//}
-
 //! Variable Table Test Fixture
 /*!
  * \class variableTableTest
@@ -38,11 +34,15 @@ class variableTableTest : public CppUnit::TestFixture {
 	
 	CPPUNIT_TEST_SUITE( variableTableTest );
 	CPPUNIT_TEST( testConstructor );
-	CPPUNIT_TEST( testInsertSearch_1 );
+	CPPUNIT_TEST( testInsert_1 );
+	CPPUNIT_TEST( testInsert_2 );
+	CPPUNIT_TEST( testSetMem_1 );
+	CPPUNIT_TEST( testSetSize_1 );
+	CPPUNIT_TEST( testCheckStrSize );
 	CPPUNIT_TEST_SUITE_END();
 	
 private:
-	variableTableAccess * _table;
+	variableTableAccess *_table;
 	
 public:
 	void setUp();
@@ -53,7 +53,15 @@ public:
 	void testConstructor();
 	
 	/*!
-	 *  testInsertSearch_1
+	 *  testInsert_1
 	 */
-	void testInsertSearch_1(); 
+	void testInsert_1(); 
+	
+	void testInsert_2();
+	
+	void testSetMem_1();
+	
+	void testSetSize_1();
+	
+	void testCheckStrSize();
 };

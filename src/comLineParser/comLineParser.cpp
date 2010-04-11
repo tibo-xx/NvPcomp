@@ -20,11 +20,11 @@
  * 	-s[1-8]				Output symbol table
  * 	-p[1-8]				Output parser
  * 	-a					Output abstract syntax tree
- * 	-scan				Put into scanner mode'
+ * 	-scan				Put into scanner mode
  * 	-c 					Compile and assemble the input !IGNORE! 
  * 	-o					Output the final product to a file
  * 	-q					Generate intermediate code only
- * 	-S 					Generate assemply-language code	
+ * 	-S 					Generate assembly-language code	
  * 
  * 	\author CMT, DRJ & BFB
  **********************************************************************/
