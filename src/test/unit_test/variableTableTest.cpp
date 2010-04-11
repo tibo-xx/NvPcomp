@@ -35,7 +35,7 @@ void variableTableTest::testConstructor() {
 	
 	const int ZERO = 0;
 	
-	cout << "Start Variable Table testConstructor." << endl;
+	cout << "Start Symble Table testConstructor." << endl;
 	
 	//Create the new variable table;
 		

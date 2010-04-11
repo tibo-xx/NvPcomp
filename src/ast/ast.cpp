@@ -30,7 +30,6 @@ ast::~ast() {
 	delete root;
 }
 
-
 astNode *ast::getRoot() {
 	return root;
 }

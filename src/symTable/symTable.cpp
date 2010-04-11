@@ -69,7 +69,7 @@ InsertResult NvPcomp::symTable::insert(string key, symNode *node) {
 			retVal = INSERT_SUCCESS_W_SHADOW;	
 		} else {
 			// The node was not found on another level.
-			retVal = INSERT_SUCCESS;	
+			retVal = INSERT_SUCCESS;
 		}		
 	}
 	
