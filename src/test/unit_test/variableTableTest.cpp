@@ -37,10 +37,29 @@ void variableTableTest::testConstructor() {
 	
 	cout << "Start Symble Table testConstructor." << endl;
 	
-	//Create the new variable table;
-		
+	//Create the new variable table.
+	variableTableAccess *vTable;
+	vTable = new variableTableAccess;	
+	
 	// Check that the Level was set correctly.
-		
+	
+	delete vTable;
+	cout << "Finished Variable Table testConstructor." << endl;
 }
 
-void variableTableTest::testInsertSearch_1() {}
+void variableTableTest::testInsertSearch_1() {
+	//Create the new variable table.
+	variableTableAccess *vTable;
+	vTable = new variableTableAccess;
+	
+	cout<< "Start Variable Table testInsertSearch_1." << endl;
+	
+	string vString1 = "vString1";
+	cout<<"vString1: "<< vTable.insert(vString1, 1) <<endl;
+	
+	
+	delete vTable;	
+	
+	
+
+}

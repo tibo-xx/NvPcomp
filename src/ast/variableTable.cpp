@@ -26,6 +26,9 @@ variableTable::variableTable() {
 
 variableTable::~variableTable() {}
 
+string variableTable::insert(std::string key, int memLocation) {
+	string retVal = key;
+	
 string variableTable::insert(std::string key, variableInfo *info) {
 	string retVal = "";
 	bool unsuccessful = false;
