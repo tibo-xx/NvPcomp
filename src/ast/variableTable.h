@@ -17,7 +17,6 @@
 #include <map>
 #include <iterator>
 
-
 #define MAXNAMELENGTH	9
 
 // Logging line start

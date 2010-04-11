@@ -13,7 +13,9 @@
 #define YY_USER_ACTION yylloc->columns (yyleng);
 
 #define YY_USER_INIT yylval->commentFound = false; \
-					 typedefMode = false;
+					 typedefMode = false; \
+					 reenterTypedefMode = false; \
+					 openBraces = 0;
 
 /* For logging */
 #define RETURN(x) \
@@ -31,6 +33,8 @@ typedef NvPcomp::BParser::token token;
 
 int 	CallerLevel;
 bool 	typedefMode;
+bool	reenterTypedefMode;		/* We were in typedefmode but had to come out of it due to an open brace */
+int		openBraces;				/* Keep track of the open braces so we can reenter typedefMode if needed */
 
 %}
 
@@ -112,13 +116,18 @@ while		{ RETURN(token::WHILE_TK); }
 
 L?\"(\\.|[^\\"])*\"		{ RETURN(token::STRING_LITERAL_TK); }
 
-"{"			{ RETURN(token::OPEN_BRACE_TK); }
-"}"			{ RETURN(token::CLOSE_BRACE_TK); }
+"{"			{ newOpenBrace(); RETURN(token::OPEN_BRACE_TK); }
+"}"			{ newClosedBrace(); RETURN(token::CLOSE_BRACE_TK); }
 "("			{ RETURN(token::OPEN_PAREN_TK); }
 ")"			{ RETURN(token::CLOSE_PAREN_TK); }
 "["			{ RETURN(token::OPEN_BRACK_TK); }
 "]"			{ RETURN(token::CLOSE_BRACK_TK); }
-";"			{ RETURN(token::SEMICOLON_TK); }
+";"			{ 	if(!typedefMode) {
+					RETURN(token::SEMICOLON_TK); 
+				} else {
+					declarationError();
+				}
+			}
 ":"			{ RETURN(token::COLON_TK); }
 ","			{ RETURN(token::COMMA_TK); }
 "."			{ RETURN(token::PERIOD_TK); }
@@ -218,16 +227,12 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	std::string key = std::string(yytext);
 	symNode *tempNode;
 	
-	// we now have an identifier that is used in typedefs
 	if(table->search(key, tempNode, false) != -1) {
 		
 		if(typedefMode) {
-
 			/* The node is already in the table but should not be. */
-			return(typedefError());
-			
+			return(typedefError());			
 		} else {
-						
 			if(tempNode->getTopType() == (int)token::TYPEDEF_NAME_TK) {
 				RETURN(token::TYPEDEF_NAME_TK);
 			} else {
@@ -294,9 +299,17 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::id_error() {
 
 // error defining new type.
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::typedefError() {
-	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLine(yylineno, yylineno);
+	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
 	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Redefined identifier";
 	LOG(ERRORLog, logLEVEL1) << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << std::endl;
+	RETURN(token::ERROR_TK);
+}
+
+// error defining new type.
+NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::declarationError() {
+	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
+	LOG(ERRORLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Declaration does not declare anything!";
+	LOG(ERRORLog, logLEVEL1) << "Found " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column << ", expecting identifier." << std::endl;
 	RETURN(token::ERROR_TK);
 }
 
@@ -317,3 +330,28 @@ void NvPcomp::FlexScanner::handleComment() {
 	}
 
 }
+
+void NvPcomp::FlexScanner::newOpenBrace() {
+	if(typedefMode) {
+		typedefMode = false;
+		reenterTypedefMode = true;
+		LOG(SCANNERLog,logLEVEL4) << "Scanner: entering reenterTypedefMode";
+	}
+	
+	++openBraces;
+	LOG(SCANNERLog,logLEVEL4) << "Scanner: new open brace current Count: " << openBraces;
+	
+}
+
+void NvPcomp::FlexScanner::newClosedBrace() {
+	--openBraces;
+	if(openBraces < 1 && reenterTypedefMode) {
+		typedefMode = true;
+		reenterTypedefMode = false;
+		LOG(SCANNERLog,logLEVEL4) << "Scanner: exciting reenterTypeDef and entering typedefMode: ";
+	}
+	
+	LOG(SCANNERLog,logLEVEL4) << "Scanner: new closed brace current Count: " << openBraces;
+	
+}
+

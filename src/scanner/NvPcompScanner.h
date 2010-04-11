@@ -72,12 +72,17 @@ namespace NvPcomp {
 		// A typedef was defined for an exsisting identifier.
 		NvPcomp::BParser::token::yytokentype typedefError();
 		
+		// Decalaration does not declare anything.
+		NvPcomp::BParser::token::yytokentype declarationError();
+		
 		NvPcomp::BParser::token::yytokentype insertTypedef(std::string key);
 		
 		NvPcomp::BParser::token::yytokentype insertID(std::string key);
 		
 		// Handle comments appropriately.
 		void handleComment();
+		void newOpenBrace();
+		void newClosedBrace();
 
 	private:
 
