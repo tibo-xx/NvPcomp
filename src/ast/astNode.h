@@ -32,15 +32,18 @@ class astNode {
 		virtual void output3AC() = 0;
 		
 		void addChild(astNode* child);
+		astNode* getChild(int child_index);
+		int getNumberOfChildren();
 		void setType(std::string nodeType);
 		void setString(std::string nodeString);
 
 		std::string getType();
+		std::string getString();
 		NvPcomp::location getLocation();
 		
 		NvPcomp::tacTree *gettacTree();
 
-	// protected:
+	protected:
 		// Node string value
 		std::string nodeString;
 		// Node string value

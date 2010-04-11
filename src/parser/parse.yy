@@ -24,6 +24,7 @@
 	#include <astNode.h>
 	#include <tacTree.h>
 	#include <ast_include.h>
+	#include <iostream>
 	
 	namespace NvPcomp {
 		class FlexScanner;
@@ -207,19 +208,94 @@ declaration
 	: declaration_specifiers SEMICOLON_TK
 		{
 			REDUCTION(declaration:declaration_specifiers SEMICOLON_TK)
+			// Typedefs
+			bool typedef_found = false;
+			std::string typedef_name = "";
+			for (int i=0; i < $<astval>1->getNumberOfChildren(); i++)
+			{
+			  if (((leaf_astNode*) $<astval>1->getChild(i))->getTokenType() == TYPEDEF_TK)
+			  {
+			    typedef_found = true;
+			  }
+			  else if (((leaf_astNode*) $<astval>1->getChild(i))->getTokenType() == TYPEDEF_NAME_TK)
+			  {
+			    typedef_name = ((leaf_astNode*) $<astval>1->getChild(i))->getString();
+			  }
+			}
+			if (!typedef_found)
+			{
+			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Declaration does not declare anything.");
+			}
+			NvPcomp::symNode* st_node = table.search_top(typedef_name);
+			if (st_node->hasType())
+			{
+			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Redeclaration of type '" + typedef_name + "'");
+			}
+			for (int i=0; i < $<astval>1->getNumberOfChildren(); i++)
+			{
+			  int token_type = ((leaf_astNode*) $<astval>1->getChild(i))->getTokenType();
+
+			  switch(token_type)
+			  {
+			    case INT_TK:
+			    case CHAR_TK:
+			    case FLOAT_TK:
+			    case DOUBLE_TK:
+			      if ( st_node->hasType(DOUBLE_TK) ||
+				  st_node->hasType(CHAR_TK) ||
+				  st_node->hasType(FLOAT_TK) ||
+				  st_node->hasType(INT_TK))
+			      {
+				NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: '" + typedef_name + "' has two or more data types in delcaration.");
+				return false;
+			      }
+			      st_node->addType(token_type);
+			      break;
+			      
+			    case SIGNED_TK:
+			    case UNSIGNED_TK:
+			      if ( st_node->hasType(SIGNED_TK) ||
+				  st_node->hasType(UNSIGNED_TK))
+			      {
+				NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: '" + typedef_name + "' specified as both 'signed' and 'unsigned'.");
+				return false;
+			      }      
+			      st_node->addType(token_type);
+			      break;
+
+			    case LONG_TK:
+			    case SHORT_TK:
+			      if ( st_node->hasType(LONG_TK) ||
+				  st_node->hasType(SHORT_TK))
+			      {
+				NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: '" + typedef_name + "' specified as both 'long' and 'short'.");
+				return false;
+			      }      
+			      st_node->addType(token_type);      
+			      break;
+			    case TYPEDEF_TK:
+			    case TYPEDEF_NAME_TK:
+			      break;
+			    default:
+			      st_node->addType(token_type);      
+			      break;
+			  }
+			}		
 		}
 	| declaration_specifiers init_declarator_list SEMICOLON_TK 	
 		{
 			REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
-			$<astval>$ = new declaration_astNode("", yylloc, &acTree);
+			$<astval>$ = new declaration_astNode(":declaration_specifiers init_declarator_list SEMICOLON_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1); // declaration_specifiers
 			$<astval>$->addChild($<astval>2); // init_declarator_list
 
 			// Assign Types to all declarations in the list
-			for (unsigned int i=0; i < $<astval>2->children.size(); i++)
+			for (int i=0; i < $<astval>2->getNumberOfChildren(); i++)
 			{
-			  init_declarator_astNode* node = (init_declarator_astNode*) $<astval>2->children[i];
-			  node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table);
+			  std::string error;
+			  init_declarator_astNode* node = (init_declarator_astNode*) $<astval>2->getChild(i);
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, error))
+			    NvPcomp::BParser::error(yyloc, error);
 			}
 			    
 		/*	$<astval>$ = new astNode("declaration");
@@ -242,7 +318,7 @@ declaration
          			// Set identifier type
                   symNode* st_node = table.search_top($<astval>2->children[0]->nodeString);
                   if (st_node->hasType())
-                     NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + st_node->_key + "' already declared!");
+                     NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Redeclaration of '" + st_node->_key + "' already declared!");
                   else
                      st_node->addType($<astval>1->nodeToken);
                } 
@@ -502,6 +578,8 @@ init_declarator
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
 			$<astval>$ = new init_declarator_astNode(":declarator EQUAL_TK initializer", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
 	/*		$<astval>$ = new astNode("init_declarator");
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild(new astNode("EQUAL_TK", "="));
@@ -698,7 +776,7 @@ type_qualifier_list
 	: type_qualifier							
 		{
 			REDUCTION(type_qualifier_list:type_qualifier)
-			$<astval>$ = new type_qualifier_list_astNode("", yylloc, &acTree);
+			$<astval>$ = new type_qualifier_list_astNode(":type_qualifier", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	| type_qualifier_list type_qualifier

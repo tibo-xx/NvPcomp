@@ -32,7 +32,10 @@ public:
 	~init_declarator_astNode();
 public:
 	virtual void output3AC();
-	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table );
+	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, std::string &error );
+private:
+	bool addType(int token_type, NvPcomp::symNode *st_node, std::string &error);
+    
 };
 
 #endif /* INIT_DECLARATOR_ASTNODE_H_ */
