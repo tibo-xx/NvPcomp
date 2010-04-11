@@ -1,5 +1,13 @@
 typedef long type_t;
 long t_long;
+
+typedef struct {
+	int i;
+	int j;
+} typeStruct;
+
+typedef int;
+
 /* coment */
 int function(void *p1, void *p2, int p3) {
   type_t ok1;           /* type_t is type! */

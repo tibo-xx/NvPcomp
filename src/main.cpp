@@ -128,7 +128,9 @@ int main( int argc, char* argv[] ) {
 			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file scanner.out";
 			return -1;
 		}
-		SET_OUTPUT(SCANNERLog, scanner_out);	
+		SET_OUTPUT(SCANNERLog, scanner_out);
+		SET_LOG_LEVEL(SCANNERLog, logLEVEL5);
+		
 	} 
 	
 	if (clp->isSymTab()) {
