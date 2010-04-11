@@ -40,7 +40,7 @@ class astNode {
 		
 		NvPcomp::tacTree *gettacTree();
 
-	protected:
+	// protected:
 		// Node string value
 		std::string nodeString;
 		// Node string value

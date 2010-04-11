@@ -37,3 +37,21 @@ void init_declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
+bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table ) {
+
+	string identifier;
+	if (children[0]->nodeString == ":pointer direct_declarator")
+	  identifier = children[0]->children[1]->nodeString;
+	else
+	  identifier = children[0]->children[0]->nodeString;
+
+	NvPcomp::symNode* st_node = table->search_top(identifier);
+        if (st_node->hasType())
+	  return false;
+	      
+	for (unsigned int i = 0; i < declaration_specifiers->children.size(); i ++)
+	{
+	  st_node->addType( ((leaf_astNode*) declaration_specifiers->children[0])->getTokenType());
+	}
+	return true;
+}

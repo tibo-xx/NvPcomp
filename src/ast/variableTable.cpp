@@ -29,23 +29,122 @@ variableTable::~variableTable() {}
 string variableTable::insert(std::string key, int memLocation) {
 	string retVal = key;
 	
+string variableTable::insert(std::string key, variableInfo *info) {
+	string retVal = "";
+	bool unsuccessful = false;
+	string newKey;
+	int suffix = 1;
+		
+	while(unsuccessful) {
+
+		newKey = mangleName(key, suffix);		
+		
+		pair<map<string, variableInfo *>::iterator, bool> ret;
+		ret = _table.insert(make_pair(key, info));
+		
+		// The node was inserted correctly.
+		if(ret.second) {
+			unsuccessful = true;
+			retVal = newKey;
+		} else {
+			suffix++;
+		}
+		
+	}
+		
 	return retVal;
+
 }
 
-void variableTable::setMemLocation(std::string key, int memLocation) {
-	
-}
-
-bool variableTable::search(const std::string key, int &memLocation) {
+bool variableTable::setMemLocation(std::string key, int memLocation) {
+	variableInfo *info;
 	bool retVal = false;
 	
-	return retVal;
+	if(search(key, info)) {
+		info->memLocation = memLocation;
+		retVal = true;
+	}
+	
+	return retVal;	
 }
 
+bool variableTable::setVariableSize(std::string key, int size) {
+	variableInfo *info;
+	bool retVal = false;
+	
+	if(search(key, info)) {
+		info->size = size;
+		retVal = true;
+	}
+	
+	return retVal;		
+}
 
+bool variableTable::setVariableInfo(std::string key, variableInfo *info_in) {
+	variableInfo *info;
+	bool retVal = false;
+	
+	if(search(key, info)) {
+		info->memLocation = info_in->memLocation;
+		info->size = info_in->size;
+		retVal = true;
+	}
+	
+	return retVal;		
+}
+
+bool variableTable::search(const std::string key, variableInfo *info) {
+	
+	bool retVal = false;	
+	map<string, variableInfo *>::iterator iter;
+ 
+	iter = _table.find(key);
+ 
+	if(iter != _table.end()) {
+		info = (*iter).second;
+		retVal = true;
+	}
+	
+	return retVal;
+
+}
+
+////////////////////////////////////////////////////////////////////////
 // Protected functions.
+////////////////////////////////////////////////////////////////////////
 bool variableTable::search(const std::string key) {
 	bool retVal = false;
+		
+	map<string, variableInfo *>::iterator iter;
+ 
+	iter = _table.find(key);
+ 
+	if(iter != _table.end()) {
+		retVal = true;
+	}
 	
 	return retVal;
 }
+
+string variableTable::mangleName(std::string key, int suffix) {
+	string newKey = key;
+	stringstream suffixStr;
+	stringstream retVal;
+	int suffixSize;
+	
+	suffixStr << suffix;	
+	suffixSize = suffixStr.str().size();
+	
+	retVal << key.substr(0, MAXNAMELENGTH - suffixSize -1 ) << suffixStr.str();
+	
+	return retVal.str();
+}
+
+
+
+
+
+
+
+
+
