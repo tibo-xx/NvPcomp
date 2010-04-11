@@ -96,7 +96,7 @@ enum LogLevel {
 /*!
  * \class NvPcomp_logger
  * 
- * \author CMT & DRJ
+ * \author CMT, DRJ & BFB
  *
  */
 /**********************************************************************/
@@ -198,7 +198,7 @@ LogLevel NvPcomp_logger<T>::FromString(const std::string& level)
  *
  * Description:
  *
- * \author CMT & DRJ
+ * \author CMT, DRJ & BFB
  *
  */
 /**********************************************************************/

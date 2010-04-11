@@ -25,13 +25,10 @@ variableTable::variableTable() {
 }
 
 variableTable::~variableTable() {}
-
-string variableTable::insert(std::string key, int memLocation) {
-	string retVal = key;
 	
 string variableTable::insert(std::string key, variableInfo *info) {
 	string retVal = "";
-	bool unsuccessful = false;
+	bool unsuccessful = true;
 	string newKey;
 	int suffix = 1;
 		
@@ -40,11 +37,11 @@ string variableTable::insert(std::string key, variableInfo *info) {
 		newKey = mangleName(key, suffix);		
 		
 		pair<map<string, variableInfo *>::iterator, bool> ret;
-		ret = _table.insert(make_pair(key, info));
+		ret = _table.insert(make_pair(newKey, info));
 		
 		// The node was inserted correctly.
 		if(ret.second) {
-			unsuccessful = true;
+			unsuccessful = false;
 			retVal = newKey;
 		} else {
 			suffix++;

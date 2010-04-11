@@ -23,6 +23,7 @@
 #include <astNode.h>
 #include <ast_include.h>
 #include <NvPcomp_logger.h>
+#include <astInfoTable.h>
 #include <variableTable.h>
 
 class ast {
@@ -38,6 +39,8 @@ class ast {
 		NvPcomp::tacTree *acTree;
 		// Variable List
 		variableTable variables;
+		// Function List
+		astInfoTable<int> functions;
 };
 
 #endif /* AST_H_ */
