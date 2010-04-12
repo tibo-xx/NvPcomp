@@ -36,11 +36,35 @@ NvPcomp::symNode::~symNode()
 
 bool NvPcomp::symNode::hasType()
 {
-   return !_type.empty();
+   bool ret = false;
+   if(!_type.empty())
+   {
+     ret = true;
+     // if this is an otherwise empty typedef
+     if (_type.size() == 1 && _type.end() != find (_type.begin(), _type.end(), 298 /*TYPEDEF_NAME_TK*/))
+	ret = false;
+   }
+   return ret;
+}
+
+bool NvPcomp::symNode::hasType(int token_type)
+{  
+   bool result = (_type.end() != find (_type.begin(), _type.end(), token_type));
+   return result;
 }
 
 void NvPcomp::symNode::addType(int type) {
 	_type.push_back(type);
+}
+
+int NvPcomp::symNode::getNumberOfTypes()
+{
+    return _type.size();
+}
+
+int NvPcomp::symNode::getTypeByIndex(int index)
+{
+    return _type[index];
 }
 
 int NvPcomp::symNode::getTopType() {

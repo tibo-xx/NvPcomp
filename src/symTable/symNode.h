@@ -24,8 +24,11 @@ namespace NvPcomp {
 		int getTopType();
 		int popType();
 		bool hasType();
+		bool hasType(int token_type);
 		void setMangledName(std::string newName);
 		std::string getMangledName();
+		int getNumberOfTypes();
+		int getTypeByIndex(int index);
 	public:
 		std::string	_key;	
 		std::string	_strType;

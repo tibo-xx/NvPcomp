@@ -37,21 +37,117 @@ void init_declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
-bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table ) {
+bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, string &error ) {
 
 	string identifier;
-	if (children[0]->nodeString == ":pointer direct_declarator")
-	  identifier = children[0]->children[1]->nodeString;
+	bool is_pointer = false;
+	if (children[0]->getString() == ":pointer direct_declarator")
+	{
+	  identifier = children[0]->getChild(1)->getString();
+	  is_pointer = true;
+	}
 	else
-	  identifier = children[0]->children[0]->nodeString;
+	  identifier = children[0]->getChild(0)->getString();
 
 	NvPcomp::symNode* st_node = table->search_top(identifier);
         if (st_node->hasType())
-	  return false;
-	      
-	for (unsigned int i = 0; i < declaration_specifiers->children.size(); i ++)
 	{
-	  st_node->addType( ((leaf_astNode*) declaration_specifiers->children[0])->getTokenType());
+	  error = "SYNTAX ERROR: Redeclaration of '" + identifier + "'";
+	  return false;
+	}     
+	// Add specifiers
+	for (int i = 0; i < declaration_specifiers->getNumberOfChildren(); i ++)
+	{
+	  int token_type = ((leaf_astNode*) declaration_specifiers->getChild(i))->getTokenType();
+	  // If this is a typedef, add the types from the typedef st_node
+	  if (token_type == TYPEDEF_NAME_TK)
+	  {
+	    NvPcomp::symNode* typedef_st_node = table->search_top(declaration_specifiers->getChild(i)->getString());
+	    for (int j = 0; j < typedef_st_node->getNumberOfTypes(); j++)
+	    {
+	      int token_type = typedef_st_node->getTypeByIndex(j);
+	      if (token_type != TYPEDEF_NAME_TK)
+		if (!addType(token_type, st_node, error))
+		  return false;		
+	    }
+	  }
+	  if (!addType(token_type, st_node, error))
+	    return false;
+	}
+	// Add pointer information
+	if (is_pointer)
+	{
+	  for (int i = 0; i < children[0]->getChild(0)->getNumberOfChildren(); i ++)
+	  {
+	    if (children[0]->getChild(0)->getChild(i)->getString() == ":type_qualifier")
+	    {
+	      for (int j = 0; j < children[0]->getChild(0)->getChild(i)->getNumberOfChildren(); j ++)
+	      {
+		int token_type = ((leaf_astNode*) children[0]->getChild(0)->getChild(i)->getChild(j))->getTokenType();
+		st_node->addType(token_type);
+		cout << "Adding pointer type " << children[0]->getChild(0)->getChild(i)->getChild(j)->getString() << endl;
+	      }
+	    }
+	    else
+	    {
+	      int token_type = ((leaf_astNode*) children[0]->getChild(0)->getChild(i))->getTokenType();
+	      st_node->addType(token_type);
+	      cout << "Adding pointer type " << children[0]->getChild(0)->getChild(i)->getString() << endl;
+	    }
+	  }	 
 	}
 	return true;
+}
+
+bool init_declarator_astNode::addType(int token_type, NvPcomp::symNode *st_node, std::string &error)
+{
+	  string identifier(st_node->_key);
+	  switch(token_type)
+	  {
+	    case INT_TK:
+	    case CHAR_TK:
+	    case FLOAT_TK:
+	    case DOUBLE_TK:
+	      if ( st_node->hasType(DOUBLE_TK) ||
+		   st_node->hasType(CHAR_TK) ||
+		   st_node->hasType(FLOAT_TK) ||
+		   st_node->hasType(INT_TK))
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' has two or more data types in delcaration.";
+		return false;
+	      }
+	      break;
+	      
+	    case SIGNED_TK:
+	    case UNSIGNED_TK:
+	      if ( st_node->hasType(SIGNED_TK) ||
+		   st_node->hasType(UNSIGNED_TK))
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'signed' and 'unsigned'.";
+		return false;
+	      }      
+	      break;
+
+	    case LONG_TK:
+	    case SHORT_TK:
+	      if ( st_node->hasType(LONG_TK) ||
+		   st_node->hasType(SHORT_TK))
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'long' and 'short'.";
+		return false;
+	      }      
+	      break;
+
+	    case TYPEDEF_NAME_TK:
+		return true;
+		break;
+	    default:
+		break;
+	  }
+	  
+	  
+	  st_node->addType(token_type);
+	  cout << "Adding type " << token_type << " to symbol '" << identifier << "'" << endl;
+	  
+	  return true;
 }

@@ -55,7 +55,7 @@ void parse_mode(const char *fileName) {
 		in.close();
 	}
 	//cout << "AST printing node" << endl;
-	//ast->printNode();
+	asTree->getRoot()->printNode();
 	//cout << "AST finished printing node" << endl;
 }
 

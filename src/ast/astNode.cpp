@@ -43,6 +43,15 @@ void astNode::addChild(astNode* child)
 	children.push_back(child);
 }
 
+astNode* astNode::getChild(int child_index)
+{
+        return children[child_index];
+}
+
+int astNode::getNumberOfChildren()
+{
+	return children.size();
+}
 void astNode::setType(string _nodeType)
 {
 	nodeType = _nodeType;
@@ -51,6 +60,11 @@ void astNode::setType(string _nodeType)
 string astNode::getType()
 {
 	return nodeType;
+}
+
+string astNode::getString()
+{
+	return nodeString;
 }
 
 NvPcomp::location astNode::getLocation() {
