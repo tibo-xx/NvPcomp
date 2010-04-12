@@ -119,18 +119,22 @@ void variableTableTest::testSetMem_1() {
 	vTable = new variableTableAccess();
 	//Create a variableInfo struct to test variable table
 	variableInfo *vi;
+	variableInfo *vi_2;
 	vi = new variableInfo;
 	
 	cout << "Start Variable Table testSetMem_1()." << endl;
 	
 	string vString1 = "int";
-	string aString1 = "int1";
+	string aString1;
+	
 	int memLoc1 = 123;
 	//Insert variable into table
-	vTable->insert(vString1, vi);
+	aString1 = vTable->insert(vString1, vi);
 	//Set memory location
-    vTable->setMemLocation(aString1, memLoc1);
-    //Check if memory location change worked
+    
+	vTable->setMemLocation(aString1, memLoc1);
+	
+	//Check if memory location change worked
 	CPPUNIT_ASSERT_EQUAL	(memLoc1, 							       \
 							vi->memLocation);	
 

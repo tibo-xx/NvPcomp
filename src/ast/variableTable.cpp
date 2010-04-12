@@ -90,7 +90,7 @@ bool variableTable::setVariableInfo(std::string key, variableInfo *info_in) {
 	return retVal;		
 }
 
-bool variableTable::search(const std::string key, variableInfo *info) {
+bool variableTable::search(const std::string key, variableInfo* &info) {
 	
 	bool retVal = false;	
 	map<string, variableInfo *>::iterator iter;

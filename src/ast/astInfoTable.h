@@ -30,7 +30,7 @@ public:
 	astInfoTable();
 	~astInfoTable();
 	std::string insert(std::string key, OBJTYPE *obj);
-	bool search(const std::string key, OBJTYPE *obj);
+	bool search(const std::string key, OBJTYPE* &obj);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -88,9 +88,9 @@ std::string astInfoTable<OBJTYPE>::insert(std::string key, OBJTYPE *obj) {
 }
 
 template<typename OBJTYPE>
-bool astInfoTable<OBJTYPE>::search(const std::string key, OBJTYPE *obj) {
+bool astInfoTable<OBJTYPE>::search(const std::string key, OBJTYPE* &obj) {
 	
-	bool retVal = false;	
+	bool retVal = false;
 	typename std::map<std::string, OBJTYPE *>::iterator iter;
  
 	iter = _table.find(key);

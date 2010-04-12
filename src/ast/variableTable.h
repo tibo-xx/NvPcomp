@@ -41,7 +41,7 @@ public:
 	bool setMemLocation(std::string key, int memLocation);
 	bool setVariableSize(std::string key, int size);
 	bool setVariableInfo(std::string key, variableInfo *info_in);
-	bool search(const std::string key, variableInfo *info);
+	bool search(const std::string key, variableInfo* &info);
 };
 
 
