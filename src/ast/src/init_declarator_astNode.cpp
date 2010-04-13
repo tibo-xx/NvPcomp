@@ -67,11 +67,14 @@ bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* decl
 	    {
 	      int token_type = typedef_st_node->getTypeByIndex(j);
 	      if (token_type != TYPEDEF_NAME_TK)
+	      {
+		cout << "Adding type " << token_type  << " from typedef" << endl;
 		if (!addType(token_type, st_node, error))
-		  return false;		
+		  return false; // we had an error
+	      }
 	    }
 	  }
-	  if (!addType(token_type, st_node, error))
+	  else if (!addType(token_type, st_node, error))
 	    return false;
 	}
 	// Add pointer information
@@ -138,8 +141,9 @@ bool init_declarator_astNode::addType(int token_type, NvPcomp::symNode *st_node,
 	      }      
 	      break;
 
-	    case TYPEDEF_NAME_TK:
-		return true;
+	    // If we find 'typedef' in the types, we mark this as being a typedef by makeing its type a typedef_name
+	    case TYPEDEF_TK:
+		token_type = TYPEDEF_NAME_TK;
 		break;
 	    default:
 		break;

@@ -70,11 +70,9 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 <comment>[^*\n]*        {}
 <comment>"*"+[^*/\n]*   {}
 <comment>\n             {yylloc->lines(yyleng);}
-<comment>"*"+"/"        {
-							handleComment();
-							BEGIN(CallerLevel);
-						}
-"!!$"					{table->dump();}
+<comment>"*"+"/"        {				handleComment();
+							BEGIN(CallerLevel); }
+"!!$"		{table->dump();}
 
 auto		{ RETURN(token::AUTO_TK); }
 break		{ RETURN(token::BREAK_TK); }
@@ -83,16 +81,16 @@ char		{ RETURN(token::CHAR_TK); }
 const		{ RETURN(token::CONST_TK); }
 continue	{ RETURN(token::CONTINUE_TK); }
 default		{ RETURN(token::DEFAULT_TK); }
-do			{ RETURN(token::DO_TK); }
+do		{ RETURN(token::DO_TK); }
 double		{ RETURN(token::DOUBLE_TK); }
 else		{ RETURN(token::ELSE_TK); }
 enum		{ RETURN(token::ENUM_TK); }
 extern		{ RETURN(token::EXTERN_TK); }
 float		{ RETURN(token::FLOAT_TK); }
-for			{ RETURN(token::FOR_TK); }
+for		{ RETURN(token::FOR_TK); }
 goto		{ RETURN(token::GOTO_TK); }
-if			{ RETURN(token::IF_TK); }
-int			{ RETURN(token::INT_TK); }
+if		{ RETURN(token::IF_TK); }
+int		{ RETURN(token::INT_TK); }
 long		{ RETURN(token::LONG_TK); }
 register	{ RETURN(token::REGISTER_TK); }
 return		{ RETURN(token::RETURN_TK); }
@@ -102,7 +100,7 @@ sizeof		{ RETURN(token::SIZEOF_TK); }
 static		{ RETURN(token::STATIC_TK); }
 struct		{ RETURN(token::STRUCT_TK); }
 switch		{ RETURN(token::SWITCH_TK); }
-typedef		{ typedefMode = true; RETURN(token::TYPEDEF_TK); }
+typedef		{ RETURN(token::TYPEDEF_TK); }
 union		{ RETURN(token::UNION_TK); }
 unsigned	{ RETURN(token::UNSIGNED_TK); }
 void		{ RETURN(token::VOID_TK); }
@@ -233,7 +231,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 			/* The node is already in the table but should not be. */
 			return(typedefError());			
 		} else {
-			if(tempNode->getTopType() == (int)token::TYPEDEF_NAME_TK) {
+			if(tempNode->hasType((int)token::TYPEDEF_NAME_TK)) {
 				RETURN(token::TYPEDEF_NAME_TK);
 			} else {
 				RETURN(token::IDENTIFIER_TK);
