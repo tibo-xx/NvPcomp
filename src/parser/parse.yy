@@ -222,36 +222,10 @@ declaration
 			{
 			  std::string error;
 			  init_declarator_astNode* node = (init_declarator_astNode*) $<astval>2->getChild(i);
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, error))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
 			    NvPcomp::BParser::error(yyloc, error);
-			}
-			    
-		/*	$<astval>$ = new astNode("declaration");
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2); */
-
-    /*     if ( $<astval>2->nodeType == "IDENTIFIER_TK")
-         {
-   			// Set identifier type
-            symNode* st_node = table.search_top($<astval>2->nodeString);
-            if (st_node->hasType())
-               NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + st_node->_key + "' already declared");
-            else
-               st_node->addType($<astval>1->nodeToken);
-         } 
-         else if ($<astval>2->nodeType == "init_declarator")
-         {
-               if ( $<astval>2->children[0]->nodeType == "IDENTIFIER_TK")
-               {
-         			// Set identifier type
-                  symNode* st_node = table.search_top($<astval>2->children[0]->nodeString);
-                  if (st_node->hasType())
-                     NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Redeclaration of '" + st_node->_key + "' already declared!");
-                  else
-                     st_node->addType($<astval>1->nodeToken);
-               } 
-*/
-         }
+			} 
+		}
 	;
 
 declaration_list

@@ -37,7 +37,7 @@ void init_declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
-bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, string &error ) {
+bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, string &error ) {
 
 	string identifier;
 	bool is_pointer = false;
@@ -99,6 +99,8 @@ bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* decl
 	    }
 	  }	 
 	}
+	variableInfo new_var;
+	st_node->setMangledName(v_table->insert(identifier, &new_var));
 	return true;
 }
 
