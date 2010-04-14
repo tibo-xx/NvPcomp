@@ -70,11 +70,9 @@ FLOAT	{DIGIT}+"."{DIGIT}*
 <comment>[^*\n]*        {}
 <comment>"*"+[^*/\n]*   {}
 <comment>\n             {yylloc->lines(yyleng);}
-<comment>"*"+"/"        {
-							handleComment();
-							BEGIN(CallerLevel);
-						}
-"!!$"					{table->dump();}
+<comment>"*"+"/"        {				handleComment();
+							BEGIN(CallerLevel); }
+"!!$"		{table->dump();}
 
 auto		{ RETURN(token::AUTO_TK); }
 break		{ RETURN(token::BREAK_TK); }
@@ -102,7 +100,7 @@ sizeof		{ RETURN(token::SIZEOF_TK); }
 static		{ RETURN(token::STATIC_TK); }
 struct		{ RETURN(token::STRUCT_TK); }
 switch		{ RETURN(token::SWITCH_TK); }
-typedef		{ typedefMode = true; RETURN(token::TYPEDEF_TK); }
+typedef		{ RETURN(token::TYPEDEF_TK); }
 union		{ RETURN(token::UNION_TK); }
 unsigned	{ RETURN(token::UNSIGNED_TK); }
 void		{ RETURN(token::VOID_TK); }
@@ -233,7 +231,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 			/* The node is already in the table but should not be. */
 			return(typedefError());			
 		} else {
-			if(tempNode->getTopType() == (int)token::TYPEDEF_NAME_TK) {
+			if(tempNode->hasType((int)token::TYPEDEF_NAME_TK)) {
 				RETURN(token::TYPEDEF_NAME_TK);
 			} else {
 				RETURN(token::IDENTIFIER_TK);

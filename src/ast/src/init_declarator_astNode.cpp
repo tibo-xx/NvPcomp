@@ -37,7 +37,7 @@ void init_declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
-bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, string &error ) {
+bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, string &error ) {
 
 	string identifier;
 	bool is_pointer = false;
@@ -67,11 +67,14 @@ bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* decl
 	    {
 	      int token_type = typedef_st_node->getTypeByIndex(j);
 	      if (token_type != TYPEDEF_NAME_TK)
+	      {
+		cout << "Adding type " << token_type  << " from typedef" << endl;
 		if (!addType(token_type, st_node, error))
-		  return false;		
+		  return false; // we had an error
+	      }
 	    }
 	  }
-	  if (!addType(token_type, st_node, error))
+	  else if (!addType(token_type, st_node, error))
 	    return false;
 	}
 	// Add pointer information
@@ -96,6 +99,8 @@ bool init_declarator_astNode::setSpecifiers(declaration_specifiers_astNode* decl
 	    }
 	  }	 
 	}
+	variableInfo new_var;
+	st_node->setMangledName(v_table->insert(identifier, &new_var));
 	return true;
 }
 
@@ -113,33 +118,53 @@ bool init_declarator_astNode::addType(int token_type, NvPcomp::symNode *st_node,
 		   st_node->hasType(FLOAT_TK) ||
 		   st_node->hasType(INT_TK))
 	      {
-		error = "SYNTAX ERROR: '" + identifier + "' has two or more data types in delcaration.";
+		error = "SYNTAX ERROR: '" + identifier + "' has two or more data types in delcaration";
 		return false;
 	      }
 	      break;
 	      
 	    case SIGNED_TK:
-	    case UNSIGNED_TK:
-	      if ( st_node->hasType(SIGNED_TK) ||
-		   st_node->hasType(UNSIGNED_TK))
+	      if ( st_node->hasType(UNSIGNED_TK))
 	      {
-		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'signed' and 'unsigned'.";
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'signed' and 'unsigned'";
+		return false;
+	      }      
+	      break;
+	    case UNSIGNED_TK:
+	      if ( st_node->hasType(SIGNED_TK) )
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'signed' and 'unsigned'";
 		return false;
 	      }      
 	      break;
 
 	    case LONG_TK:
-	    case SHORT_TK:
-	      if ( st_node->hasType(LONG_TK) ||
-		   st_node->hasType(SHORT_TK))
+	      if ( st_node->hasType(SHORT_TK))
 	      {
-		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'long' and 'short'.";
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'long' and 'short'";
+		return false;
+	      } 
+	      break;
+	    case SHORT_TK:
+	      if ( st_node->hasType(SHORT_TK))
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' specified as both 'long' and 'short'";
 		return false;
 	      }      
 	      break;
-
-	    case TYPEDEF_NAME_TK:
-		return true;
+	      
+	    /*
+	    case CONST_TK:
+	      if (nodeString != ":declarator EQUAL_TK initializer" && !st_node->hasType(TYPEDEF_NAME_TK))
+	      {
+		error = "SYNTAX ERROR: '" + identifier + "' specified as 'const' but not initilized";
+		return false;
+	      }    
+	    */ 
+	    
+	    // If we find 'typedef' in the types, we mark this as being a typedef by makeing its type a typedef_name
+	    case TYPEDEF_TK:
+		token_type = TYPEDEF_NAME_TK;
 		break;
 	    default:
 		break;
