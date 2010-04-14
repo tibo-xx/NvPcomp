@@ -24,7 +24,9 @@
  * 	-c 					Compile and assemble the input !IGNORE! 
  * 	-o					Output the final product to a file
  * 	-q					Generate intermediate code only
- * 	-S 					Generate assembly-language code	
+ * 	-S 					Generate assembly-language code
+ *  -all[1-8] 			Turn on all output (lexer, symbol table, parser,
+ * 						ast, and scanner mode) 	
  * 
  * 	\author CMT, DRJ & BFB
  **********************************************************************/
@@ -41,7 +43,8 @@ comLineParser::comLineParser() {
 	_scanner 	= false;
 	_output 	= false;
 	_intcode	= false;
-	_asscode	= false;  
+	_asscode	= false; 
+	_all		= false; 
 }
 comLineParser::comLineParser(int argc, char* argv[]) {
 	_lexer 		= false;
@@ -52,6 +55,7 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 	_output 	= false;
 	_intcode	= false;
 	_asscode	= false; 
+	_all		= false;
 	
 	lexer  			= 	arg_int0
 						("l", "lexer", "<n>", 
@@ -92,10 +96,13 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 	targetFile		=	arg_file1 
 						(NULL,NULL,NULL, 
 						"NvPcomp target file");	
+	all  			= 	arg_int0
+						("all", "ALL", "<n>", 
+						"define level of all detail");
 	end     		= 	arg_end(20);	
 					
 	void* argtable[] = 	{lexer, symtab, parser, ast, scanner, output, 
-						intcode, asscode, targetFile, end};
+						intcode, asscode, targetFile, all, end};
 						
 	nerrors = arg_parse(argc, argv, argtable);
 	
@@ -103,7 +110,7 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						symtab->ival[0], parser->count, parser->ival[0],
 						ast->count, scanner->count, output->count,
 						output->filename, targetFile->count, 
-						targetFile->filename);
+						targetFile->filename, all->count, all->ival[0]);
 }
 
 comLineParser::~comLineParser() {
@@ -113,7 +120,7 @@ comLineParser::~comLineParser() {
 int comLineParser::clpDriver	(int &l, int lLvl, int &s, int sLvl, int
 								&p, int pLvl, int &a, int &sc, int &o, 
 								const char **outfile, int &tf, const 
-								char **tarFile) {
+								char **tarFile, int &all, int allLvl) {
 	if (l > 0) {
 		_lexLevel = lLvl;		
 		_lexer = true; 
@@ -136,6 +143,10 @@ int comLineParser::clpDriver	(int &l, int lLvl, int &s, int sLvl, int
 			outputFN = string(outfile[0]);
 		else 
 			outputFN = "output.txt";
+	}
+	if (all >= 0) {
+		_all = _lexer = _symtab = _parser = _ast = _scanner = true;
+		_allLevel = _lexLevel = _symTabLevel = _parseLevel = allLvl;
 	}
 	_numTargets = tf;
 	//for (i = 0; i < numTarget; i++) {
@@ -173,7 +184,11 @@ bool comLineParser::isScanner () {
 bool comLineParser::isOutput () {
 		if (_output) return true;
 		return false;
-	} 	
+	} 
+bool comLineParser::isAll () {
+		if (_all) return true;
+		return false;
+	} 		
 string comLineParser::getOutput () {
 	return outputFN;
 }
@@ -201,5 +216,9 @@ int comLineParser::getSymTabLevel () {
 }
 int comLineParser::getParseLevel () {
 	if (_parser) return _parseLevel;
+	return 0;
+}
+int comLineParser::getAllLevel () {
+	if (_all) return _allLevel;
 	return 0;
 }

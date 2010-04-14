@@ -119,30 +119,28 @@ void variableTableTest::testSetMem_1() {
 	vTable = new variableTableAccess();
 	//Create a variableInfo struct to test variable table
 	variableInfo *vi;
-	variableInfo *vi_2;
 	vi = new variableInfo;
 	
 	cout << "Start Variable Table testSetMem_1()." << endl;
-	
+
 	string vString1 = "int";
-	string aString1;
-	
+	string aString1 = "int1";
 	int memLoc1 = 123;
 	//Insert variable into table
 	aString1 = vTable->insert(vString1, vi);
 	//Set memory location
-    
 	vTable->setMemLocation(aString1, memLoc1);
-	
 	//Check if memory location change worked
 	CPPUNIT_ASSERT_EQUAL	(memLoc1, 							       \
 							vi->memLocation);	
+	CPPUNIT_ASSERT			(1234567 != vi->memLocation);
 
 	delete vTable;	
 	delete vi;
 	cout << "Finished Variable Table testSetMem_1()." << endl;
 
-}void variableTableTest::testSetSize_1() {
+}
+void variableTableTest::testSetSize_1() {
 	//Create the new variable table.
 	variableTableAccess *vTable;
 	vTable = new variableTableAccess();
@@ -152,9 +150,18 @@ void variableTableTest::testSetMem_1() {
 	
 	cout << "Start Variable Table testSetSize_1." << endl;
 	
-	string vString1 = "int";
-	string vString2 = "char";
-	
+	string vString1 = "char";
+	string aString1 = "char1";
+	int size1 = 19;
+	//Insert variable into table
+	aString1 = vTable->insert(vString1, vi);
+	//Set memory location
+	vTable->setVariableSize(aString1, size1);
+	//Check if memory location change worked
+	CPPUNIT_ASSERT_EQUAL	(size1, 							       \
+							vi->size);	
+	CPPUNIT_ASSERT			(69 != vi->size);
+
 	delete vTable;	
 	delete vi;
 	cout << "Finished Variable Table testSetSize_1." << endl;
@@ -169,10 +176,16 @@ void variableTableTest::testSetMem_1() {
 	
 	cout << "Start Variable Table testCheckStrSize." << endl;
 	
-	string vString1 = "int";
-	string vString2 = "char";
-
+	string vString1 = "IlikeToProgram";
+	string vString2 = "IlikeToParty";
 	
+	for (int i = 0; i < 11; i++) {
+		if (i%2 == 0)
+			CPPUNIT_ASSERT ((vTable->insert(vString2, vi)).size() <= 9);
+		else
+			CPPUNIT_ASSERT ((vTable->insert(vString1, vi)).size() <= 9);
+	}
+		
 	delete vTable;	
 	delete vi;
 	cout << "Finished Variable Table testCheckStrSize." << endl;
