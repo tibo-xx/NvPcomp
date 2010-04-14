@@ -1,5 +1,7 @@
 int main()
 {
+int (a);
+
 int test2,test3;
 int test4 = 5;
 char *mystring = "string";

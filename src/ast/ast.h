@@ -26,21 +26,26 @@
 #include <astInfoTable.h>
 #include <variableTable.h>
 
+typedef struct functionDefinition {
+    astNode *declaration;
+    astNode *definition;    
+} functionDefinition;
+
 class ast {
-	public:
-		ast(NvPcomp::tacTree *tree);
-		~ast();
-		astNode *getRoot();
-		NvPcomp::tacTree *gettacTree();
-		variableTable getVariableTable();
-	private:
-		astNode *root;
-		// tacTree
-		NvPcomp::tacTree *acTree;
-		// Variable List
-		variableTable variables;
-		// Function List
-		astInfoTable<int> functions;
+    public:
+        ast(NvPcomp::tacTree *tree);
+        ~ast();
+        astNode *getRoot();
+        NvPcomp::tacTree *gettacTree();
+        variableTable getVariableTable();
+    private:
+        astNode *root;
+        // tacTree
+        NvPcomp::tacTree *acTree;
+        // Variable List
+        variableTable variables;
+        // Function List
+        astInfoTable<functionDefinition> functions;
 };
 
 #endif /* AST_H_ */
