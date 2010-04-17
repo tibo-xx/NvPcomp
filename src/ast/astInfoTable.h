@@ -1,7 +1,7 @@
 /**********************************************************************/
 //! struct table implementation for NvPcomp
 /*!
- * \class structTable
+ * \class astInfoTable
  *
  * Description: The struct Table implementation for NvPcomp
  *
@@ -12,12 +12,13 @@
 #ifndef ASTINFOTABLE_H_
 #define ASTINFOTABLE_H_
 
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <map>
 #include <astNode.h>
 #include <iterator>
-
+using namespace std;
 #define ASTINFO_MAXNAMELENGTH	8
 
 template<typename OBJTYPE>
@@ -26,7 +27,7 @@ protected:
 	std::map< std::string, OBJTYPE *> _table;
 protected:
 	std::string mangleName(std::string key, int suffix);
-public:
+public:  
 	astInfoTable();
 	~astInfoTable();
 	std::string insert(std::string key, OBJTYPE *obj);
@@ -34,14 +35,13 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////
-// Constructor/Desctructor
+// Constructor/Destructor
 ////////////////////////////////////////////////////////////////////////
 template<typename OBJTYPE>
 astInfoTable<OBJTYPE>::astInfoTable() {}
 
 template<typename OBJTYPE>
 astInfoTable<OBJTYPE>::~astInfoTable() {
-
 	// Delete everything.
 	typename std::map< std::string, OBJTYPE* >::iterator map_iter;
 	// loop through and delete all of the map symNodes.
@@ -55,7 +55,7 @@ astInfoTable<OBJTYPE>::~astInfoTable() {
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Public functions.
+// Public functions
 ////////////////////////////////////////////////////////////////////////
 template<typename OBJTYPE>
 std::string astInfoTable<OBJTYPE>::insert(std::string key, OBJTYPE *obj) {
@@ -80,16 +80,11 @@ std::string astInfoTable<OBJTYPE>::insert(std::string key, OBJTYPE *obj) {
 		}
 		
 	}
-		
-	return retVal;
-	
-	
-	
+	return retVal;	
 }
 
 template<typename OBJTYPE>
 bool astInfoTable<OBJTYPE>::search(const std::string key, OBJTYPE* &obj) {
-	
 	bool retVal = false;
 	typename std::map<std::string, OBJTYPE *>::iterator iter;
  
@@ -99,7 +94,6 @@ bool astInfoTable<OBJTYPE>::search(const std::string key, OBJTYPE* &obj) {
 		obj = (*iter).second;
 		retVal = true;
 	}
-	
 	return retVal;	
 
 }

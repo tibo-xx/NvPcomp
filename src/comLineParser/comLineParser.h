@@ -60,9 +60,11 @@ public:
 	bool isIntCode();
 	bool isAsscode();
 	bool isInput();
+	bool isAll();
 	int getLexLevel ();
 	int getSymTabLevel ();
 	int getParseLevel ();
+	int getAllLevel ();
 	std::string getOutput();
 	std::string getInput();
 	
@@ -70,7 +72,7 @@ private:
 	//void errorCheck(int &argc, const char *&argv, void *argtable);
 	int clpDriver 	(int &l, int lLvl, int &s, int sLvl, int &p, int 
 					pLvl, int &a, int &sc, int &o, const char **outfile,
-					int &tf, const char **tarFile);
+					int &tf, const char **tarFile, int &all, int allLvl);
 					
 					
 	/* -l command line argument */
@@ -91,16 +93,18 @@ private:
 	struct arg_lit  *asscode;
 	/* target files for NvPcomp */
 	struct arg_file *targetFile;
+	/* -all command line argument */
+	struct arg_int  *all;
 	/* */
 	struct arg_end *end; 
 	int nerrors, exitcode;
 	
 	bool 	_lexer, _symtab, _parser, _ast, _scanner, _output, 
-			_intcode, _asscode;	
+			_intcode, _asscode, _all;	
 	std::string outputFN;
 	char **targetFN;
 	int _numTargets;
-	int _lexLevel, _symTabLevel, _parseLevel; 
+	int _lexLevel, _symTabLevel, _parseLevel, _allLevel; 
 	 
 	std::string inputFile;
 	

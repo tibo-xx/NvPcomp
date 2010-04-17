@@ -16,70 +16,61 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-#include <variableTableTest.h>
+#include <astInfoTableTest.h>
 
 using namespace std;
 
 /* Register this test suite with the factory. */
-CPPUNIT_TEST_SUITE_REGISTRATION( variableTableTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( astInfoTableTest );
 
-void variableTableTest::setUp() {
-	_table = new variableTableAccess();
+void astInfoTableTest::setUp() {
+	_ait = new astInfoTable<int>;
 }
 
-void variableTableTest::tearDown() {
-	delete _table;
+void astInfoTableTest::tearDown() {
+	delete _ait;
 }
 
-void variableTableTest::testConstructor() {
+void astInfoTableTest::testConstructor() {
+
+	cout << "Start AST Info Table testConstructor." << endl;
 	
-	const int ZERO = 0;
+	//Create the new AST info table.
+	astInfoTable<int> *ait;
+	ait = new astInfoTable<int>;	
+
+	int *num1;
+	num1 = new int(3);
 	
-	cout << "Start Symble Table testConstructor." << endl;
-	
-	//Create the new variable table.
-	variableTableAccess *vTable;
-	vTable = new variableTableAccess;	
-	
-	// Check that the Level was set correctly.
-	
-	delete vTable;
-	cout << "Finished Variable Table testConstructor." << endl;
+	CPPUNIT_ASSERT (ait != NULL);
+	delete ait;
+	//Test that pointer to object is deleted by the destructor
+	//CPPUNIT_ASSERT_EQUAL(NULL, num1);
+
+	cout << "Finished AST Info Table testConstructor." << endl;
 }
 
-void variableTableTest::testInsert_1() {
-	//Create the new variable table.
-	variableTableAccess *vTable;
-	vTable = new variableTableAccess();
-	variableInfo *vi;
+void astInfoTableTest::testInsert_1() {
+	
+	cout << "Start AST Info Table testInsert_1." << endl;
+	
+	//Create the new AST info table.
+	astInfoTable<int> *ait;
+	ait = new astInfoTable<int>;	
 
-	vi = new variableInfo;
-	
-	cout << "Start Variable Table testInsert_1." << endl;
-	
-	string vString1 = "int";
-	string cString1 = "int1";
-	string vString2 = "long";
-	string cString2 = "long1";
-	string vString3 = "char";
-	string cString3 = "char1";
-	string vString4 = "struct";
-	string cString4 = "struct1";
+	int *num1;
+	num1 = new int(3);
+	string check = "test1";
+	CPPUNIT_ASSERT (check == ait->insert("test", num1));
+	CPPUNIT_ASSERT (ait->search("test1", num1));
 
-	CPPUNIT_ASSERT_EQUAL	(cString1, 							       \
-							vTable->insert(vString1, vi));
-	CPPUNIT_ASSERT_EQUAL	(cString2, 							       \
-							vTable->insert(vString2, vi));
-	CPPUNIT_ASSERT_EQUAL	(cString3, 							       \
-							vTable->insert(vString3, vi));
-	CPPUNIT_ASSERT_EQUAL	(cString4, 							       \
-							vTable->insert(vString4, vi));
-	delete vTable;	
-	delete vi;
-	
-	cout << "Finished Variable Table testInsert_1." << endl;
+
+	delete ait;
+
+	cout << "Finished AST Info Table testInsert_1." << endl;
 
 }
+/*
 void variableTableTest::testInsert_2() {
 	//Create the new variable table.
 	variableTableAccess *vTable;
@@ -179,7 +170,7 @@ void variableTableTest::testSetSize_1() {
 	string vString1 = "IlikeToProgram";
 	string vString2 = "IlikeToParty";
 	
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 1001; i++) {
 		if (i%2 == 0)
 			CPPUNIT_ASSERT ((vTable->insert(vString2, vi)).size() <= 9);
 		else
@@ -190,4 +181,4 @@ void variableTableTest::testSetSize_1() {
 	delete vi;
 	cout << "Finished Variable Table testCheckStrSize." << endl;
 
-}	
+}	*/

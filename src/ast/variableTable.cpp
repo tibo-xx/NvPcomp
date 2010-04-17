@@ -55,9 +55,7 @@ string variableTable::insert(std::string key, variableInfo *info) {
 bool variableTable::setMemLocation(std::string key, int memLocation) {
 	variableInfo *info;
 	bool retVal = false;
-	cout<<"key: "<<key<<" memLocation: "<<memLocation<<endl;
 	if(search(key, info)) {
-		cout<<"set mem, in if"<<endl;
 		info->memLocation = memLocation;
 		retVal = true;
 	}
@@ -135,12 +133,3 @@ string variableTable::mangleName(std::string key, int suffix) {
 	
 	return retVal.str();
 }
-
-
-
-
-
-
-
-
-
