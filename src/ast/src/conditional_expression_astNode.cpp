@@ -23,12 +23,12 @@
 using namespace std;
 
 conditional_expression_astNode::conditional_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "conditional_expression";
 }
 
 conditional_expression_astNode::conditional_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "conditional_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

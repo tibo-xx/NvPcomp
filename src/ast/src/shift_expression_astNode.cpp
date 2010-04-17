@@ -23,12 +23,12 @@
 using namespace std;
 
 shift_expression_astNode::shift_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "shift_expression";
 }
 
 shift_expression_astNode::shift_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "shift_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

@@ -13,6 +13,7 @@
 #define ARGUMENT_EXPRESSION_LIST_ASTNODE_H_
 
 #include <astNode.h>
+#include <expression_astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -23,7 +24,7 @@
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
 
-class argument_expression_list_astNode:public astNode {
+class argument_expression_list_astNode:public expression_astNode {
 public:
 	argument_expression_list_astNode();
 	argument_expression_list_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);

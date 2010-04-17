@@ -13,6 +13,7 @@
 #define INCLUSIVE_OR_EXPRESSION_ASTNODE_H_
 
 #include <astNode.h>
+#include <expression_astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -23,7 +24,7 @@
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
 
-class inclusive_or_expression_astNode:public astNode {
+class inclusive_or_expression_astNode:public expression_astNode {
 public:
 	inclusive_or_expression_astNode();
 	inclusive_or_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
