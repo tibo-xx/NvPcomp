@@ -126,7 +126,7 @@ scanner: ./src/scanner/scanner.lex
 ########################################################################
 parser: ./src/parser/parse.yy
 	@echo "\nBuilding Parser...\n"
-	$(YACC) --verbose -t -d -o parse.cc $<
+	$(YACC) --verbose --debug -b parser.output -d -o parse.cc $<
 	mv parse.* ./src/parser/
 	mv *.hh ./src/parser/
 	$(CXX) $(CXXFLAGS) $(INCS) -c ./src/parser/parse.cc -o ./src/parser/parse.o

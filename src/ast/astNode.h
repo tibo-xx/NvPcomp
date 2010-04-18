@@ -27,6 +27,7 @@ class astNode {
 	public:
 		astNode();
 		astNode(std::string nodeString, NvPcomp::location loc, NvPcomp::tacTree *tree);
+		~astNode();
 	public:
 		virtual void printNode(bool printProductions = true, int level = 0);	
 		virtual void output3AC() = 0;
