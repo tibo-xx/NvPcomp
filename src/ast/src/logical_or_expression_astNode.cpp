@@ -23,12 +23,12 @@
 using namespace std;
 
 logical_or_expression_astNode::logical_or_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "logical_or_expression";
 }
 
 logical_or_expression_astNode::logical_or_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "logical_or_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

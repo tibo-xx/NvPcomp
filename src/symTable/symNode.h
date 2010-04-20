@@ -29,6 +29,10 @@ namespace NvPcomp {
 		std::string getMangledName();
 		int getNumberOfTypes();
 		int getTypeByIndex(int index);
+		int getNumberOfPointerTypes();
+		void addPointerType(int type);
+		bool hasPointerType(int token_type);
+		int getPointerTypeByIndex(int index);	
 	public:
 		std::string	_key;	
 		std::string	_strType;
@@ -36,6 +40,7 @@ namespace NvPcomp {
 		
 	private:
 		std::vector<int> _type;
+		std::vector<int> _pointerType;
 		std::string _mangledName;
 		
 	public:

@@ -23,12 +23,12 @@
 using namespace std;
 
 argument_expression_list_astNode::argument_expression_list_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "argument_expression_list";
 }
 
 argument_expression_list_astNode::argument_expression_list_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "argument_expression_list";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

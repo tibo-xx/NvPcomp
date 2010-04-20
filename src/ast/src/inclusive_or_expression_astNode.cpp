@@ -23,12 +23,12 @@
 using namespace std;
 
 inclusive_or_expression_astNode::inclusive_or_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "inclusive_or_expression";
 }
 
 inclusive_or_expression_astNode::inclusive_or_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "inclusive_or_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

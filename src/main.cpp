@@ -111,6 +111,9 @@ int main( int argc, char* argv[] ) {
 	SET_OUTPUT(WARNINGLog, stdout);
 	SET_OUTPUT(ERRORLog, stderr);
 	
+	cin.get();
+	
+	
 	if(clp->isInput()) {
 		inputFile = clp->getInput();
 		cout << "inputFile: " << inputFile << endl;
@@ -153,10 +156,10 @@ int main( int argc, char* argv[] ) {
 		SET_OUTPUT(ASTLog, symbol_out);
 	}		
 	
-	if (clp->isScanner()) {
+	//if (clp->isScanner()) {
 		// Scan Mode	
-		scan_mode(inputFile.c_str());		
-	} else {		
+	//	scan_mode(inputFile.c_str());		
+	//} else {		
 		parser_out = fopen("parse.out", "w");
 		if(parser_out == NULL) {
 			LOG(INFOLog, logLEVEL1) << "Aborting, Error opening output file " << fileName;
@@ -166,7 +169,7 @@ int main( int argc, char* argv[] ) {
 		
 		// Parse Mode
 		parse_mode(inputFile.c_str());				
-	}	
+	//}	
 	return 0;
 }
 

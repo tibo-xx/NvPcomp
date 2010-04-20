@@ -23,12 +23,12 @@
 using namespace std;
 
 assignment_operator_astNode::assignment_operator_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "assignment_operator";
 }
 
 assignment_operator_astNode::assignment_operator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "assignment_operator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

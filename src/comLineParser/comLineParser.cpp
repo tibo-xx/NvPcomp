@@ -60,33 +60,21 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 	lexer  			= 	arg_int0
 						("l", "lexer", "<n>", 
 						"define level of lexer detail");
-	//lexerFile		= 	arg_file0
-	//					("l", NULL,"lexerFile", 
-	//					"lexerFile");
 	symtab	    	= 	arg_int0
 						("s", "symtab", "<n>",                      
 						"define level of symbol table detail");	
-	//stFile			= 	arg_file0
-	//					("s", NULL,"symtabFile", 
-	//					"symtabFile");
 	parser		   	= 	arg_int0
 						("p", "parser", "<n>",                    
-						"define level of parser detail");
-	//parserFile		= 	arg_file0
-	//					("p", NULL,"parserFile", 
-	//					"parserFile");						
+						"define level of parser detail");					
 	ast				= 	arg_lit0
 						("a",NULL,                      
 						"ast");		
 	scanner    		= 	arg_lit0
-						("scan", NULL,                      
+						("c", NULL,                      
 						"scanner mode");														
 	output 			= 	arg_file0
 						("o", NULL, "<output>",                      
-						"output file (generic is output.txt");
-	//outputFile 		= 	arg_file0
-	//					("o", NULL,"genFile", 
-	//					"output file");						
+						"output file (generic is output.txt");			
 	intcode    		= 	arg_lit0
 						("q",NULL,                      
 						"intermediate code");														
@@ -97,7 +85,7 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						(NULL,NULL,NULL, 
 						"NvPcomp target file");	
 	all  			= 	arg_int0
-						("all", "ALL", "<n>", 
+						("A", "ALL", "<n>", 
 						"define level of all detail");
 	end     		= 	arg_end(20);	
 					
@@ -111,16 +99,24 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						ast->count, scanner->count, output->count,
 						output->filename, targetFile->count, 
 						targetFile->filename, all->count, all->ival[0]);
+	arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
 }
 
 comLineParser::~comLineParser() {
-	//arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
+	
 }
 
 int comLineParser::clpDriver	(int &l, int lLvl, int &s, int sLvl, int
 								&p, int pLvl, int &a, int &sc, int &o, 
 								const char **outfile, int &tf, const 
 								char **tarFile, int &all, int allLvl) {
+	cout	<<	"l: "	<<	l	<<	endl
+			<<	"s: "	<<	s	<<	endl
+			<<	"p: "	<<	p	<<	endl
+			<<	"a: "	<<	a	<<	endl
+			<<	"sc: "	<<	sc	<<	endl
+			<<	"o: "	<<	o	<<	endl
+			<<	"all: "	<<	all	<<	endl;
 	if (l > 0) {
 		_lexLevel = lLvl;		
 		_lexer = true; 

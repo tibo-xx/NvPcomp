@@ -23,12 +23,12 @@
 using namespace std;
 
 string_astNode::string_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "string";
 }
 
 string_astNode::string_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "string";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

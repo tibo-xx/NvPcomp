@@ -3,7 +3,9 @@
 #include <tacTree.h>
 #include <astNode.h>
 
+
 namespace NvPcomp {
+		
     class Parser {
     public:
         Parser( NvPcomp::FlexScanner *arg_scanner, const char *fileName, ast *_astIn) :     \

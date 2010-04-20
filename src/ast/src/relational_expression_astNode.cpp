@@ -23,12 +23,12 @@
 using namespace std;
 
 relational_expression_astNode::relational_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "relational_expression";
 }
 
 relational_expression_astNode::relational_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "relational_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

@@ -1,0 +1,36 @@
+/**********************************************************************/
+//! ASTNode [% classname %]_astNode implementation for NvPcomp
+/*!
+* \class [% classname %]_astNode
+*
+* Description: The [% classname %]_astNode implementation for Abstract Syntax Tree in NvPcomp
+*
+* \author CMT, DRJ & BFB
+*
+*/
+/**********************************************************************/
+#ifndef [% classname_upper %]_ASTNODE_H_
+#define [% classname_upper %]_ASTNODE_H_
+
+#include <astNode.h>
+#include <expression_astNode.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <position.hh>
+#include <location.hh>
+#include <tacTree.h>
+#include <NvPcomp_logger.h>
+
+class [% classname %]_astNode:public expression_astNode {
+public:
+	[% classname %]_astNode();
+	[% classname %]_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
+	~[% classname %]_astNode();
+public:
+	virtual void output3AC();
+};
+
+#endif /* [% classname_upper %]_ASTNODE_H_ */

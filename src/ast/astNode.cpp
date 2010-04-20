@@ -33,6 +33,8 @@ astNode::astNode(string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *t
 	acTree = tree;
 }
 
+astNode::~astNode() {}
+
 void astNode::setString(string _nodeString)
 {
 	nodeString = _nodeString;

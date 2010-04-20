@@ -23,12 +23,12 @@
 using namespace std;
 
 multiplicative_expression_astNode::multiplicative_expression_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "multiplicative_expression";
 }
 
 multiplicative_expression_astNode::multiplicative_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "multiplicative_expression";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

@@ -100,3 +100,21 @@ string NvPcomp::symNode::getMangledName() {
 }
 
 
+
+
+int NvPcomp::symNode::getNumberOfPointerTypes() {
+    return _pointerType.size();
+}
+
+void NvPcomp::symNode::addPointerType(int type) {
+	_pointerType.push_back(type);
+}
+
+bool NvPcomp::symNode::hasPointerType(int token_type) {  
+   bool result = (_pointerType.end() != find (_pointerType.begin(), _pointerType.end(), token_type));
+   return result;
+}
+
+int NvPcomp::symNode::getPointerTypeByIndex(int index) {
+    return _pointerType[index];
+}

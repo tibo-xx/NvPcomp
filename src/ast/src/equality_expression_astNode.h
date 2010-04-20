@@ -13,6 +13,7 @@
 #define EQUALITY_EXPRESSION_ASTNODE_H_
 
 #include <astNode.h>
+#include <expression_astNode.h>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -23,7 +24,7 @@
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
 
-class equality_expression_astNode:public astNode {
+class equality_expression_astNode:public expression_astNode {
 public:
 	equality_expression_astNode();
 	equality_expression_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);

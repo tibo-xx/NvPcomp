@@ -23,12 +23,12 @@
 using namespace std;
 
 unary_operator_astNode::unary_operator_astNode()
-	:astNode() {
+	:expression_astNode() {
 	nodeType = "unary_operator";
 }
 
 unary_operator_astNode::unary_operator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
-	:astNode(_nodeString, _loc, tree) {
+	:expression_astNode(_nodeString, _loc, tree) {
 	nodeType = "unary_operator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }

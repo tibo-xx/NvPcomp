@@ -33,6 +33,8 @@ expression_astNode::expression_astNode(std::string _nodeString, NvPcomp::locatio
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
+expression_astNode::~expression_astNode() {}
+
 void expression_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
