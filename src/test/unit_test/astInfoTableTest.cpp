@@ -46,7 +46,7 @@ void astInfoTableTest::testConstructor() {
 	delete ait;
 	//Test that pointer to object is deleted by the destructor
 	//CPPUNIT_ASSERT_EQUAL(NULL, num1);
-
+cout<<"num1 "<<num1<<" "<<*num1<<endl;
 	cout << "Finished AST Info Table testConstructor." << endl;
 }
 
