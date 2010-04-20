@@ -111,7 +111,7 @@ int main( int argc, char* argv[] ) {
 	SET_OUTPUT(WARNINGLog, stdout);
 	SET_OUTPUT(ERRORLog, stderr);
 	
-	cin.get();
+	
 	
 	
 	if(clp->isInput()) {

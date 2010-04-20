@@ -110,13 +110,13 @@ int comLineParser::clpDriver	(int &l, int lLvl, int &s, int sLvl, int
 								&p, int pLvl, int &a, int &sc, int &o, 
 								const char **outfile, int &tf, const 
 								char **tarFile, int &all, int allLvl) {
-	cout	<<	"l: "	<<	l	<<	endl
+/*	cout	<<	"l: "	<<	l	<<	endl
 			<<	"s: "	<<	s	<<	endl
 			<<	"p: "	<<	p	<<	endl
 			<<	"a: "	<<	a	<<	endl
 			<<	"sc: "	<<	sc	<<	endl
 			<<	"o: "	<<	o	<<	endl
-			<<	"all: "	<<	all	<<	endl;
+			<<	"all: "	<<	all	<<	endl; */
 	if (l > 0) {
 		_lexLevel = lLvl;		
 		_lexer = true; 
