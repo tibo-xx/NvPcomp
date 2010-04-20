@@ -191,22 +191,34 @@ function_definition
 	: declarator compound_statement	
 		{
 			REDUCTION(function_definition:declarator compound_statement)
+			$<astval>$ = new function_definition_astNode("declarator compound_statement", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
 		}
 	| declarator declaration_list compound_statement							
 		{
 			REDUCTION(function_definition:declarator declaration_list compound_statement)
+			$<astval>$ = new function_definition_astNode("declarator declaration_list compound_statement", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>3);
 		}
 	| declaration_specifiers declarator compound_statement						
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator compound_statement)
-		/*	$<astval>$ = new astNode("function_definition");
+			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator compound_statement", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3); */
+			$<astval>$->addChild($<astval>3);
 		}
 	| declaration_specifiers declarator declaration_list compound_statement		
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator declaration_list compound_statement)
+			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator declaration_list compound_statement", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
+			$<astval>$->addChild($<astval>3);
+			$<astval>$->addChild($<astval>4);
 		}
 	;
 
@@ -1388,68 +1400,68 @@ assignment_operator
 	: EQUAL_TK
 		{
 			REDUCTION(assignment_operator:EQUAL_TK)
-	   		$<astval>$ = new assignment_operator_astNode(":=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*	   		$<astval>$ = new assignment_operator_astNode(":=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| MUL_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MUL_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":*=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":*=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| DIV_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:DIV_ASSIGN_TK)
-	    	$<astval>$ = new assignment_operator_astNode(":/=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":/=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| MOD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MOD_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":%=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":%=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| ADD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:ADD_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":+=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/* 			$<astval>$ = new assignment_operator_astNode(":+=", yylloc, &acTree);
+ 			$<astval>$->addChild($<astval>1);*/
 		}
 	| SUB_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:SUB_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":-=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":-=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| LEFT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:LEFT_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":<=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":<=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| RIGHT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":>=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":>=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| AND_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:AND_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":&=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":&=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| XOR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:XOR_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":^=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":^=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	| OR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:OR_ASSIGN_TK)
-			$<astval>$ = new assignment_operator_astNode(":|=", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+/*			$<astval>$ = new assignment_operator_astNode(":|=", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);*/
 		}
 	;
 
