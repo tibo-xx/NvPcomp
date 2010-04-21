@@ -13,6 +13,7 @@
 #define TACTREE_H_
 
 #include <tacNode.h>
+#include <vector>
 
 namespace NvPcomp {
 	class tacTree {
@@ -23,6 +24,8 @@ namespace NvPcomp {
 		public:
 			void addNode(tacNode *node);
 			void outputASM();
+		private:
+			std::vector<tacNode> _tree;
 	};
 };
 

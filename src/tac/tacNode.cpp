@@ -21,7 +21,22 @@
 
 using namespace std;
 
-NvPcomp::tacNode::tacNode() {}
+NvPcomp::tacNode::tacNode() {
+	_label = "NULL";
+	_op = "NULL";
+	_add1 = "NULL";
+	_add2 = "NULL";
+	_add3 = "NULL";
+}
+
+NvPcomp::tacNode::tacNode	(string label, string op, string add1, string 
+							add2, string add3) {
+	_label = label;
+	_op = op;
+	_add1 = add1;
+	_add2 = add2;
+	_add3 = add3;
+}
 
 NvPcomp::tacNode::~tacNode() {}
 
