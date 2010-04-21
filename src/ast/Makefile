@@ -25,6 +25,7 @@ INCS += -I./../parser/
 INCS += -I./../logging/
 INCS += -I./../tac/
 INCS += -I./../symTable/
+INCS += -I./../
 
 # library paths
 LIBS = -lstdc++

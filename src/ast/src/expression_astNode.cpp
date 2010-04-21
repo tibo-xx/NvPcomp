@@ -39,3 +39,43 @@ void expression_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
+bool expression_astNode::checkType(NvPcomp::symTable *table) {
+	
+	leaf_astNode *lhs;
+	leaf_astNode *rhs;
+	NvPcomp::symNode* stNode_lhs;
+	NvPcomp::symNode* stNode_rhs;
+	bool retVal = true;
+
+	// We're assuming that we have three nodes right now, left-hand-side, operator, right-hand-side.
+	lhs = (leaf_astNode*) children.at(0);
+	rhs = (leaf_astNode*) children.at(2);
+
+	// Is the lhs in the symbol table?
+	if(table->search(lhs->getString(), stNode_lhs, false) < 0) {
+		retVal = false;
+	} else {		
+		// Check the right hand side to see if this is a constant or another variable.
+		if(IDENTIFIER_TK == rhs->getTokenType()) {
+			// The right-hand-side is an identifier, grab its symbol table node.
+			if(table->search(rhs->getString(), stNode_rhs, false) < 0) {
+				retVal = false;
+			} else {
+				// Compare the types of the two identifiers.
+				retVal = checkTypes(stNode_lhs, stNode_rhs);
+			}
+		} else {
+			// Compare the type of the left-hand-side with the constant.
+			retVal = checkTypes(stNode_lhs, rhs);
+		}
+	}
+	return retVal;
+}
+
+bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, NvPcomp::symNode* rhs) {
+	return true;
+}
+
+bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, leaf_astNode* rhs) {	
+	return lhs->hasType(rhs->getTokenType());
+}

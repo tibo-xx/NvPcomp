@@ -20,6 +20,7 @@
 #include <location.hh>
 #include <position.hh>
 #include <tacTree.h>
+#include <yytokentypes.h>
 #include <NvPcomp_logger.h>
 
 class astNode {

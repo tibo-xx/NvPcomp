@@ -56,7 +56,7 @@
 	unsigned int BP_lastLine = 0;
 	
 	#define REDUCTION(spot) \
-		yydebug_ = 1; \
+		yydebug_ = 0; \
 		if(yylval.commentFound) { \
 			LOG(PARSERLog, logLEVEL1) << "Comment Preceeding Reduction: at " << yylval.comment_loc; \
 			yylval.commentFound = false; \
@@ -1112,7 +1112,7 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); 
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK sCLOSE_BRACE_TK", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			//$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
 	| OPEN_BRACE_TK scope_push statement_list CLOSE_BRACE_TK
@@ -1120,7 +1120,7 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); 
 			SCOPE_POP()
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK statement_list CLOSE_BRACE_TK", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			//$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
@@ -1129,7 +1129,7 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			//$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
@@ -1138,7 +1138,7 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK);
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			//$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
@@ -1389,10 +1389,19 @@ assignment_expression
 	| unary_expression assignment_operator assignment_expression
 		{
 			REDUCTION(assignment_expression:unary_expression assignment_operator assignment_expression)
+			expression_astNode *tempNode;
 			$<astval>$ = new assignment_expression_astNode("unary_expression assignment_operator assignment_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
+			
+			tempNode = (expression_astNode *) $<astval>$;
+			
+			if(!tempNode->checkType(&table)) {
+				///ToDo: Add more useful error messaging.
+				NvPcomp::BParser::error(yyloc, "Type mismatch");
+			}
+			
 		}
 	;
 
