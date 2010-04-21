@@ -24,6 +24,7 @@ using namespace std;
 ast::ast(NvPcomp::tacTree *tree) {
 	root = new root_astNode("root");
 	acTree = tree;
+	_numLabels = 0;
 }
 
 ast::~ast() {
@@ -41,3 +42,12 @@ NvPcomp::tacTree *ast::gettacTree() {
 variableTable ast::getVariableTable() {
 	return variables;
 }
+
+string ast::genLabel() {
+	stringstream retString;
+	retString << "L" << _numLabels;
+	_numLabels++;
+	
+	return retString.str();
+}
+
