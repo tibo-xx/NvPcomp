@@ -40,6 +40,7 @@ class astNode {
 
 		std::string getType();
 		std::string getString();
+
 		NvPcomp::location getLocation();
 		
 		NvPcomp::tacTree *gettacTree();
@@ -62,7 +63,6 @@ class astNode {
 		std::string nodeType;
 		// tacTree
 		NvPcomp::tacTree *acTree;
-		
 };
 
 #endif /* ASTNODE_H_ */

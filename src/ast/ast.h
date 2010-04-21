@@ -13,6 +13,7 @@
 #define AST_H_
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <stdio.h>
 #include <string>
@@ -46,6 +47,10 @@ class ast {
         variableTable variables;
         // Function List
         astInfoTable<functionDefinition> functions;
+		// Label count
+		int _numLabels;
+		// Create labels
+		std::string genLabel ();
 };
 
 #endif /* AST_H_ */
