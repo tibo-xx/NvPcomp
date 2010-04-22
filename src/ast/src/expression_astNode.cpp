@@ -76,6 +76,26 @@ bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, NvPcomp::symNode* rhs
 	return true;
 }
 
-bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, leaf_astNode* rhs) {	
-	return lhs->hasType(rhs->getTokenType());
+bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, leaf_astNode* rhs) {
+	
+	yytokentype tempToken = (yytokentype)rhs->getTokenType();
+	bool retVal = false;
+	
+	switch(tempToken) {
+		case INTEGER_CONSTANT_TK:
+			retVal = lhs->hasType(INT_TK) || lhs->hasType(LONG_TK) || lhs->hasType(SHORT_TK);
+			break;		
+		case FLOATING_CONSTANT_TK:
+			retVal = lhs->hasType(FLOAT_TK) || lhs->hasType(DOUBLE_TK);
+			break;
+		case CHARACTER_CONSTANT_TK:
+			retVal = lhs->hasType(CHAR_TK);
+			break;
+		default:
+			retVal = false;
+			break;
+	}
+		
+	return retVal;
+	
 }
