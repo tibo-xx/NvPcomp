@@ -234,6 +234,7 @@ declaration
 			$<astval>$ = new declaration_astNode(":declaration_specifiers init_declarator_list SEMICOLON_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1); // declaration_specifiers
 			$<astval>$->addChild($<astval>2); // init_declarator_list
+			std::cout << $<astval>2->getNumberOfChildren() << endl;
 			// Assign Types to all declarations in the list
 			for (int i=0; i < $<astval>2->getNumberOfChildren(); i++)
 			{
@@ -497,8 +498,8 @@ init_declarator_list
 	: init_declarator
 		{
 			REDUCTION(init_declarator_list:init_declarator)
-			//~ $<astval>$ = new init_declarator_list_astNode("", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new init_declarator_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| init_declarator_list COMMA_TK init_declarator
 		{
@@ -512,15 +513,15 @@ init_declarator
 	: declarator							
 		{
 			REDUCTION(init_declarator:declarator)
-			//~ $<astval>$ = new init_declarator_astNode(":declarator", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new init_declarator_astNode(":declarator", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| declarator EQUAL_TK initializer		
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
-			//~ $<astval>$ = new init_declarator_astNode(":declarator EQUAL_TK initializer", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
-			//~ $<astval>$->addChild($<astval>3);
+			$<astval>$ = new init_declarator_astNode(":declarator EQUAL_TK initializer", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>3);
 		}
 	;
 
@@ -673,8 +674,8 @@ declarator
 	: direct_declarator
 		{
 			REDUCTION(declarator:direct_declarator)
-			//~ $<astval>$ = new declarator_astNode(":direct_declarator", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new declarator_astNode(":direct_declarator", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| pointer direct_declarator
 		{
