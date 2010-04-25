@@ -26,9 +26,7 @@ NvPcomp::tacTree::tacTree() {}
 NvPcomp::tacTree::~tacTree() {}
 
 void NvPcomp::tacTree::addNode(tacNode *node) {
-	vector<tacNode>::iterator it;
-	it = _tree.begin();
-	it = _tree.insert (it, *node);
+	_tree.push_back (*node);
 }
 
 void NvPcomp::tacTree::outputASM() {}

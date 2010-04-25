@@ -14,6 +14,7 @@
 
 #include <tacNode.h>
 #include <vector>
+#include <optokentypes.h>
 
 namespace NvPcomp {
 	class tacTree {

@@ -29,7 +29,7 @@ NvPcomp::tacNode::tacNode() {
 	_add3 = "NULL";
 }
 
-NvPcomp::tacNode::tacNode	(string label, string op, string add1, string 
+NvPcomp::tacNode::tacNode	(string label, int op, string add1, string 
 							add2, string add3) {
 	_label = label;
 	_op = op;

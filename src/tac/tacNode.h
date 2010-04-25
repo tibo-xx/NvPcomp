@@ -19,7 +19,7 @@ namespace NvPcomp {
 	class tacNode {
 		public:
 			tacNode();
-			tacNode(std::string label, std::string op, std::string add1,
+			tacNode(std::string label, int op, std::string add1,
 					std::string add2, std::string add3);
 			~tacNode();
 
