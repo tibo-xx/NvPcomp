@@ -22,6 +22,9 @@
 #include <location.hh>
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
+#include <symTable.h>
+#include <ast_include.h>
+#include <variableTable.h>
 
 class declarator_astNode:public astNode {
 public:
@@ -30,6 +33,9 @@ public:
 	~declarator_astNode();
 public:
 	virtual void output3AC();
+	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, std::string &error );
+private:
+	bool addType(int token_type, NvPcomp::symNode *st_node, std::string &error);
 };
 
 #endif /* DECLARATOR_ASTNODE_H_ */

@@ -210,6 +210,11 @@ function_definition
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
+			  std::string error;
+			  // get the declarator
+			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(0);			  
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
+			    NvPcomp::BParser::error(yyloc, error);
 		}
 	| declaration_specifiers declarator declaration_list compound_statement		
 		{
@@ -234,16 +239,12 @@ declaration
 			$<astval>$ = new declaration_astNode(":declaration_specifiers init_declarator_list SEMICOLON_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1); // declaration_specifiers
 			$<astval>$->addChild($<astval>2); // init_declarator_list
-			std::cout << $<astval>2->getNumberOfChildren() << endl;
 			// Assign Types to all declarations in the list
 			for (int i=0; i < $<astval>2->getNumberOfChildren(); i++)
 			{
 			  std::string error;
-			  init_declarator_astNode* node = (init_declarator_astNode*) $<astval>2->getChild(i);
-			  
-			  std::cout << "i =" << i << " Node: " << node->getString() << " of type " << node->getType() << std::endl;
-			  std::cout << " Val 1: " << $<astval>1->getString() << " of type " << $<astval>1->getType() << std::endl;
-			  
+			  // Grab each declarator node
+			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(i)->getChild(0);
 			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
 			    NvPcomp::BParser::error(yyloc, error);
 			} 
@@ -254,13 +255,14 @@ declaration_list
 	: declaration
 		{
 			REDUCTION(declaration_list:declaration)
+			$<astval>$ = new declaration_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| declaration_list declaration								
 		{
 			REDUCTION(declaration_list:declaration_list declaration)
-		/*	$<astval>$ = new astNode("declaration_list");
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2); */
+			$<astval>$ = $<astval>1;
+			$<astval>$->addChild($<astval>2);
 		}
 	;
 
@@ -274,9 +276,6 @@ declaration_specifiers
 	| storage_class_specifier declaration_specifiers
 		{
 			REDUCTION(declaration_specifiers:storage_class_specifier declaration_specifiers)
-		/*	$<astval>$ = new astNode("declaration_specifiers");
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2); */
 			$<astval>$ = $<astval>2;
 			$<astval>2->addChild($<astval>1);
 		}
@@ -289,9 +288,6 @@ declaration_specifiers
 	| type_specifier declaration_specifiers						
 		{
 			REDUCTION(declaration_specifiers:type_specifier declaration_specifiers)
-	/*		$<astval>$ = new astNode("declaration_specifiers");
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2); */
 			$<astval>$ = $<astval>2;
 			$<astval>2->addChild($<astval>1);
 		}
@@ -304,9 +300,6 @@ declaration_specifiers
 	| type_qualifier declaration_specifiers
 		{
 			REDUCTION(declaration_specifiers:type_qualifier declaration_specifiers)
-		/*	$<astval>$ = new astNode("declaration_specifiers");
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2); */
 			$<astval>$ = $<astval>2;
 			$<astval>2->addChild($<astval>1);
 		}
@@ -344,58 +337,34 @@ type_specifier
 	: VOID_TK
 		{
 			REDUCTION(type_specifier:VOID_TK)
-
-		/*	$<astval>$ = new astNode("VOID_TK", yylval.sval); */
-
-
 		}
 	| CHAR_TK
 		{
 			REDUCTION(type_specifier:CHAR_TK)
-
-		/*	$<astval>$ = new astNode("CHAR_TK", yylval.sval); */
 		}
 	| SHORT_TK
 		{
 			REDUCTION(type_specifier:SHORT_TK)
-
-		/*	$<astval>$ = new astNode("SHORT_TK", yylval.sval); */
-
 		}
 	| INT_TK
 		{
 			REDUCTION(type_specifier:INT_TK)
-
-		/*	$<astval>$ = new astNode("INT_TK", yylval.sval); */
-
 		}
 	| LONG_TK
 		{
 			REDUCTION(type_specifier:LONG_TK)
-
-		/*	$<astval>$ = new astNode("LONG_TK", yylval.sval); */
-
 		}
 	| FLOAT_TK
 		{
 			REDUCTION(type_specifier:FLOAT_TK)
-
-		/*	$<astval>$ = new astNode("FLOAT_TK", yylval.sval); */
-
 		}
 	| DOUBLE_TK
 		{
 			REDUCTION(type_specifier:DOUBLE_TK)
-
-		/*	$<astval>$ = new astNode("DOUBLE_TK", yylval.sval); */
-
 		}
 	| SIGNED_TK
 		{
 			REDUCTION(type_specifier:SIGNED_TK)
-
-		/*	$<astval>$ = new astNode("SIGNED_TK", yylval.sval); */
-
 		}
 	| UNSIGNED_TK
 		{
@@ -420,14 +389,10 @@ type_qualifier
 	: CONST_TK							
 		{
 			REDUCTION(type_qualifier:CONST_TK)
-			//~ $<astval>$ = new type_qualifier_astNode(":CONST_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
 		}
 	| VOLATILE_TK
 		{
 			REDUCTION(type_qualifier:VOLATILE_TK)
-			//~ $<astval>$ = new type_qualifier_astNode(":VOLATILE_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
 		}
 	;
 
@@ -467,14 +432,10 @@ struct_or_union
 	: STRUCT_TK
 		{
 			REDUCTION(struct_or_union:STRUCT_TK)
-			//~ $<astval>$ = new struct_or_union_astNode(":STRUCT_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
 		}
 	| UNION_TK
 		{
 			REDUCTION(struct_or_union:UNION_TK)
-			//~ $<astval>$ = new struct_or_union_astNode(":UNION_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
 		}
 	;
 
@@ -482,14 +443,13 @@ struct_declaration_list
 	: struct_declaration
 		{
 			REDUCTION(struct_declaration_list:struct_declaration)
-			//~ $<astval>$ = new struct_declaration_list_astNode(":struct_declaration", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new struct_declaration_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| struct_declaration_list struct_declaration
 		{
 			REDUCTION(struct_declaration_list:struct_declaration_list struct_declaration)
-			$<astval>$ = new struct_declaration_list_astNode(":struct_declaration_list struct_declaration", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>2);
 		}
 	;
@@ -540,27 +500,25 @@ specifier_qualifier_list
 	: type_specifier
 		{
 			REDUCTION(specifier_qualifier_list:type_specifier)
-			//~ $<astval>$ = new specifier_qualifier_list_astNode("type_specifier", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new specifier_qualifier_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| type_specifier specifier_qualifier_list
 		{
 			REDUCTION(specifier_qualifier_list:type_specifier specifier_qualifier_list)
-			$<astval>$ = new specifier_qualifier_list_astNode("type_specifier specifier_qualifier_list", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>2);
 		}
 	| type_qualifier
 		{
 			REDUCTION(specifier_qualifier_list:type_qualifier)
-			//~ $<astval>$ = new specifier_qualifier_list_astNode("type_qualifier", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new specifier_qualifier_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| type_qualifier specifier_qualifier_list
 		{
 			REDUCTION(specifier_qualifier_list:type_qualifier specifier_qualifier_list)
-			$<astval>$ = new specifier_qualifier_list_astNode("type_qualifier specifier_qualifier_list", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>2);
 		}
 	;
@@ -569,15 +527,13 @@ struct_declarator_list
 	: struct_declarator
 		{
 			REDUCTION(struct_declarator_list:struct_declarator)
-			//~ $<astval>$ = new struct_declarator_list_astNode("struct_declarator", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new struct_declarator_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| struct_declarator_list COMMA_TK struct_declarator
 		{
 			REDUCTION(struct_declarator_list:struct_declarator_list COMMA_TK struct_declarator)
-			$<astval>$ = new struct_declarator_list_astNode("struct_declarator_list COMMA_TK struct_declarator", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>3);
 		}
 	;
@@ -593,7 +549,6 @@ struct_declarator
 		{
 			REDUCTION(struct_declarator:COLON_TK constant_expression)
 			$<astval>$ = new struct_declarator_astNode("COLON_TK constant_expression", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
 	| declarator COLON_TK constant_expression
@@ -601,13 +556,13 @@ struct_declarator
 			REDUCTION(struct_declarator:declarator COLON_TK constant_expression)
 			$<astval>$ = new struct_declarator_astNode("declarator COLON_TK constant_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	;
 
+// TODO
 enum_specifier
-	: ENUM_TK OPEN_BRACE_TK scope_push	enumerator_list CLOSE_BRACE_TK
+	: ENUM_TK OPEN_BRACE_TK scope_push enumerator_list CLOSE_BRACE_TK
 		{
 			REDUCTION(enum_specifier:ENUM_TK OPEN_BRACE_TK enumerator_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
@@ -640,19 +595,18 @@ enumerator_list
 	: enumerator
 		{
 			REDUCTION(enumerator_list:enumerator)
-			//~ $<astval>$ = new enumerator_list_astNode("enumerator", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new enumerator_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| enumerator_list COMMA_TK enumerator
 		{
 			REDUCTION(enumerator_list:enumerator_list COMMA_TK enumerator)
-			$<astval>$ = new enumerator_list_astNode("enumerator_list COMMA_TK enumerator", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>3);
 		}
 	;
 
+// TODO
 enumerator
 	: identifier
 		{
@@ -723,13 +677,11 @@ direct_declarator
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)
 			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3);
 		}
 	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)
-			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK", yylloc, &acTree);
+			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK function CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -830,6 +782,11 @@ parameter_declaration
 			$<astval>$ = new parameter_declaration_astNode("declaration_specifiers declarator", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
+			  std::string error;
+			  // get the declarator
+			  declarator_astNode* node = (declarator_astNode*) $<astval>2;			  
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
+			    NvPcomp::BParser::error(yyloc, error);
 		}
 	| declaration_specifiers
 		{
@@ -1114,7 +1071,7 @@ compound_statement
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK sCLOSE_BRACE_TK", yylloc, &acTree);
 			//$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			//$<astval>$->addChild($<astval>2);
 		}
 	| OPEN_BRACE_TK scope_push statement_list CLOSE_BRACE_TK
 		{
@@ -1122,7 +1079,7 @@ compound_statement
 			SCOPE_POP()
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK statement_list CLOSE_BRACE_TK", yylloc, &acTree);
 			//$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	| OPEN_BRACE_TK scope_push declaration_list CLOSE_BRACE_TK
@@ -1131,7 +1088,7 @@ compound_statement
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
 			//$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	| OPEN_BRACE_TK scope_push declaration_list statement_list CLOSE_BRACE_TK
@@ -1140,7 +1097,7 @@ compound_statement
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK", yylloc, &acTree);
 			//$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
+			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 		}
@@ -1150,14 +1107,13 @@ statement_list
 	: statement
 		{
 			REDUCTION(statement_list:statement)
-			//~ $<astval>$ = new statement_list_astNode("statement", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
+			$<astval>$ = new statement_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
 		}
 	| statement_list statement
 		{
 			REDUCTION(statement_list:statement_list statement)
-			$<astval>$ = new statement_list_astNode("statement_list statement", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>2);
 		}
 	;
@@ -1860,7 +1816,6 @@ postfix_expression
 			REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)
 			$<astval>$ = new postfix_expression_astNode(": ( )", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
 		}
 	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK
 		{
@@ -1905,6 +1860,14 @@ primary_expression
 	: identifier
 		{
 			REDUCTION(primary_expression:identifier)
+			std::string identifier = $<astval>1->getString();
+			NvPcomp::symNode* st_node;
+			table.search(identifier, st_node, false);
+			if (!(st_node && st_node->hasType()))
+			{
+			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + identifier + "' not declared in current scope.");
+			} 
+			
 			//~ $<astval>$ = new primary_expression_astNode(":identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
@@ -1934,15 +1897,13 @@ argument_expression_list
 	: assignment_expression
 		{
 			REDUCTION(argument_expression_list:assignment_expression)
-			//~ $<astval>$ = new argument_expression_list_astNode(":assignment_expression", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);	
+			$<astval>$ = new argument_expression_list_astNode("", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);	
 		}
 	| argument_expression_list COMMA_TK assignment_expression
 		{
 			REDUCTION(argument_expression_list:argument_expression_list COMMA_TK assignment_expression)
-			$<astval>$ = new argument_expression_list_astNode(":assignment_expression_list", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);	
-			$<astval>$->addChild($<astval>2);
+			$<astval>$ = $<astval>1;
 			$<astval>$->addChild($<astval>3);
 		}
 	;

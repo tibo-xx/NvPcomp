@@ -2,11 +2,11 @@
 #define AST_INCLUDE_H_
 
 #include <translation_unit_astNode.h>
+#include <declaration_specifiers_astNode.h>
 #include <external_declaration_astNode.h>
 #include <function_definition_astNode.h>
 #include <declaration_astNode.h>
 #include <declaration_list_astNode.h>
-#include <declaration_specifiers_astNode.h>
 #include <storage_class_specifier_astNode.h>
 #include <type_specifier_astNode.h>
 #include <type_qualifier_astNode.h>
