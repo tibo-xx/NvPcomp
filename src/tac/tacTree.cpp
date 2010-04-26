@@ -21,12 +21,64 @@
 
 using namespace std;
 
-NvPcomp::tacTree::tacTree() {}
+NvPcomp::tacTree::tacTree() {
+	translateOps.push_back ( "ADD" ); 		//258	
+	translateOps.push_back ( "SUB" ); 		//259		
+	translateOps.push_back ( "MULT" ); 		//260	
+	translateOps.push_back ( "DIV" ); 		//261
+	translateOps.push_back ( "NEG" ); 		//262
+	translateOps.push_back ( "NOT" ); 		//263	
+	translateOps.push_back ( "EQ" ); 		//264
+	translateOps.push_back ( "GT" ); 		//265
+	translateOps.push_back ( "LT" ); 		//266
+	translateOps.push_back ( "GE" ); 		//267
+	translateOps.push_back ( "LE" ); 		//268
+	translateOps.push_back ( "NE" ); 		//269
+	translateOps.push_back ( "ASSIGN" ); 	//270
+	translateOps.push_back ( "LABEL" ); 	//271
+	translateOps.push_back ( "BR" ); 		//272
+	translateOps.push_back ( "BREQ" ); 		//273
+	translateOps.push_back ( "BRGT" ); 		//274
+	translateOps.push_back ( "BRLT" ); 		//275
+	translateOps.push_back ( "BRGE" ); 		//276
+	translateOps.push_back ( "BRLE" ); 		//277
+	translateOps.push_back ( "BRNE" ); 		//278
+	translateOps.push_back ( "HALT" ); 		//279
+	translateOps.push_back ( "ARGS" ); 		//280
+	translateOps.push_back ( "REFOUT" ); 	//281
+	translateOps.push_back ( "VALOUT" ); 	//282
+	translateOps.push_back ( "CALL" ); 		//283
+	translateOps.push_back ( "PROCENTRY" );	//284
+	translateOps.push_back ( "ENDPROC" ); 	//285
+	translateOps.push_back ( "RETURN" ); 	//286
+	translateOps.push_back ( "BOUND" ); 	//287
+	translateOps.push_back ( "ADDR" ); 		//288	
+	translateOps.push_back ( "GLOBAL" ); 	//289
+	translateOps.push_back ( "STRING" ); 	//290
+	translateOps.push_back ( "COMMENT" ); 	//291
+ }
 
 NvPcomp::tacTree::~tacTree() {}
 
 void NvPcomp::tacTree::addNode(tacNode *node) {
 	_tree.push_back (*node);
+}
+void NvPcomp::tacTree::displayTree() {
+	vector<tacNode>::iterator it;
+	for(it = _tree.begin(); it < _tree.end(); it++) 
+		cout	<< it->_label				<< "\t"	
+				<< getOp(it->_op)			<< "\t"	
+				<< it->_add1 				<< "\t"	
+				<< it->_add2				<< "\t"	
+				<< it->_add3 				<< "\t"	
+				<< it->_loc					<<endl;
+}
+
+string NvPcomp::tacTree::getOp(int op) {
+	if ( (op >= 258) && (op <= 291) )
+		return translateOps[op-258];
+	else
+		return "error";
 }
 
 void NvPcomp::tacTree::outputASM() {}

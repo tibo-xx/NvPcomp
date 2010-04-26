@@ -15,6 +15,7 @@
 #include <tacNode.h>
 #include <vector>
 #include <optokentypes.h>
+#include <string>
 
 namespace NvPcomp {
 	class tacTree {
@@ -25,8 +26,12 @@ namespace NvPcomp {
 		public:
 			void addNode(tacNode *node);
 			void outputASM();
+			// For now, just displaying...will add logger later
+			void displayTree();
 		private:
 			std::vector<tacNode> _tree;
+			std::string getOp(int op);
+			std::vector<std::string> translateOps;
 	};
 };
 
