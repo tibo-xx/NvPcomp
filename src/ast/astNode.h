@@ -45,6 +45,8 @@ class astNode {
 		NvPcomp::location getLocation();
 		
 		NvPcomp::tacTree *gettacTree();
+		
+		std::string ret3ac;
 
 	protected:
 		// Node string value

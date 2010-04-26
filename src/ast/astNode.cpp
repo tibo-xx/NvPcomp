@@ -25,12 +25,14 @@ using namespace std;
 
 astNode::astNode() {
 	nodeString = "empty";
+	ret3ac = "";
 }
 
 astNode::astNode(string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree) {
 	loc = _loc;
 	nodeString = _nodeString;
 	acTree = tree;
+	ret3ac = "";
 }
 
 astNode::~astNode() {}

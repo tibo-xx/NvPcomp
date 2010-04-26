@@ -40,23 +40,22 @@ void additive_expression_astNode::output3AC() {
 	  getChild(2)->output3AC();
 	  NvPcomp::tacNode * ac_node;
 	  
-	  op1 = getChild(2)->getString();
-	  op2 = getChild(0)->getString();
+	  op1 = getChild(2)->ret3ac;
+	  op2 = getChild(0)->ret3ac;
 	  dst = gettacTree()->asTree->genReg();
 	  
 	  switch(((leaf_astNode*) getChild(1))->getTokenType())
 	  {
 	    case PLUS_TK:
-	      cout << "\t" << "\tOP_ADD   " << "\t" << op1 << "\t" << op2 << "\t" << dst << "\t" << loc << endl;
 	      ac_node = new NvPcomp::tacNode("", OP_ADD, op1, op2, dst, loc);
 	      break;
 	    case MINUS_TK:
-	      cout << "\t" << "\tOP_SUB   " << "\t" << op1 << "\t" << op2 << "\t" << dst << "\t" << loc << endl;
 	      ac_node = new NvPcomp::tacNode("", OP_SUB, op1, op2, dst, loc);
 	      break;	      
 	    default:
 	      break;
 	  }
+	  ret3ac = dst;
 	  acTree->addNode(ac_node);	  
 	
 }

@@ -45,7 +45,6 @@ void postfix_expression_astNode::output3AC() {
 	  
 	  lhs = getChild(0)->getString();	 
 	  
-	  cout << "\t" << "\tOP_CALL  " << "\t" <<  lhs << "\t" << rhs << "\t" << "\t" << loc << endl;
 	  ac_node = new NvPcomp::tacNode("", OP_CALL, lhs, "", "", loc);
 
 	  acTree->addNode(ac_node);	  
