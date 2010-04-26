@@ -25,6 +25,7 @@ ast::ast(NvPcomp::tacTree *tree) {
 	root = new root_astNode("root");
 	acTree = tree;
 	_numLabels = 0;
+	_numReg = 0;
 }
 
 ast::~ast() {
@@ -51,3 +52,10 @@ string ast::genLabel() {
 	return retString.str();
 }
 
+string ast::genReg() {
+	stringstream retString;
+	retString << "A" << _numReg;
+	_numLabels++;
+	
+	return retString.str();
+}

@@ -10,93 +10,47 @@
 #define OPTOKENTYPES_H_
 
  enum optokentype {
-  OP_AUTO_TK = 258,
-  OP_BREAK_TK = 259,
-  OP_CASE_TK = 260,
-  OP_CHAR_TK = 261,
-  OP_CONST_TK = 262,
-  OP_CONTINUE_TK = 263,
-  OP_DEFAULT_TK = 264,
-  OP_DO_TK = 265,
-  OP_DOUBLE_TK = 266,
-  OP_ELSE_TK = 267,
-  OP_ENUM_TK = 268,
-  OP_EXTERN_TK = 269,
-  OP_FLOAT_TK = 270,
-  OP_FOR_TK = 271,
-  OP_GOTO_TK = 272,
-  OP_IF_TK = 273,
-  OP_INT_TK = 274,
-  OP_LONG_TK = 275,
-  OP_REGISTER_TK = 276,
-  OP_RETURN_TK = 277,
-  OP_SHORT_TK = 278,
-  OP_SIGNED_TK = 279,
-  OP_SIZEOF_TK = 280,
-  OP_STATIC_TK = 281,
-  OP_STRUCT_TK = 282,
-  OP_SWITCH_TK = 283,
-  OP_TYPEDEF_TK = 284,
-  OP_UNION_TK = 285,
-  OP_UNSIGNED_TK = 286,
-  OP_VOID_TK = 287,
-  OP_VOLATILE_TK = 288,
-  OP_WHILE_TK = 289,
-  OP_ERROR_TK = 290,
-  OP_RANGE_TK = 291,
-  OP_IDENTIFIER_TK = 292,
-  OP_INTEGER_CONSTANT_TK = 293,
-  OP_FLOATING_CONSTANT_TK = 294,
-  OP_CHARACTER_CONSTANT_TK = 295,
-  OP_ENUMERATION_CONSTANT_TK = 296,
-  OP_STRING_LITERAL_TK = 297,
-  OP_TYPEDEF_NAME_TK = 298,
-  OP_OPEN_BRACE_TK = 299,
-  OP_CLOSE_BRACE_TK = 300,
-  OP_OPEN_PAREN_TK = 301,
-  OP_CLOSE_PAREN_TK = 302,
-  OP_SEMICOLON_TK = 303,
-  OP_OPEN_BRACK_TK = 304,
-  OP_CLOSE_BRACK_TK = 305,
-  OP_COMMA_TK = 306,
-  OP_ELIPSIS_TK = 307,
-  OP_BIT_NOT_TK = 308,
-  OP_BIT_AND_TK = 309,
-  OP_BIT_OR_TK = 310,
-  OP_BIT_XOR_TK = 311,
-  OP_STAR_TK = 312,
-  OP_DIV_TK = 313,
-  OP_PLUS_TK = 314,
-  OP_MINUS_TK = 315,
-  OP_MOD_TK = 316,
-  OP_LT_TK = 317,
-  OP_LE_OP_TK = 318,
-  OP_GT_TK = 319,
-  OP_GE_OP_TK = 320,
-  OP_NOT_TK = 321,
-  OP_AND_OP_TK = 322,
-  OP_OR_OP_TK = 323,
-  OP_LEFT_OP_TK = 324,
-  OP_RIGHT_OP_TK = 325,
-  OP_EQUAL_TK = 326,
-  OP_ADD_ASSIGN_TK = 327,
-  OP_SUB_ASSIGN_TK = 328,
-  OP_MOD_ASSIGN_TK = 329,
-  OP_MUL_ASSIGN_TK = 330,
-  OP_DIV_ASSIGN_TK = 331,
-  OP_LEFT_ASSIGN_TK = 332,
-  OP_RIGHT_ASSIGN_TK = 333,
-  OP_AND_ASSIGN_TK = 334,
-  OP_XOR_ASSIGN_TK = 335,
-  OP_OR_ASSIGN_TK = 336,
-  OP_QUESTION_TK = 337,
-  OP_COLON_TK = 338,
-  OP_INC_OP_TK = 339,
-  OP_DEC_OP_TK = 340,
-  OP_PTR_OP_TK = 341,
-  OP_PERIOD_TK = 342,
-  OP_EQ_OP_TK = 343,
-  OP_NE_OP_TK = 344
+  // Arithmetic Operations	 
+  OP_ADD = 258, 		// op3 := op1 + op2
+  OP_SUB = 259,			// op3 := op1 - op2
+  OP_MULT = 260,		// op3 := op1 * op2
+  OP_DIV  = 261,		// op3 := op1DIVop2
+  OP_NEG = 262,			// op3 := -op1
+  // Logical Operations
+  OP_NOT = 263,			// if(op1 <> 0)op3 := 0 else op3 := 1
+  // Relational Operations
+  OP_EQ = 264,			// op3 := op1 = op2
+  OP_GT = 265,			// op3 := op1 > op2
+  OP_LT = 266,			// op3 := op1 < op2
+  OP_GE = 267,			// op3 := op1 >= op2
+  OP_LE = 268,			// op3 := op1 <= op2
+  OP_NE = 269,			// op3 := op1 <> op2
+  // Assignment
+  OP_ASSIGN = 270,      // op3 := op1
+  // Control Forms
+  OP_LABEL = 271,		// The next statement is labeled with op1 
+  OP_BR = 272,			// goto op3
+  OP_BREQ = 273,		// if(op1 = op2) goto op3
+  OP_BRGT = 274,		// if(op1 > op2) goto op3
+  OP_BRLT = 275,		// if(op1 < op2) goto op3
+  OP_BRGE = 276,		// if(op1 >= op2) goto op3
+  OP_BRLE = 277,		// if(op1 <= op2) goto op3
+  OP_BRNE = 278,		// if(op1 <> op2) goto op3
+  OP_HALT = 279,		// Immediately halt execution
+  // Procedure Call Operations
+  OP_ARGS = 280,		// The next call requires op1 arguments
+  OP_REFOUT = 281,		// Pass op1 by reference
+  OP_VALOUT = 282,		// Pass op2 by value
+  OP_CALL = 283,		// Call the procedure named op1
+  OP_PROCENTRY = 284,	// Mark beginning of the procedure named op1
+  OP_ENDPROC = 285,		// Mark the end of the current procedure
+  OP_RETURN = 286,		// Return control to the caller
+  // Additional Statements
+  OP_BOUND = 287,		// if(op3 < op1)or(op3 > op2) then HALT
+  OP_ADDR = 288,		// op3 := address of op1
+  OP_GLOBAL = 289,		// Declare op1 as a global of size op2
+  OP_STRING = 290,		// Associate string op1 with label op2
+  OP_COMMENT = 291,		// op1 is a comment
 };
 
 #endif /* OPTOKENTYPES_H_ */

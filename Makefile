@@ -69,6 +69,8 @@ TEST_OBJS += ./src/test/unit_test/symNodeTest.o
 TEST_OBJS += ./src/test/unit_test/symTableTest.o
 TEST_OBJS += ./src/test/unit_test/variableTableTest.o
 TEST_OBJS += ./src/test/unit_test/astInfoTableTest.o
+TEST_OBJS += ./src/test/unit_test/tacNodeTest.o
+TEST_OBJS += ./src/test/unit_test/tacTreeTest.o
 TEST_OBJS += $(OBJS)
 
 TEST_LIBS = $(LIBS) -lcppunit -ldl

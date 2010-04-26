@@ -13,6 +13,7 @@
 #define TACNODE_H_
 
 #include <string>
+#include <location.hh>
 
 
 namespace NvPcomp {
@@ -20,17 +21,20 @@ namespace NvPcomp {
 		public:
 			tacNode();
 			tacNode(std::string label, int op, std::string add1,
-					std::string add2, std::string add3);
+					std::string add2, std::string add3, 
+					NvPcomp::location loc);
 			~tacNode();
 
 		public:
 			virtual std::string outputASM();
-		private:
+		//private:
 			std::string _label;
-			std::string _op;
+			int _op;
 			std::string _add1;
 			std::string _add2;
 			std::string _add3;
+			// Location
+			NvPcomp::location _loc;
 	};
 };
 

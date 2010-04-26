@@ -26,6 +26,7 @@
 #include <NvPcomp_logger.h>
 #include <astInfoTable.h>
 #include <variableTable.h>
+#include <optokentypes.h>
 
 typedef struct functionDefinition {
     astNode *declaration;
@@ -51,6 +52,10 @@ class ast {
 		int _numLabels;
 		// Create labels
 		std::string genLabel ();
+		// Temporary register generator (for testing)
+		std::string genReg ();
+		// Temporary register count
+		int _numReg;
 };
 
 #endif /* AST_H_ */

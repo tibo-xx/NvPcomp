@@ -23,19 +23,20 @@ using namespace std;
 
 NvPcomp::tacNode::tacNode() {
 	_label = "NULL";
-	_op = "NULL";
+	_op = 0;
 	_add1 = "NULL";
 	_add2 = "NULL";
 	_add3 = "NULL";
 }
 
 NvPcomp::tacNode::tacNode	(string label, int op, string add1, string 
-							add2, string add3) {
-	_label = label;
-	_op = op;
-	_add1 = add1;
-	_add2 = add2;
-	_add3 = add3;
+							add2, string add3, NvPcomp::location loc) {
+	_label 	= label;
+	_op 	= op;
+	_add1 	= add1;
+	_add2 	= add2;
+	_add3 	= add3;
+	_loc 	= loc;
 }
 
 NvPcomp::tacNode::~tacNode() {}
