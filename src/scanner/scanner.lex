@@ -206,11 +206,12 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string 
 	//tempNode->addType((int)prev_token);
 	/******************************************************************/	
 	InsertResult result = table->insert(key, tempNode);
+        std::cout << "inserting " << key << std::endl;
 
 	if(result == INSERT_SUCCESS_W_SHADOW) {
 		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
-		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
-		RETURN(token::ERROR_TK);		
+		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^Warning: Variable redefined " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;
+		RETURN(token::IDENTIFIER_TK);
 	} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
 		LOG(INFOLog, logLEVEL1) << buffer.bufferGetLineNoCR(yylineno, yylineno);
 		LOG(INFOLog, logLEVEL1) << std::string(yylloc->begin.column - 1, ' ') << "^-failed to insert " << yytext << " on line: " << yylloc->begin.line << " at position: " << yylloc->begin.column;

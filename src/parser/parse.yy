@@ -206,6 +206,7 @@ function_definition
 	| declaration_specifiers declarator compound_statement						
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator compound_statement)
+			SCOPE_POP()
 			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator compound_statement", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
@@ -672,22 +673,22 @@ direct_declarator
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 		}
-	| direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK
+	| direct_declarator OPEN_PAREN_TK scope_push CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)
 			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
-	| direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK
+	| direct_declarator OPEN_PAREN_TK scope_push parameter_type_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)
 			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK function CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
+			$<astval>$->addChild($<astval>5);
 		}
-	| direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK
+	| direct_declarator OPEN_PAREN_TK scope_push identifier_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)
 			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK", yylloc, &acTree);
@@ -748,6 +749,7 @@ parameter_type_list
 			//~ $<astval>$ = new parameter_type_list_astNode("parameter_list", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
+// UNSUPPORTED !!!
 	| parameter_list COMMA_TK ELIPSIS_TK
 		{
 			REDUCTION(parameter_type_list:parameter_list COMMA_TK ELIPSIS_TK)
@@ -770,7 +772,6 @@ parameter_list
 			REDUCTION(parameter_list:parameter_list COMMA_TK parameter_declaration)
 			$<astval>$ = new parameter_list_astNode("parameter_list COMMA_TK parameter_declaration", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
-			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	;
