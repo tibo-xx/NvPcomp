@@ -22,14 +22,20 @@
 #include <location.hh>
 #include <tacTree.h>
 #include <NvPcomp_logger.h>
+#include <symTable.h>
+#include <ast_include.h>
+#include <variableTable.h>
+#include <astInfoTable.h>
 
 class function_definition_astNode:public astNode {
 public:
 	function_definition_astNode();
-	function_definition_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree);
+	function_definition_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree, NvPcomp::symTable *table);
 	~function_definition_astNode();
 public:
-	virtual void output3AC();
+	void output3AC();
+private:
+	NvPcomp::symTable *table;
 };
 
 #endif /* FUNCTION_DEFINITION_ASTNODE_H_ */

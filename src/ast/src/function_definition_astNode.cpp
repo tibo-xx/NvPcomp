@@ -27,13 +27,21 @@ function_definition_astNode::function_definition_astNode()
 	nodeType = "function_definition";
 }
 
-function_definition_astNode::function_definition_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree)
+function_definition_astNode::function_definition_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree, NvPcomp::symTable *_table)
 	:astNode(_nodeString, _loc, tree) {
 	nodeType = "function_definition";
+	table = _table;
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
 
 void function_definition_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	if (nodeString == "declarator declaration_list compound_statement")
+	{
+	  // get the declarator
+	  declarator_astNode* node = (declarator_astNode*) getChild(2)->getChild(0);
+	  // get our name for use as label
+	  std::string label = table->search_top(node->getName())->getMangledName();
+	  cout << label << endl;
+	}
 }
 

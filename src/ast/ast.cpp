@@ -44,6 +44,10 @@ variableTable ast::getVariableTable() {
 	return variables;
 }
 
+astInfoTable<functionDefinition> *ast::getFunctionTable() {
+	return &functions;
+}
+
 string ast::genLabel() {
 	stringstream retString;
 	retString << "L" << _numLabels;

@@ -28,10 +28,6 @@
 #include <variableTable.h>
 #include <optokentypes.h>
 
-typedef struct functionDefinition {
-    astNode *declaration;
-    astNode *definition;    
-} functionDefinition;
 
 class ast {
     public:
@@ -40,6 +36,7 @@ class ast {
         astNode *getRoot();
         NvPcomp::tacTree *gettacTree();
         variableTable getVariableTable();
+	astInfoTable<functionDefinition> *getFunctionTable();
     private:
         astNode *root;
         // tacTree

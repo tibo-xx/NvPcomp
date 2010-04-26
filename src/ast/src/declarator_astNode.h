@@ -25,6 +25,7 @@
 #include <symTable.h>
 #include <ast_include.h>
 #include <variableTable.h>
+#include <astInfoTable.h>
 
 class declarator_astNode:public astNode {
 public:
@@ -33,7 +34,8 @@ public:
 	~declarator_astNode();
 public:
 	virtual void output3AC();
-	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, std::string &error );
+	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, std::string &error, astInfoTable<functionDefinition> *f_table);
+	std::string getName();
 private:
 	bool addType(int token_type, NvPcomp::symNode *st_node, std::string &error);
 };

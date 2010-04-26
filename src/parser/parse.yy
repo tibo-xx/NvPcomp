@@ -191,14 +191,14 @@ function_definition
 	: declarator compound_statement	
 		{
 			REDUCTION(function_definition:declarator compound_statement)
-			$<astval>$ = new function_definition_astNode("declarator compound_statement", yylloc, &acTree);
+			$<astval>$ = new function_definition_astNode("declarator compound_statement", yylloc, &acTree, &table);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
 	| declarator declaration_list compound_statement							
 		{
 			REDUCTION(function_definition:declarator declaration_list compound_statement)
-			$<astval>$ = new function_definition_astNode("declarator declaration_list compound_statement", yylloc, &acTree);
+			$<astval>$ = new function_definition_astNode("declarator declaration_list compound_statement", yylloc, &acTree, &table);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -207,20 +207,22 @@ function_definition
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator compound_statement)
 			SCOPE_POP()
-			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator compound_statement", yylloc, &acTree);
+			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator compound_statement", yylloc, &acTree, &table);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 			  std::string error;
 			  // get the declarator
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(0);			  
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, asTree.getFunctionTable()))
 			    NvPcomp::BParser::error(yyloc, error);
+
+			  
 		}
 	| declaration_specifiers declarator declaration_list compound_statement		
 		{
 			REDUCTION(function_definition:declaration_specifiers declarator declaration_list compound_statement)
-			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator declaration_list compound_statement", yylloc, &acTree);
+			$<astval>$ = new function_definition_astNode("declaration_specifiers declarator declaration_list compound_statement", yylloc, &acTree, &table);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -246,7 +248,7 @@ declaration
 			  std::string error;
 			  // Grab each declarator node
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(i)->getChild(0);
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, NULL))
 			    NvPcomp::BParser::error(yyloc, error);
 			} 
 		}
@@ -786,7 +788,7 @@ parameter_declaration
 			  std::string error;
 			  // get the declarator
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2;			  
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, NULL))
 			    NvPcomp::BParser::error(yyloc, error);
 		}
 	| declaration_specifiers

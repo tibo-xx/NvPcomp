@@ -21,6 +21,12 @@
 using namespace std;
 #define ASTINFO_MAXNAMELENGTH	8
 
+typedef struct functionDefinition {
+    astNode *declaration;
+    astNode *definition;    
+} functionDefinition;
+
+
 template<typename OBJTYPE>
 class astInfoTable {
 protected:

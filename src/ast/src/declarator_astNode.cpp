@@ -37,7 +37,19 @@ void declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
-bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, string &error ) {
+std::string declarator_astNode::getName()
+{
+	string identifier;
+	if (getString() == ":pointer direct_declarator")
+	{
+	  identifier = getChild(1)->getString();
+	}
+	else
+	  identifier = getChild(0)->getString();
+	return identifier;
+}
+
+bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, string &error, astInfoTable<functionDefinition> *f_table) {
 
 	string identifier;
 	bool is_pointer = false;
@@ -50,6 +62,11 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	  identifier = getChild(0)->getString();
 
 	NvPcomp::symNode* st_node = table->search_top(identifier);
+	if (!st_node)
+	{
+	  error = "SERIOUS ERROR: '" + identifier + "' not found in symbol table";
+	  return false;
+	} 	  
         if (st_node->hasType())
 	{
 	  error = "SYNTAX ERROR: Redeclaration of '" + identifier + "'";
@@ -99,8 +116,16 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	    }
 	  }	 
 	}
-	variableInfo new_var;
-	st_node->setMangledName(v_table->insert(identifier, &new_var));
+	if (f_table)
+	{
+	  functionDefinition new_func;
+	  st_node->setMangledName(f_table->insert(identifier, &new_func));	  
+	}
+	else
+	{
+	  variableInfo new_var;
+	  st_node->setMangledName(v_table->insert(identifier, &new_var));
+	}
 	return true;
 }
 
