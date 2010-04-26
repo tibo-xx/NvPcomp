@@ -37,6 +37,10 @@ class ast {
         NvPcomp::tacTree *gettacTree();
         variableTable getVariableTable();
 	astInfoTable<functionDefinition> *getFunctionTable();
+		// Create labels
+		std::string genLabel ();
+		// Temporary register generator (for testing)
+		std::string genReg ();
     private:
         astNode *root;
         // tacTree
@@ -47,10 +51,6 @@ class ast {
         astInfoTable<functionDefinition> functions;
 		// Label count
 		int _numLabels;
-		// Create labels
-		std::string genLabel ();
-		// Temporary register generator (for testing)
-		std::string genReg ();
 		// Temporary register count
 		int _numReg;
 };

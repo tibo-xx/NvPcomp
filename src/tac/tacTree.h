@@ -17,6 +17,8 @@
 #include <optokentypes.h>
 #include <string>
 
+class ast;
+
 namespace NvPcomp {
 	class tacTree {
 
@@ -26,8 +28,8 @@ namespace NvPcomp {
 		public:
 			void addNode(tacNode *node);
 			void outputASM();
-			// For now, just displaying...will add logger later
 			void displayTree();
+			ast* asTree;
 		private:
 			std::vector<tacNode> _tree;
 			std::string getOp(int op);

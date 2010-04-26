@@ -24,6 +24,7 @@ using namespace std;
 ast::ast(NvPcomp::tacTree *tree) {
 	root = new root_astNode("root");
 	acTree = tree;
+	tree->asTree = this;
 	_numLabels = 0;
 	_numReg = 0;
 }
@@ -59,7 +60,7 @@ string ast::genLabel() {
 string ast::genReg() {
 	stringstream retString;
 	retString << "A" << _numReg;
-	_numLabels++;
+	_numReg++;
 	
 	return retString.str();
 }

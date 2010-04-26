@@ -1819,13 +1819,13 @@ postfix_expression
 	| postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK)
-			$<astval>$ = new postfix_expression_astNode(": ( )", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	| postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK)
-			$<astval>$ = new postfix_expression_astNode(":argument_expression_list", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1834,7 +1834,7 @@ postfix_expression
 	| postfix_expression PERIOD_TK identifier
 		{
 			REDUCTION(postfix_expression:postfix_expression PERIOD_TK identifier)
-			$<astval>$ = new postfix_expression_astNode(":period_operator", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression PERIOD_TK identifier", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);	         
 		}

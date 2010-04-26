@@ -34,6 +34,21 @@ postfix_expression_astNode::postfix_expression_astNode(std::string _nodeString, 
 }
 
 void postfix_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+
+	// function call
+	if (nodeString == "postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK")
+	{
+	  std::string lhs = "",rhs = "";
+	  getChild(0)->output3AC();
+	  getChild(2)->output3AC();
+	  NvPcomp::tacNode * ac_node;
+	  
+	  lhs = getChild(0)->getString();	 
+	  
+	  cout << "\t" << "\tOP_CALL  " << "\t" <<  lhs << "\t" << rhs << "\t" << "\t" << loc << endl;
+	  ac_node = new NvPcomp::tacNode("", OP_CALL, lhs, "", "", loc);
+
+	  acTree->addNode(ac_node);	  
+	}
 }
 

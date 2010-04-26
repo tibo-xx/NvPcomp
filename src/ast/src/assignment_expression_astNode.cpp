@@ -36,14 +36,19 @@ assignment_expression_astNode::assignment_expression_astNode(std::string _nodeSt
 void assignment_expression_astNode::output3AC() {
 	if (nodeString == "unary_expression assignment_operator assignment_expression")
 	{
+	  std::string lhs = "lhs",rhs = "rhs";
 	  getChild(0)->output3AC();
 	  getChild(2)->output3AC();
 	  NvPcomp::tacNode * ac_node;
 	  
+	  rhs = getChild(2)->getString();
+	  lhs = getChild(0)->getString();
+	  
 	  switch(((leaf_astNode*) getChild(1))->getTokenType())
 	  {
 	    case EQUAL_TK:
-	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, "LHS", "RHS", "", loc);
+	      cout << "\t" << "\tOP_ASSIGN" << "\t" << rhs << "\t" << "" << "\t" << lhs << "\t" << loc << endl;
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, rhs, "", lhs, loc);
 	      break;
 	    default:
 	      break;

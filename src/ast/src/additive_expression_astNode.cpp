@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <additive_expression_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -34,6 +35,29 @@ additive_expression_astNode::additive_expression_astNode(std::string _nodeString
 }
 
 void additive_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	  std::string op1 = "op1", op2 = "op2", dst = "dst";
+	  getChild(0)->output3AC();
+	  getChild(2)->output3AC();
+	  NvPcomp::tacNode * ac_node;
+	  
+	  op1 = getChild(2)->getString();
+	  op2 = getChild(0)->getString();
+	  dst = gettacTree()->asTree->genReg();
+	  
+	  switch(((leaf_astNode*) getChild(1))->getTokenType())
+	  {
+	    case PLUS_TK:
+	      cout << "\t" << "\tOP_ADD   " << "\t" << op1 << "\t" << op2 << "\t" << dst << "\t" << loc << endl;
+	      ac_node = new NvPcomp::tacNode("", OP_ADD, op1, op2, dst, loc);
+	      break;
+	    case MINUS_TK:
+	      cout << "\t" << "\tOP_SUB   " << "\t" << op1 << "\t" << op2 << "\t" << dst << "\t" << loc << endl;
+	      ac_node = new NvPcomp::tacNode("", OP_SUB, op1, op2, dst, loc);
+	      break;	      
+	    default:
+	      break;
+	  }
+	  acTree->addNode(ac_node);	  
+	
 }
 

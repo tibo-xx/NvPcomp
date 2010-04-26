@@ -35,7 +35,6 @@ leaf_astNode::leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPc
 }
 
 void leaf_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
 int leaf_astNode::getTokenType() {
