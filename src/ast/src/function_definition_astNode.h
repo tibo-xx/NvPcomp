@@ -26,6 +26,7 @@
 #include <ast_include.h>
 #include <variableTable.h>
 #include <astInfoTable.h>
+#include <optokentypes.h>
 
 class function_definition_astNode:public astNode {
 public:
@@ -34,8 +35,10 @@ public:
 	~function_definition_astNode();
 public:
 	void output3AC();
+	std::string name;
 private:
 	NvPcomp::symTable *table;
+	
 };
 
 #endif /* FUNCTION_DEFINITION_ASTNODE_H_ */

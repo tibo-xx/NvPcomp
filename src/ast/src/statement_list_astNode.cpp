@@ -34,6 +34,7 @@ statement_list_astNode::statement_list_astNode(std::string _nodeString, NvPcomp:
 }
 
 void statement_list_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	for (int i = 0; i < getNumberOfChildren(); i ++)
+	  getChild(i)->output3AC();
 }
 

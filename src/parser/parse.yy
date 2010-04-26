@@ -216,6 +216,8 @@ function_definition
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(0);			  
 			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, asTree.getFunctionTable()))
 			    NvPcomp::BParser::error(yyloc, error);
+			  
+			  ((function_definition_astNode*) $<astval>$)->name = table.search_top(node->getName())->getMangledName();
 
 			  
 		}

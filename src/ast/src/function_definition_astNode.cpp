@@ -35,13 +35,11 @@ function_definition_astNode::function_definition_astNode(std::string _nodeString
 }
 
 void function_definition_astNode::output3AC() {
-	if (nodeString == "declarator declaration_list compound_statement")
+	if (nodeString == "declaration_specifiers declarator compound_statement")
 	{
-	  // get the declarator
-	  declarator_astNode* node = (declarator_astNode*) getChild(2)->getChild(0);
-	  // get our name for use as label
-	  std::string label = table->search_top(node->getName())->getMangledName();
-	  cout << label << endl;
+ 	  NvPcomp::tacNode * ac_node = new NvPcomp::tacNode("", OP_LABEL, name, "", "", loc);
+	  acTree->addNode(ac_node);	  
+	  getChild(2)->output3AC();
 	}
 }
 

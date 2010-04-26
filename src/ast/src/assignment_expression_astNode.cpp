@@ -34,6 +34,21 @@ assignment_expression_astNode::assignment_expression_astNode(std::string _nodeSt
 }
 
 void assignment_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	if (nodeString == "unary_expression assignment_operator assignment_expression")
+	{
+	  getChild(0)->output3AC();
+	  getChild(2)->output3AC();
+	  NvPcomp::tacNode * ac_node;
+	  
+	  switch(((leaf_astNode*) getChild(1))->getTokenType())
+	  {
+	    case EQUAL_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, "LHS", "RHS", "", loc);
+	      break;
+	    default:
+	      break;
+	  }
+	  acTree->addNode(ac_node);	  
+	}
 }
 

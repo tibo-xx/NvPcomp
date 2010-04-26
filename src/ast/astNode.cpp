@@ -47,7 +47,7 @@ void astNode::addChild(astNode* child)
 
 astNode* astNode::getChild(int child_index)
 {
-        return children[child_index];
+        return children.at(child_index);
 }
 
 int astNode::getNumberOfChildren()

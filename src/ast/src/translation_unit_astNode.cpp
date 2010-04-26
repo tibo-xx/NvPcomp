@@ -34,6 +34,10 @@ translation_unit_astNode::translation_unit_astNode(std::string _nodeString, NvPc
 }
 
 void translation_unit_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	for (int i = 0; i < getNumberOfChildren(); i ++)
+	{
+	  cout << i << endl;
+	  getChild(i)->output3AC();
+	}
 }
 
