@@ -40,7 +40,7 @@ void declarator_astNode::output3AC() {
 std::string declarator_astNode::getName()
 {
 	string identifier;
-	if (getString() == ":pointer direct_declarator")
+	if (getString() == "pointer direct_declarator")
 	{
 	  identifier = getChild(1)->getString();
 	}
@@ -53,13 +53,15 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 
 	string identifier;
 	bool is_pointer = false;
-	if (getString() == ":pointer direct_declarator")
+	if (getString() == "pointer direct_declarator")
 	{
 	  identifier = getChild(1)->getString();
 	  is_pointer = true;
 	}
 	else
 	  identifier = getChild(0)->getString();
+
+	ret3ac = identifier;
 
 	NvPcomp::symNode* st_node = table->search_top(identifier);
 	if (!st_node)
@@ -99,7 +101,7 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	{
 	  for (int i = 0; i < getChild(0)->getNumberOfChildren(); i ++)
 	  {
-	    if (getChild(0)->getChild(i)->getString() == ":type_qualifier")
+	    if (getChild(0)->getChild(i)->getString() == "type_qualifier")
 	    {
 	      for (int j = 0; j < getChild(0)->getChild(i)->getNumberOfChildren(); j ++)
 	      {

@@ -55,6 +55,24 @@ void assignment_expression_astNode::output3AC() {
 	  acTree->addNode(ac_node);	  
 	  ret3ac = lhs;
 	}
-	
+	else if (nodeString == "declarator EQUAL_TK initializer")
+	{
+	  std::string lhs = "lhs",rhs = "rhs";
+	  getChild(2)->output3AC();
+	  NvPcomp::tacNode * ac_node;
+	  
+	  rhs = getChild(2)->ret3ac;
+	  lhs = getChild(0)->ret3ac;
+	  
+	  switch(((leaf_astNode*) getChild(1))->getTokenType())
+	  {
+	    case EQUAL_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, rhs, "", lhs, loc);
+	      break;
+	    default:
+	      break;
+	  }
+	  acTree->addNode(ac_node);	  
+	}
 }
 

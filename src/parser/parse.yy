@@ -484,8 +484,9 @@ init_declarator
 	| declarator EQUAL_TK initializer		
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
-			$<astval>$ = new init_declarator_astNode("declarator EQUAL_TK initializer", yylloc, &acTree);
+			$<astval>$ = new assignment_expression_astNode("declarator EQUAL_TK initializer", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	;
