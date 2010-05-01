@@ -1154,6 +1154,8 @@ iteration_statement
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 			$<astval>$->addChild($<astval>5);    
+			((iteration_statement_astNode*)$<astval>$)->e2_child = 2;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 4;
 	     }
 	| DO_TK statement WHILE_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK SEMICOLON_TK
 		{
@@ -1177,7 +1179,8 @@ iteration_statement
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 			$<astval>$->addChild($<astval>5);
-			$<astval>$->addChild($<astval>6);    
+			$<astval>$->addChild($<astval>6);   
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 5;
 	    }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement							
 		{
@@ -1190,6 +1193,8 @@ iteration_statement
 			$<astval>$->addChild($<astval>5);
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
+			((iteration_statement_astNode*)$<astval>$)->e3_child = 4;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 6;
          }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
@@ -1202,6 +1207,8 @@ iteration_statement
 			$<astval>$->addChild($<astval>5);
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
+			((iteration_statement_astNode*)$<astval>$)->e2_child = 3;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 6;
          }
 	| FOR_TK OPEN_PAREN_TK SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
@@ -1215,6 +1222,9 @@ iteration_statement
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
 			$<astval>$->addChild($<astval>8);
+			((iteration_statement_astNode*)$<astval>$)->e2_child = 3;
+			((iteration_statement_astNode*)$<astval>$)->e3_child = 5;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 7;
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
@@ -1227,6 +1237,8 @@ iteration_statement
 			$<astval>$->addChild($<astval>5);
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
+			((iteration_statement_astNode*)$<astval>$)->e1_child = 2;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 6;
 		}
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
@@ -1240,6 +1252,9 @@ iteration_statement
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
 			$<astval>$->addChild($<astval>8);
+			((iteration_statement_astNode*)$<astval>$)->e1_child = 2;
+			((iteration_statement_astNode*)$<astval>$)->e3_child = 5;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 7;
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK CLOSE_PAREN_TK statement
 		{
@@ -1253,6 +1268,9 @@ iteration_statement
 			$<astval>$->addChild($<astval>6);
 			$<astval>$->addChild($<astval>7);
 			$<astval>$->addChild($<astval>8);
+			((iteration_statement_astNode*)$<astval>$)->e1_child = 2;
+			((iteration_statement_astNode*)$<astval>$)->e2_child = 4;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 7;
          }
 	| FOR_TK OPEN_PAREN_TK expression SEMICOLON_TK expression SEMICOLON_TK expression CLOSE_PAREN_TK statement
 		{
@@ -1267,6 +1285,10 @@ iteration_statement
 			$<astval>$->addChild($<astval>7);
 			$<astval>$->addChild($<astval>8);
 			$<astval>$->addChild($<astval>9);
+			((iteration_statement_astNode*)$<astval>$)->e1_child = 2;
+			((iteration_statement_astNode*)$<astval>$)->e2_child = 4;
+			((iteration_statement_astNode*)$<astval>$)->e3_child = 6;
+			((iteration_statement_astNode*)$<astval>$)->statement_child = 8;
          }
 	;
 

@@ -30,6 +30,8 @@ public:
 	~iteration_statement_astNode();
 public:
 	virtual void output3AC();
+        int e1_child, e2_child, e3_child, statement_child;
+
 };
 
 #endif /* ITERATION_STATEMENT_ASTNODE_H_ */
