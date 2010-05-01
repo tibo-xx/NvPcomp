@@ -19,6 +19,8 @@
 **********************************************************************/
 
 #include <unary_expression_astNode.h>
+#include <ast.h>
+
 
 using namespace std;
 
@@ -34,6 +36,28 @@ unary_expression_astNode::unary_expression_astNode(std::string _nodeString, NvPc
 }
 
 void unary_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	if (nodeString == "++ unary_expression" || nodeString == "-- unary_expression")
+	{
+	  std::string op1 = "op1", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(1)->output3AC();
+	  op1 = getChild(1)->ret3ac;
+	  dst = op1;
+	  
+	  switch(((leaf_astNode*) getChild(0))->getTokenType())
+	  {
+	    case INC_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_ADD, op1, "1", dst, loc);
+	      break;
+	    case DEC_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_SUB, op1, "1", dst, loc);
+	      break;	      
+	    default:
+	      break;
+	  }
+	  ret3ac = op1;
+	  acTree->addNode(ac_node);
+	}
 }
 

@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <postfix_expression_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -48,6 +49,38 @@ void postfix_expression_astNode::output3AC() {
 	  ac_node = new NvPcomp::tacNode("", OP_CALL, lhs, "", "", loc);
 
 	  acTree->addNode(ac_node);	  
+	  ret3ac = lhs;
+	}
+	if (nodeString == "postfix_expression ++" || nodeString == "postfix_expression --")
+	{
+	  std::string op1 = "op1", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(0)->output3AC();
+	  op1 = getChild(0)->ret3ac;
+	  
+	  // we need a register because this is a post inc/dec, so our value for the rest 
+	  // of the expression is our value pre-inc or pre-dec
+	  dst = gettacTree()->asTree->genReg();
+	  
+	  switch(((leaf_astNode*) getChild(1))->getTokenType())
+	  {
+	    case INC_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_ADD, op1, "1", dst, loc);
+	      acTree->addNode(ac_node);
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, dst, "", op1, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	    case DEC_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_SUB, op1, "1", dst, loc);
+	      acTree->addNode(ac_node);
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, dst, "", op1, loc);
+	      acTree->addNode(ac_node);
+	      break;	      
+	    default:
+	      break;
+	  }
+	  ret3ac = dst;
 	}
 }
 

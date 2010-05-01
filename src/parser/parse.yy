@@ -241,7 +241,7 @@ declaration
 	| declaration_specifiers init_declarator_list SEMICOLON_TK 	
 		{
 			REDUCTION(declaration:declaration_specifiers init_declarator_list SEMICOLON_TK)
-			$<astval>$ = new declaration_astNode(":declaration_specifiers init_declarator_list SEMICOLON_TK", yylloc, &acTree);
+			$<astval>$ = new declaration_astNode("declaration_specifiers init_declarator_list SEMICOLON_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1); // declaration_specifiers
 			$<astval>$->addChild($<astval>2); // init_declarator_list
 			// Assign Types to all declarations in the list
@@ -406,7 +406,7 @@ struct_or_union_specifier
 		{
 			REDUCTION(struct_or_union_specifier:struct_or_union identifier OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
-			$<astval>$ = new struct_or_union_specifier_astNode(":struct_or_union identifier OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
+			$<astval>$ = new struct_or_union_specifier_astNode("struct_or_union identifier OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -418,7 +418,7 @@ struct_or_union_specifier
 		{
 			REDUCTION(struct_or_union_specifier:struct_or_union OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK) 
 			SCOPE_POP();
-			$<astval>$ = new struct_or_union_specifier_astNode(":struct_or_union OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
+			$<astval>$ = new struct_or_union_specifier_astNode("struct_or_union OPEN_BRACE_TK scope_push struct_declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -428,7 +428,7 @@ struct_or_union_specifier
 	| struct_or_union identifier
 		{
 			REDUCTION(struct_or_union_specifier:struct_or_union identifier)
-			$<astval>$ = new struct_or_union_specifier_astNode(":struct_or_union identifier", yylloc, &acTree);
+			$<astval>$ = new struct_or_union_specifier_astNode("struct_or_union identifier", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	;
@@ -478,13 +478,13 @@ init_declarator
 	: declarator							
 		{
 			REDUCTION(init_declarator:declarator)
-			$<astval>$ = new init_declarator_astNode(":declarator", yylloc, &acTree);
+			$<astval>$ = new init_declarator_astNode("declarator", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	| declarator EQUAL_TK initializer		
 		{
 			REDUCTION(init_declarator:declarator EQUAL_TK initializer)
-			$<astval>$ = new init_declarator_astNode(":declarator EQUAL_TK initializer", yylloc, &acTree);
+			$<astval>$ = new init_declarator_astNode("declarator EQUAL_TK initializer", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>3);
 		}
@@ -633,13 +633,13 @@ declarator
 	: direct_declarator
 		{
 			REDUCTION(declarator:direct_declarator)
-			$<astval>$ = new declarator_astNode(":direct_declarator", yylloc, &acTree);
+			$<astval>$ = new declarator_astNode("direct_declarator", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	| pointer direct_declarator
 		{
 			REDUCTION(declarator:pointer direct_declarator)
-			$<astval>$ = new declarator_astNode(":pointer direct_declarator", yylloc, &acTree);
+			$<astval>$ = new declarator_astNode("pointer direct_declarator", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
@@ -735,7 +735,7 @@ type_qualifier_list
 	: type_qualifier							
 		{
 			REDUCTION(type_qualifier_list:type_qualifier)
-			$<astval>$ = new type_qualifier_list_astNode(":type_qualifier", yylloc, &acTree);
+			$<astval>$ = new type_qualifier_list_astNode("type_qualifier", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	| type_qualifier_list type_qualifier
@@ -1371,67 +1371,67 @@ assignment_operator
 	: EQUAL_TK
 		{
 			REDUCTION(assignment_operator:EQUAL_TK)
-/*	   		$<astval>$ = new assignment_operator_astNode(":=", yylloc, &acTree);
+/*	   		$<astval>$ = new assignment_operator_astNode("=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| MUL_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MUL_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":*=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("*=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| DIV_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:DIV_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":/=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("/=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| MOD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:MOD_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":%=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("%=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| ADD_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:ADD_ASSIGN_TK)
-/* 			$<astval>$ = new assignment_operator_astNode(":+=", yylloc, &acTree);
+/* 			$<astval>$ = new assignment_operator_astNode("+=", yylloc, &acTree);
  			$<astval>$->addChild($<astval>1);*/
 		}
 	| SUB_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:SUB_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":-=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("-=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| LEFT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:LEFT_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":<=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("<=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| RIGHT_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:RIGHT_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":>=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode(">=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| AND_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:AND_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":&=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("&=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| XOR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:XOR_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":^=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("^=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	| OR_ASSIGN_TK
 		{
 			REDUCTION(assignment_operator:OR_ASSIGN_TK)
-/*			$<astval>$ = new assignment_operator_astNode(":|=", yylloc, &acTree);
+/*			$<astval>$ = new assignment_operator_astNode("|=", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);*/
 		}
 	;
@@ -1440,13 +1440,13 @@ conditional_expression
 	: logical_or_expression
 		{
 			REDUCTION(conditional_expression:logical_or_expression)
-			//~ $<astval>$ = new conditional_expression_astNode(":conditional_expression", yylloc, &acTree);
+			//~ $<astval>$ = new conditional_expression_astNode("conditional_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| logical_or_expression QUESTION_TK expression COLON_TK conditional_expression
 		{
 			REDUCTION(conditional_expression:logical_or_expression QUESTION_TK expression COLON_TK conditional_expression)
-			$<astval>$ = new conditional_expression_astNode(":logical_or_expression ? expression : conditional_expression", yylloc, &acTree);
+			$<astval>$ = new conditional_expression_astNode("logical_or_expression ? expression : conditional_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1459,7 +1459,7 @@ constant_expression
 	: conditional_expression
 		{
 			REDUCTION(constant_expression:conditional_expression)
-			//~ $<astval>$ = new constant_expression_astNode(":conditional_expression", yylloc, &acTree);
+			//~ $<astval>$ = new constant_expression_astNode("conditional_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 			
 		}
@@ -1469,13 +1469,13 @@ logical_or_expression
 	: logical_and_expression
 		{
 			REDUCTION(logical_or_expression:logical_and_expression)
-			//~ $<astval>$ = new logical_or_expression_astNode(":logical_and_expression", yylloc, &acTree);
+			//~ $<astval>$ = new logical_or_expression_astNode("logical_and_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| logical_or_expression OR_OP_TK logical_and_expression
 		{
 			REDUCTION(logical_or_expression:logical_or_expression OR_OP_TK logical_and_expression)
-			$<astval>$ = new logical_or_expression_astNode(":logical_or_expression AND_OP_TK logical_and_expression", yylloc, &acTree);
+			$<astval>$ = new logical_or_expression_astNode("logical_or_expression AND_OP_TK logical_and_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1486,13 +1486,13 @@ logical_and_expression
 	: inclusive_or_expression
 		{
 			REDUCTION(logical_and_expression:inclusive_or_expression)
-			//~ $<astval>$ = new logical_and_expression_astNode(":inclusive_or_expression", yylloc, &acTree);
+			//~ $<astval>$ = new logical_and_expression_astNode("inclusive_or_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| logical_and_expression AND_OP_TK inclusive_or_expression
 		{
 			REDUCTION(logical_and_expression:logical_and_expression AND_OP_TK inclusive_or_expression)
-			$<astval>$ = new logical_and_expression_astNode(":logical_and_expression AND_OP_TK inclusive_or_expression", yylloc, &acTree);
+			$<astval>$ = new logical_and_expression_astNode("logical_and_expression AND_OP_TK inclusive_or_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1503,13 +1503,13 @@ inclusive_or_expression
 	: exclusive_or_expression
 		{
 			REDUCTION(inclusive_or_expression:exclusive_or_expression)
-			//~ $<astval>$ = new inclusive_or_expression_astNode(":inclusive_or_expression", yylloc, &acTree);
+			//~ $<astval>$ = new inclusive_or_expression_astNode("inclusive_or_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| inclusive_or_expression BIT_OR_TK exclusive_or_expression
 		{
 			REDUCTION(inclusive_or_expression:inclusive_or_expression BIT_OR_TK exclusive_or_expression)
-			$<astval>$ = new inclusive_or_expression_astNode(":inclusive_or_expression BIT_OR_TK exclusive_or_expression", yylloc, &acTree);
+			$<astval>$ = new inclusive_or_expression_astNode("inclusive_or_expression BIT_OR_TK exclusive_or_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1520,13 +1520,13 @@ exclusive_or_expression
 	: and_expression
 		{
 			REDUCTION(exclusive_or_expression:and_expression)
-			//~ $<astval>$ = new exclusive_or_expression_astNode(":and_expression", yylloc, &acTree);
+			//~ $<astval>$ = new exclusive_or_expression_astNode("and_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| exclusive_or_expression BIT_XOR_TK and_expression
 		{
 			REDUCTION(exclusive_or_expression:exclusive_or_expression BIT_XOR_TK and_expression)
-			$<astval>$ = new exclusive_or_expression_astNode(":exclusive_or_expression ^ and_expression", yylloc, &acTree);
+			$<astval>$ = new exclusive_or_expression_astNode("exclusive_or_expression ^ and_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1537,13 +1537,13 @@ and_expression
 	: equality_expression
 		{
 			REDUCTION(and_expression:equality_expression)
-			//~ $<astval>$ = new and_expression_astNode(":equality_expression", yylloc, &acTree);
+			//~ $<astval>$ = new and_expression_astNode("equality_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| and_expression BIT_AND_TK equality_expression
 		{
 			REDUCTION(and_expression:and_expression BIT_AND_TK equality_expression)
-			$<astval>$ = new and_expression_astNode(":and_expression & equality_expression", yylloc, &acTree);
+			$<astval>$ = new and_expression_astNode("and_expression & equality_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1554,13 +1554,13 @@ equality_expression
 	: relational_expression
 		{
 			REDUCTION(equality_expression:relational_expression)
-			//~ $<astval>$ = new equality_expression_astNode(":relational_expression", yylloc, &acTree);
+			//~ $<astval>$ = new equality_expression_astNode("relational_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| equality_expression EQ_OP_TK relational_expression
 		{
 			REDUCTION(equality_expression:equality_expression EQ_OP_TK relational_expression)
-			$<astval>$ = new equality_expression_astNode(":equality_expression == relational_expression", yylloc, &acTree);
+			$<astval>$ = new equality_expression_astNode("equality_expression == relational_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1568,7 +1568,7 @@ equality_expression
 	| equality_expression NE_OP_TK relational_expression
 		{
 			REDUCTION(equality_expression:equality_expression NE_OP_TK relational_expression)
-			$<astval>$ = new equality_expression_astNode(":equality_expression != relational_expression", yylloc, &acTree);
+			$<astval>$ = new equality_expression_astNode("equality_expression != relational_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1579,13 +1579,13 @@ relational_expression
 	: shift_expression
 		{
 			REDUCTION(relational_expression:shift_expression)
-			//~ $<astval>$ = new relational_expression_astNode(":shift_expression", yylloc, &acTree);
+			//~ $<astval>$ = new relational_expression_astNode("shift_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| relational_expression LT_TK shift_expression
 		{
 			REDUCTION(relational_expression:relational_expression LT_TK shift_expression)
-			$<astval>$ = new relational_expression_astNode(":relational_expression < shift_expression", yylloc, &acTree);
+			$<astval>$ = new relational_expression_astNode("relational_expression < shift_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1593,7 +1593,7 @@ relational_expression
 	| relational_expression GT_TK shift_expression
 		{
 			REDUCTION(relational_expression:relational_expression GT_TK shift_expression)
-			$<astval>$ = new relational_expression_astNode(":relational_expression > shift_expression", yylloc, &acTree);
+			$<astval>$ = new relational_expression_astNode("relational_expression > shift_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1601,7 +1601,7 @@ relational_expression
 	| relational_expression LE_OP_TK shift_expression
 		{
 			REDUCTION(relational_expression:relational_expression LE_OP_TK shift_expression)
-			$<astval>$ = new relational_expression_astNode(":relational_expression <= shift_expression", yylloc, &acTree);
+			$<astval>$ = new relational_expression_astNode("relational_expression <= shift_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1609,7 +1609,7 @@ relational_expression
 	| relational_expression GE_OP_TK shift_expression
 		{
 			REDUCTION(relational_expression:relational_expression GE_OP_TK shift_expression)
-			$<astval>$ = new relational_expression_astNode(":relational_expression >= shift_expression", yylloc, &acTree);
+			$<astval>$ = new relational_expression_astNode("relational_expression >= shift_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1620,13 +1620,13 @@ shift_expression
 	: additive_expression
 		{
 			REDUCTION(shift_expression:additive_expression)
-			//~ $<astval>$ = new shift_expression_astNode(":additive_expression", yylloc, &acTree);
+			//~ $<astval>$ = new shift_expression_astNode("additive_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| shift_expression LEFT_OP_TK additive_expression
 		{
 			REDUCTION(shift_expression:shift_expression LEFT_OP_TK additive_expression)
-			$<astval>$ = new shift_expression_astNode(":shift_expression << additive_expression", yylloc, &acTree);
+			$<astval>$ = new shift_expression_astNode("shift_expression << additive_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);			
@@ -1634,7 +1634,7 @@ shift_expression
 	| shift_expression RIGHT_OP_TK additive_expression
 		{
 			REDUCTION(shift_expression:shift_expression RIGHT_OP_TK additive_expression)
-			$<astval>$ = new shift_expression_astNode(":shift_expression >> additive_expression", yylloc, &acTree);
+			$<astval>$ = new shift_expression_astNode("shift_expression >> additive_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1645,13 +1645,13 @@ additive_expression
 	: multiplicative_expression
 		{
 			REDUCTION(additive_expression:multiplicative_expression)
-			//~ $<astval>$ = new additive_expression_astNode(":multiplicative_expression", yylloc, &acTree);
+			//~ $<astval>$ = new additive_expression_astNode("multiplicative_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| additive_expression PLUS_TK multiplicative_expression				
 		{
 			REDUCTION(additive_expression:additive_expression PLUS_TK multiplicative_expression)
-			$<astval>$ = new additive_expression_astNode(":additive_expression + multiplicative_expression", yylloc, &acTree);
+			$<astval>$ = new additive_expression_astNode("additive_expression + multiplicative_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1659,7 +1659,7 @@ additive_expression
 	| additive_expression MINUS_TK multiplicative_expression
 		{
 			REDUCTION(additive_expression:additive_expression MINUS_TK multiplicative_expression)
-			$<astval>$ = new additive_expression_astNode(":additive_expression - multiplicative_expression", yylloc, &acTree);
+			$<astval>$ = new additive_expression_astNode("additive_expression - multiplicative_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1670,13 +1670,13 @@ multiplicative_expression
 	: cast_expression
 		{
 			REDUCTION(multiplicative_expression:cast_expression)
-			//~ $<astval>$ = new multiplicative_expression_astNode(":cast_expression", yylloc, &acTree);
+			//~ $<astval>$ = new multiplicative_expression_astNode("cast_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| multiplicative_expression STAR_TK cast_expression
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression STAR_TK cast_expression)
-			$<astval>$ = new multiplicative_expression_astNode(":* cast_expression", yylloc, &acTree);
+			$<astval>$ = new multiplicative_expression_astNode("* cast_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1684,7 +1684,7 @@ multiplicative_expression
 	| multiplicative_expression DIV_TK cast_expression					
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression DIV_TK cast_expression)
-			$<astval>$ = new multiplicative_expression_astNode(":/ cast_expression", yylloc, &acTree);
+			$<astval>$ = new multiplicative_expression_astNode("/ cast_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1692,7 +1692,7 @@ multiplicative_expression
 	| multiplicative_expression MOD_TK cast_expression
 		{
 			REDUCTION(multiplicative_expression:multiplicative_expression MOD_TK cast_expression)
-			$<astval>$ = new multiplicative_expression_astNode(":% cast_expression", yylloc, &acTree);
+			$<astval>$ = new multiplicative_expression_astNode("% cast_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1703,13 +1703,13 @@ cast_expression
 	: unary_expression
 		{
 			REDUCTION(cast_expression:unary_expression)
-			//~ $<astval>$ = new cast_expression_astNode(":cast_expression", yylloc, &acTree);
+			//~ $<astval>$ = new cast_expression_astNode("cast_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression
 		{
 			REDUCTION(cast_expression:OPEN_PAREN_TK type_name CLOSE_PAREN_TK cast_expression)
-			$<astval>$ = new cast_expression_astNode(":cast_expression ( type name ) cast_expression", yylloc, &acTree);
+			$<astval>$ = new cast_expression_astNode("cast_expression ( type name ) cast_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1721,39 +1721,41 @@ unary_expression
 	: postfix_expression
 		{
 			REDUCTION(unary_expression:postfix_expression)
-			//~ $<astval>$ = new unary_expression_astNode(":postfix_expression", yylloc, &acTree);
+			//~ $<astval>$ = new unary_expression_astNode("postfix_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);			
 		}
 	| INC_OP_TK unary_expression
 		{
 			REDUCTION(unary_expression:INC_OP_TK unary_expression)
-			$<astval>$ = new unary_expression_astNode(":++ unary_expression", yylloc, &acTree);
+			$<astval>$ = new unary_expression_astNode("++ unary_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);
 		}
 	| DEC_OP_TK unary_expression										
 		{
 			REDUCTION(unary_expression:DEC_OP_TK unary_expression)
-			$<astval>$ = new unary_expression_astNode(":-- unary_expression", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);  
+			$<astval>$ = new unary_expression_astNode("-- unary_expression", yylloc, &acTree);
+			$<astval>$->addChild($<astval>1);
+			$<astval>$->addChild($<astval>2);  
 		}
 	| unary_operator cast_expression
 		{
 			REDUCTION(unary_expression:unary_operator cast_expression)
-	     	$<astval>$ = new unary_expression_astNode(":unary_operator cast_expression", yylloc, &acTree);
+	     	$<astval>$ = new unary_expression_astNode("unary_operator cast_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
 	| SIZEOF_TK unary_expression
 		{
 			REDUCTION(unary_expression:SIZEOF_TK unary_expression)
-			$<astval>$ = new unary_expression_astNode(":sizeof unary_expression", yylloc, &acTree);
+			$<astval>$ = new unary_expression_astNode("sizeof unary_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
 	| SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK
 		{
 			REDUCTION(unary_expression:SIZEOF_TK OPEN_PAREN_TK type_name CLOSE_PAREN_TK)
-			$<astval>$ = new unary_expression_astNode(":sizeof ( type_name )", yylloc, &acTree);
+			$<astval>$ = new unary_expression_astNode("sizeof ( type_name )", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1765,37 +1767,37 @@ unary_operator
 	: BIT_AND_TK
 		{
 			REDUCTION(unary_operator:BIT_AND_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":&", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("&", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| STAR_TK
 		{
 			REDUCTION(unary_operator:STAR_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":*", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("*", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| PLUS_TK
 		{
 			REDUCTION(unary_operator:PLUS_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":+", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("+", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| MINUS_TK
 		{
 			REDUCTION(unary_operator:MINUS_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":-", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("-", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| BIT_NOT_TK
 		{
 			REDUCTION(unary_operator:BIT_NOT_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":~", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("~", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| NOT_TK
 		{
 			REDUCTION(unary_operator:NOT_TK)
-			//~ $<astval>$ = new unary_operator_astNode(":!", yylloc, &acTree);
+			//~ $<astval>$ = new unary_operator_astNode("!", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	;
@@ -1804,13 +1806,13 @@ postfix_expression
 	: primary_expression
 		{
 			REDUCTION(postfix_expression:primary_expression)
-			//~ $<astval>$ = new postfix_expression_astNode(":primary_expression", yylloc, &acTree);
+			//~ $<astval>$ = new postfix_expression_astNode("primary_expression", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)
-			$<astval>$ = new postfix_expression_astNode(":[ expression ]", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("[ expression ]", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1841,21 +1843,21 @@ postfix_expression
 	| postfix_expression PTR_OP_TK identifier
 		{
 			REDUCTION(postfix_expression:postfix_expression PTR_OP_TK identifier)
-			$<astval>$ = new postfix_expression_astNode(":pointer_operator", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression PTR_OP_TK identifier", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);     
 		}
 	| postfix_expression INC_OP_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression INC_OP_TK)
-			$<astval>$ = new postfix_expression_astNode(":increment_operator", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression ++", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);      
 		}
 	| postfix_expression DEC_OP_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression DEC_OP_TK)
-			$<astval>$ = new postfix_expression_astNode(":decrement_operator", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression --", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 		}
@@ -1873,28 +1875,26 @@ primary_expression
 			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + identifier + "' not declared in current scope.");
 			} 
 			
-			//~ $<astval>$ = new primary_expression_astNode(":identifier", yylloc, &acTree);
+			//~ $<astval>$ = new primary_expression_astNode("identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| constant
 		{
 			REDUCTION(primary_expression:constant)
-			//~ $<astval>$ = new primary_expression_astNode(":constant", yylloc, &acTree);
+			//~ $<astval>$ = new primary_expression_astNode("constant", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);			
 		}
 	| string
 		{
 			REDUCTION(primary_expression:string)
-			//~ $<astval>$ = new primary_expression_astNode(":string", yylloc, &acTree);
+			//~ $<astval>$ = new primary_expression_astNode("string", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);			
 		}
 	| OPEN_PAREN_TK expression CLOSE_PAREN_TK
 		{
 			REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)
-			$<astval>$ = new primary_expression_astNode(":expression", yylloc, &acTree);
-			$<astval>$->addChild($<astval>1);
+			$<astval>$ = new primary_expression_astNode("expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3);
 		}
 	;
 
@@ -1917,25 +1917,25 @@ constant
 	: INTEGER_CONSTANT_TK				
 		{
 			REDUCTION(constant:INTEGER_CONSTANT_TK)
-			//~ $<astval>$ = new constant_astNode(":integer", yylloc, &acTree);
+			//~ $<astval>$ = new constant_astNode("integer", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| CHARACTER_CONSTANT_TK
 		{
 			REDUCTION(constant:CHARACTER_CONSTANT_TK)
-			//~ $<astval>$ = new constant_astNode(":character", yylloc, &acTree);
+			//~ $<astval>$ = new constant_astNode("character", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| FLOATING_CONSTANT_TK
 		{
 			REDUCTION(constant:FLOATING_CONSTANT_TK)
-			//~ $<astval>$ = new constant_astNode(":float", yylloc, &acTree);
+			//~ $<astval>$ = new constant_astNode("float", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	| ENUMERATION_CONSTANT_TK
 		{
 			REDUCTION(constant:ENUMERATION_CONSTANT_TK)
-			//~ $<astval>$ = new constant_astNode(":enumeration", yylloc, &acTree);
+			//~ $<astval>$ = new constant_astNode("enumeration", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
 	;
@@ -1944,7 +1944,7 @@ string
 	: STRING_LITERAL_TK
 		{
 			REDUCTION(string:STRING_LITERAL_TK)
-			$<astval>$ = new string_astNode(":string", yylloc, &acTree);
+			$<astval>$ = new string_astNode("string", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
 	;
@@ -1966,7 +1966,7 @@ identifier
 // Error Function Implementation
 void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
 	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLineNoCR(loc.begin.line, loc.end.line);
-	LOG(ERRORLog, logLEVEL1) << std::string(loc.begin.column - 1, ' ') <<"^-Error: " << msg << ": at location: " << loc << std::endl;
+	LOG(ERRORLog, logLEVEL1) << std::string(loc.begin.column - 1, ' ') <<"^-Error: " << msg << " at location: " << loc << std::endl;
 }
 
 // Declare the Scanner and implement the yylex function

@@ -40,8 +40,8 @@ void additive_expression_astNode::output3AC() {
 	  getChild(2)->output3AC();
 	  NvPcomp::tacNode * ac_node;
 	  
-	  op1 = getChild(2)->ret3ac;
-	  op2 = getChild(0)->ret3ac;
+	  op1 = getChild(0)->ret3ac;
+	  op2 = getChild(2)->ret3ac;
 	  dst = gettacTree()->asTree->genReg();
 	  
 	  switch(((leaf_astNode*) getChild(1))->getTokenType())

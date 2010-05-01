@@ -37,9 +37,12 @@ function_definition_astNode::function_definition_astNode(std::string _nodeString
 void function_definition_astNode::output3AC() {
 	if (nodeString == "declaration_specifiers declarator compound_statement")
 	{
- 	  NvPcomp::tacNode * ac_node = new NvPcomp::tacNode("", OP_LABEL, name, "", "", loc);
+ 	  NvPcomp::tacNode * ac_node;
+	  ac_node= new NvPcomp::tacNode("", OP_LABEL, name, "", "", loc);
 	  acTree->addNode(ac_node);	  
 	  getChild(2)->output3AC();
+	  ac_node = new NvPcomp::tacNode("", OP_RETURN, "", "", "", loc);
+	  acTree->addNode(ac_node);	  
 	}
 }
 
