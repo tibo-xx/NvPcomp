@@ -18,6 +18,8 @@
   OP_NEG = 262,			// op3 := -op1
   // Logical Operations
   OP_NOT = 263,			// if(op1 <> 0)op3 := 0 else op3 := 1
+  OP_AND = 292,
+  OP_OR = 293,
   // Relational Operations
   OP_EQ = 264,			// op3 := op1 = op2
   OP_GT = 265,			// op3 := op1 > op2

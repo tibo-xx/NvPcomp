@@ -1054,15 +1054,10 @@ expression_statement
 	: SEMICOLON_TK
 		{
 			REDUCTION(expression_statement:SEMICOLON_TK) 
-			//~ $<astval>$ = new expression_statement_astNode("SEMICOLON_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
 		}
 	| expression SEMICOLON_TK
 		{
 			REDUCTION(expression_statement:expression SEMICOLON_TK)
-			//~ $<astval>$ = new expression_statement_astNode("expression SEMICOLON_TK", yylloc, &acTree);
-			//~ $<astval>$->addChild($<astval>1);
-			//~ $<astval>$->addChild($<astval>2);
 		}
 	;
 
@@ -1070,21 +1065,16 @@ scope_push
    : {SCOPE_PUSH()}
 
 compound_statement
-	: OPEN_BRACE_TK scope_push CLOSE_BRACE_TK
+	: OPEN_BRACE_TK CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK CLOSE_BRACE_TK); 
-			SCOPE_POP();
-			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK sCLOSE_BRACE_TK", yylloc, &acTree);
-			//$<astval>$->addChild($<astval>1);
-			//$<astval>$->addChild($<astval>2);
+			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK CLOSE_BRACE_TK", yylloc, &acTree);
 		}
 	| OPEN_BRACE_TK scope_push statement_list CLOSE_BRACE_TK
 		{
 			REDUCTION(compound_statement:OPEN_BRACE_TK statement_list CLOSE_BRACE_TK); 
 			SCOPE_POP()
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK statement_list CLOSE_BRACE_TK", yylloc, &acTree);
-			//$<astval>$->addChild($<astval>1);
-			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	| OPEN_BRACE_TK scope_push declaration_list CLOSE_BRACE_TK
@@ -1092,8 +1082,6 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK); 
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list CLOSE_BRACE_TK", yylloc, &acTree);
-			//$<astval>$->addChild($<astval>1);
-			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
 	| OPEN_BRACE_TK scope_push declaration_list statement_list CLOSE_BRACE_TK
@@ -1101,8 +1089,6 @@ compound_statement
 			REDUCTION(compound_statement:OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK);
 			SCOPE_POP();
 			$<astval>$ = new compound_statement_astNode("OPEN_BRACE_TK declaration_list statement_list CLOSE_BRACE_TK", yylloc, &acTree);
-			//$<astval>$->addChild($<astval>1);
-			//$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 		}
@@ -1337,7 +1323,6 @@ expression
 			$<astval>$ = new expression_astNode("expression COMMA_TK assignment_expression", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
-			$<astval>$->addChild($<astval>3);
 		}
 	;
 
@@ -1893,8 +1878,7 @@ primary_expression
 	| OPEN_PAREN_TK expression CLOSE_PAREN_TK
 		{
 			REDUCTION(primary_expression:OPEN_PAREN_TK expression CLOSE_PAREN_TK)
-			$<astval>$ = new primary_expression_astNode("expression", yylloc, &acTree);
-			$<astval>$->addChild($<astval>2);
+			$<astval>$ = $<astval>2;
 		}
 	;
 

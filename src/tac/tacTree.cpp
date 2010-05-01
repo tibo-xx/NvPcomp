@@ -56,6 +56,8 @@ NvPcomp::tacTree::tacTree() {
 	translateOps.push_back ( "GLOBAL" ); 	//289
 	translateOps.push_back ( "STRING" ); 	//290
 	translateOps.push_back ( "COMMENT" ); 	//291
+	translateOps.push_back ( "AND" ); 	//292
+	translateOps.push_back ( "OR" ); 	//293
  }
 
 NvPcomp::tacTree::~tacTree() {}
@@ -75,7 +77,7 @@ void NvPcomp::tacTree::displayTree() {
 }
 
 string NvPcomp::tacTree::getOp(int op) {
-	if ( (op >= 258) && (op <= 291) )
+	if ( (op >= 258) && (op <= 293) )
 		return translateOps[op-258];
 	else
 		return "error";

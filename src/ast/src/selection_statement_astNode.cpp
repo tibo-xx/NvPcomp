@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <selection_statement_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -34,6 +35,58 @@ selection_statement_astNode::selection_statement_astNode(std::string _nodeString
 }
 
 void selection_statement_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	if (nodeString == "IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement")
+	{
+	  std::string expression = "op1", statement = "op2", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  // evaluate expression
+	  getChild(2)->output3AC();
+	  expression = getChild(2)->ret3ac;
+	  dst = gettacTree()->asTree->genLabel();
+	  
+	  // j if = 0
+	  ac_node = new NvPcomp::tacNode("", OP_BREQ, expression, "0", dst, loc);
+	  acTree->addNode(ac_node);
+
+	  // evaluate statement
+	  getChild(4)->output3AC();
+
+	  // our label to jump to
+	  ac_node = new NvPcomp::tacNode("", OP_LABEL, "", "", dst, loc);
+	  acTree->addNode(ac_node);	  
+	}
+	else if (nodeString == "IF_TK OPEN_PAREN_TK expression CLOSE_PAREN_TK statement ELSE_TK statement")
+	{
+	  std::string expression = "op1", statement = "op2", dst = "dst", dst2 = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  // evaluate expression
+	  getChild(2)->output3AC();
+	  expression = getChild(2)->ret3ac;
+	  dst = gettacTree()->asTree->genLabel();
+	  dst2 = gettacTree()->asTree->genLabel();
+	  
+	  // j if = 0
+	  ac_node = new NvPcomp::tacNode("", OP_BREQ, expression, "0", dst, loc);
+	  acTree->addNode(ac_node);
+	  
+	  // evaluate statement
+	  getChild(4)->output3AC();
+	  // jump out
+	  ac_node = new NvPcomp::tacNode("", OP_BR, "", "", dst2, loc);
+	  acTree->addNode(ac_node);
+	  
+	  // our else label to jump to
+	  ac_node = new NvPcomp::tacNode("", OP_LABEL, "", "", dst, loc);
+	  acTree->addNode(ac_node);	  
+	  
+	  getChild(6)->output3AC();
+
+	  // our non-else label to jump to
+	  ac_node = new NvPcomp::tacNode("", OP_LABEL, "", "", dst2, loc);
+	  acTree->addNode(ac_node);	  
+
+	}
 }
 
