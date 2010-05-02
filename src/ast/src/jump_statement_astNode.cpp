@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <jump_statement_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -34,6 +35,19 @@ jump_statement_astNode::jump_statement_astNode(std::string _nodeString, NvPcomp:
 }
 
 void jump_statement_astNode::output3AC() {
+	if (nodeString == "RETURN_TK expression SEMICOLON_TK")
+	{
+	  std::string expression = "op1";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  // evaluate expression
+	  getChild(1)->output3AC();
+	  expression = getChild(1)->ret3ac;
+
+	  
+	  ac_node = new NvPcomp::tacNode("", OP_RETURN, "", "", expression, loc);
+	  acTree->addNode(ac_node);	  
+	}
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 

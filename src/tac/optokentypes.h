@@ -18,8 +18,6 @@
   OP_NEG = 262,			// op3 := -op1
   // Logical Operations
   OP_NOT = 263,			// if(op1 <> 0)op3 := 0 else op3 := 1
-  OP_AND = 292,
-  OP_OR = 293,
   // Relational Operations
   OP_EQ = 264,			// op3 := op1 = op2
   OP_GT = 265,			// op3 := op1 > op2
@@ -53,6 +51,10 @@
   OP_GLOBAL = 289,		// Declare op1 as a global of size op2
   OP_STRING = 290,		// Associate string op1 with label op2
   OP_COMMENT = 291,		// op1 is a comment
+  OP_AND = 292,			// op3 = op1 && op2
+  OP_OR = 293,			// op3 = op1 || op2
+  OP_ARRAY = 294,		// op3 = op1[op2]  op1 = address, op2 = offset
+  OP_INDR = 295, 		// op3 = address contained in op1
 };
 
 #endif /* OPTOKENTYPES_H_ */

@@ -19,6 +19,8 @@
 **********************************************************************/
 
 #include <declarator_astNode.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -53,13 +55,35 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 
 	string identifier;
 	bool is_pointer = false;
+	bool is_array = false;
+	int array_size = 0;
 	if (getString() == "pointer direct_declarator")
 	{
 	  identifier = getChild(1)->getString();
 	  is_pointer = true;
 	}
 	else
-	  identifier = getChild(0)->getString();
+	{
+	  if (getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK")
+	  {
+	    // 2D array
+	    if (getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK")
+	    {
+	      identifier = getChild(0)->getChild(0)->getChild(0)->getString();
+	      is_array = true;
+	      array_size = atoi(getChild(0)->getChild(2)->getString().c_str()) * atoi(getChild(0)->getChild(0)->getChild(2)->getString().c_str());
+	    }
+	    // 1D array
+	    else
+	    {
+	      identifier = getChild(0)->getChild(0)->getString();
+	      is_array = true;
+	      array_size = atoi(getChild(0)->getChild(2)->getString().c_str());
+	    }
+	  }
+	  else
+	    identifier = getChild(0)->getString();
+	}
 
 	ret3ac = identifier;
 
@@ -96,6 +120,12 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	  else if (!addType(token_type, st_node, error))
 	    return false;
 	}
+	// Add pointer if its an array
+	if (is_array)
+	{
+	  st_node->addType(STAR_TK);
+          cout << "Adding pointer type " << STAR_TK << " to array " << identifier << " of size " << array_size << endl;
+	}
 	// Add pointer information
 	if (is_pointer)
 	{
@@ -107,7 +137,7 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	      {
 		int token_type = ((leaf_astNode*) getChild(0)->getChild(i)->getChild(j))->getTokenType();
 		st_node->addType(token_type);
-		cout << "Adding pointer type " << getChild(0)->getChild(i)->getChild(j)->getString() << endl;
+		cout << "Adding qualifier type " << getChild(0)->getChild(i)->getChild(j)->getString() << endl;
 	      }
 	    }
 	    else
