@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <and_expression_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -34,6 +35,19 @@ and_expression_astNode::and_expression_astNode(std::string _nodeString, NvPcomp:
 }
 
 void and_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	  std::string op1 = "op1", op2 = "op2", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(0)->output3AC();
+	  op1 = getChild(0)->ret3ac;
+	  getChild(2)->output3AC();
+	  op2 = getChild(2)->ret3ac;
+	 
+	  dst = gettacTree()->asTree->genReg();
+
+	  ac_node = new NvPcomp::tacNode("", OP_BIT_AND, op1, op2, dst, loc);
+	  
+	  ret3ac = dst;
+	  acTree->addNode(ac_node);
 }
 
