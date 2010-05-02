@@ -31,8 +31,10 @@ public:
 	int getTokenType();
 public:
 	virtual void output3AC();
+	std::string mangled_name;
 private:
 	int tokenType;
+	
 };
 
 #endif /* LEAF_ASTNODE_H_ */

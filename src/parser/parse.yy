@@ -1888,7 +1888,7 @@ primary_expression
 			{
 			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + identifier + "' not declared in current scope.");
 			} 
-			
+			((leaf_astNode*) $<astval>$)->mangled_name = st_node->getMangledName();
 			//~ $<astval>$ = new primary_expression_astNode("identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
