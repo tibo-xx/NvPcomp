@@ -59,5 +59,25 @@ void unary_expression_astNode::output3AC() {
 	  ret3ac = op1;
 	  acTree->addNode(ac_node);
 	}
+	else if (nodeString == "unary_operator cast_expression")
+	{
+	  std::string op1 = "op1", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(1)->output3AC();
+	  op1 = getChild(1)->ret3ac;
+	  
+	  dst = gettacTree()->asTree->genReg();
+	  	  
+	  switch(((leaf_astNode*) getChild(0))->getTokenType())
+	  {
+	    default:
+	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, op1, "", dst, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	  }
+	  ret3ac = dst;
+	  
+	}
 }
 

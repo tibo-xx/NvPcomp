@@ -34,6 +34,25 @@ argument_expression_list_astNode::argument_expression_list_astNode(std::string _
 }
 
 void argument_expression_list_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	NvPcomp::tacNode * ac_node;
+	    
+	std::string s;
+	std::stringstream out;
+	out << getNumberOfChildren();
+	s = out.str();
+
+	// # args
+	ac_node = new NvPcomp::tacNode("", OP_ARGS, s, "", "", loc);
+	acTree->addNode(ac_node);
+	
+	for (int i = 0; i < getNumberOfChildren(); i ++)
+	{
+	  getChild(i)->output3AC();
+	  std::string expression = getChild(i)->ret3ac;
+	  
+	  // argument (C is always pass-by-value)
+	  ac_node = new NvPcomp::tacNode("", OP_VALOUT, expression, "", "", loc);
+	  acTree->addNode(ac_node);
+	}
 }
 
