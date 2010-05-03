@@ -47,9 +47,21 @@ string variableTable::insert(std::string key, variableInfo *info) {
 		}
 		
 	}
-		
+	
 	return retVal;
 
+}
+
+void variableTable::print() {
+
+	map<string, variableInfo *>::iterator map_iter;
+	
+	cout << "Table:" << endl;
+	
+	for(map_iter = _table.begin(); map_iter != _table.end(); map_iter++) {
+		cout << "\t" << (*map_iter).first << endl;
+	}
+	
 }
 
 bool variableTable::setMemLocation(std::string key, int memLocation) {

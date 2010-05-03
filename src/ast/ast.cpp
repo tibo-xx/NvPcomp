@@ -41,8 +41,8 @@ NvPcomp::tacTree *ast::gettacTree() {
 	return acTree;
 }
 
-variableTable ast::getVariableTable() {
-	return variables;
+variableTable *ast::getVariableTable() {
+	return &variables;
 }
 
 astInfoTable<functionDefinition> *ast::getFunctionTable() {

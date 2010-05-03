@@ -36,7 +36,7 @@ public:
 	virtual void output3AC();
 	bool setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, \
 						NvPcomp::symTable *table, \
-						variableTable *v_table, \
+						variableTable &v_table, \
 						std::string &error, \
 						astInfoTable<functionDefinition> *f_table, \
 						NvPcomp::location loc);

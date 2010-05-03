@@ -214,7 +214,7 @@ function_definition
 			  std::string error;
 			  // get the declarator
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(0);			  
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, asTree.getFunctionTable(), yylloc))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, *(asTree.getVariableTable()), error, asTree.getFunctionTable(), yylloc))
 			    NvPcomp::BParser::error(yyloc, error);
 			  
 			  ((function_definition_astNode*) $<astval>$)->name = table.search_top(node->getName())->getMangledName();
@@ -250,7 +250,7 @@ declaration
 			  std::string error;
 			  // Grab each declarator node
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2->getChild(i)->getChild(0);
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, NULL, yylloc))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, *(asTree.getVariableTable()), error, NULL, yylloc))
 			    NvPcomp::BParser::error(yyloc, error);
 			} 
 		}
@@ -797,7 +797,7 @@ parameter_declaration
 			  std::string error;
 			  // get the declarator
 			  declarator_astNode* node = (declarator_astNode*) $<astval>2;			  
-			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, &(asTree.getVariableTable()), error, NULL, yylloc))
+			  if (!node->setSpecifiers((declaration_specifiers_astNode*) $<astval>1, &table, *(asTree.getVariableTable()), error, NULL, yylloc))
 			    NvPcomp::BParser::error(yyloc, error);
 		}
 	| declaration_specifiers
@@ -1883,12 +1883,14 @@ primary_expression
 			REDUCTION(primary_expression:identifier)
 			std::string identifier = $<astval>1->getString();
 			NvPcomp::symNode* st_node;
+			
 			table.search(identifier, st_node, false);
 			if (!(st_node && st_node->hasType()))
 			{
 			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + identifier + "' not declared in current scope.");
 			} 
 			((leaf_astNode*) $<astval>$)->mangled_name = st_node->getMangledName();
+			
 			//~ $<astval>$ = new primary_expression_astNode("identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}

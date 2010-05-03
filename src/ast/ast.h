@@ -35,7 +35,7 @@ class ast {
         ~ast();
         astNode *getRoot();
         NvPcomp::tacTree *gettacTree();
-        variableTable getVariableTable();
+        variableTable *getVariableTable();
 	astInfoTable<functionDefinition> *getFunctionTable();
 		// Create labels
 		std::string genLabel ();

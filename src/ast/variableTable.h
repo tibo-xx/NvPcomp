@@ -34,6 +34,7 @@ protected:
 protected:
 	bool search(const std::string key);
 	std::string mangleName(std::string key, int suffix);
+	void print();
 public:
 	variableTable();
 	~variableTable();
