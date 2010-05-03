@@ -58,6 +58,16 @@ NvPcomp::tacTree::tacTree() {
 	translateOps.push_back ( "COMMENT" ); 	//291
 	translateOps.push_back ( "AND" ); 	//292
 	translateOps.push_back ( "OR" ); 	//293
+	translateOps.push_back ( "ARRAY" ); 	//294
+	translateOps.push_back ( "INDR" ); 	//295
+	translateOps.push_back ( "BIT_NOT" ); 	//296
+	translateOps.push_back ( "LSHIFT" ); 	//297
+	translateOps.push_back ( "RSHIFT" ); 	//298
+
+	translateOps.push_back ( "BIT_AND" ); 	//299
+	translateOps.push_back ( "BIT_XOR" ); 	//300
+	translateOps.push_back ( "BIT_OR" ); 	//301
+	
  }
 
 NvPcomp::tacTree::~tacTree() {}
@@ -77,7 +87,7 @@ void NvPcomp::tacTree::displayTree() {
 }
 
 string NvPcomp::tacTree::getOp(int op) {
-	if ( (op >= 258) && (op <= 293) )
+	if ( (op >= 258) && (op <= 310) )
 		return translateOps[op-258];
 	else
 		return "error";

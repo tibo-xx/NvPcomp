@@ -36,6 +36,38 @@ postfix_expression_astNode::postfix_expression_astNode(std::string _nodeString, 
 
 void postfix_expression_astNode::output3AC() {
 
+	// array access
+	if (nodeString == "postfix_expression [ expression ]")
+	{
+	  std::string name = "", offset = "", dst = "";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(0)->output3AC();
+	  getChild(2)->output3AC();
+	  name = getChild(0)->ret3ac;
+	  offset = getChild(2)->ret3ac;
+	  
+	  dst = gettacTree()->asTree->genReg();
+	  
+	  ac_node = new NvPcomp::tacNode("", OP_ARRAY, name, offset, dst, loc);
+
+	  acTree->addNode(ac_node);	  
+	  ret3ac = dst;
+	}
+	// function call
+	if (nodeString == "postfix_expression OPEN_PAREN_TK CLOSE_PAREN_TK")
+	{
+	  std::string lhs = "",rhs = "";
+	  getChild(0)->output3AC();
+	  NvPcomp::tacNode * ac_node;
+	  
+	  lhs = getChild(0)->getString();	 
+	  
+	  ac_node = new NvPcomp::tacNode("", OP_CALL, lhs, "", "", loc);
+
+	  acTree->addNode(ac_node);	  
+	  ret3ac = lhs;
+	}
 	// function call
 	if (nodeString == "postfix_expression OPEN_PAREN_TK argument_expression_list CLOSE_PAREN_TK")
 	{

@@ -48,11 +48,11 @@ void assignment_expression_astNode::output3AC() {
 	  {
 	    case EQUAL_TK:
 	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, rhs, "", lhs, loc);
+	      acTree->addNode(ac_node);	  
 	      break;
 	    default:
 	      break;
 	  }
-	  acTree->addNode(ac_node);	  
 	  ret3ac = lhs;
 	}
 	else if (nodeString == "declarator EQUAL_TK initializer")

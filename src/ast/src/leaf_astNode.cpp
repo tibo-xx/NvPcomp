@@ -35,7 +35,12 @@ leaf_astNode::leaf_astNode(std::string _nodeString, NvPcomp::location _loc, NvPc
 }
 
 void leaf_astNode::output3AC() {
-	ret3ac = nodeString;
+	if (tokenType == IDENTIFIER_TK)
+	{
+	  ret3ac = mangled_name;
+	}
+	else
+	  ret3ac = nodeString;
 }
 
 int leaf_astNode::getTokenType() {

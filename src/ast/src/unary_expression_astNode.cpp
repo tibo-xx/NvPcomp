@@ -71,9 +71,39 @@ void unary_expression_astNode::output3AC() {
 	  	  
 	  switch(((leaf_astNode*) getChild(0))->getTokenType())
 	  {
-	    default:
-	      ac_node = new NvPcomp::tacNode("", OP_ASSIGN, op1, "", dst, loc);
+	    
+	    case BIT_AND_TK:
+	      // &variable
+	      ac_node = new NvPcomp::tacNode("", OP_ADDR, op1, "", dst, loc);
 	      acTree->addNode(ac_node);
+	      break;
+	    case STAR_TK:
+	      // *variable (dereference / indirection)
+	      ac_node = new NvPcomp::tacNode("", OP_INDR, op1, "", dst, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	    case NOT_TK:
+	      // !variable ( !a == (a == 0) )
+	      ac_node = new NvPcomp::tacNode("", OP_EQ, op1, "0", dst, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	    case PLUS_TK:
+	      // +variable
+	      // nothing special
+	      dst = op1;
+	      break;
+	    case MINUS_TK:
+	      // -variable
+	      ac_node = new NvPcomp::tacNode("", OP_NEG, op1, "", dst, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	    case BIT_NOT_TK:
+	      // ~variable (ones complement)
+	      ac_node = new NvPcomp::tacNode("", OP_BIT_NOT, op1, "", dst, loc);
+	      acTree->addNode(ac_node);
+	      break;
+	    default:
+	      cout << "3AC Error: Unary operator " << ((leaf_astNode*) getChild(0))->getTokenType() << " not currently supported!"<< endl;
 	      break;
 	  }
 	  ret3ac = dst;

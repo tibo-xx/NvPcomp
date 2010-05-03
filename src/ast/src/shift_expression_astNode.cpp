@@ -19,6 +19,7 @@
 **********************************************************************/
 
 #include <shift_expression_astNode.h>
+#include <ast.h>
 
 using namespace std;
 
@@ -34,6 +35,28 @@ shift_expression_astNode::shift_expression_astNode(std::string _nodeString, NvPc
 }
 
 void shift_expression_astNode::output3AC() {
-	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
+	  std::string op1 = "op1", op2 = "op2", dst = "dst";
+	  NvPcomp::tacNode * ac_node;
+	  
+	  getChild(0)->output3AC();
+	  op1 = getChild(0)->ret3ac;
+	  getChild(2)->output3AC();
+	  op2 = getChild(2)->ret3ac;
+	 
+	  dst = gettacTree()->asTree->genReg();
+	  
+	  switch(((leaf_astNode*) getChild(1))->getTokenType())
+	  {
+	    case LEFT_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_LSHIFT, op1, op2, dst, loc);
+	      break;
+	    case RIGHT_OP_TK:
+	      ac_node = new NvPcomp::tacNode("", OP_RSHIFT, op1, op2, dst, loc);
+	      break;	      
+	    default:
+	      break;
+	  }
+	  ret3ac = dst;
+	  acTree->addNode(ac_node);
 }
 

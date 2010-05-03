@@ -653,6 +653,8 @@ direct_declarator
 			//~ $<astval>$ = new direct_declarator_astNode("identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
+
+// TODO no idea what this is for
 	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)
@@ -661,6 +663,7 @@ direct_declarator
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
 		}
+// TODO
 	| direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK)
@@ -678,12 +681,14 @@ direct_declarator
 			$<astval>$->addChild($<astval>3);
 			$<astval>$->addChild($<astval>4);
 		}
+// TODO
 	| direct_declarator OPEN_PAREN_TK scope_push CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK)
 			$<astval>$ = new direct_declarator_astNode("direct_declarator OPEN_PAREN_TK CLOSE_PAREN_TK", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 		}
+// TODO
 	| direct_declarator OPEN_PAREN_TK scope_push parameter_type_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK parameter_type_list CLOSE_PAREN_TK)
@@ -693,6 +698,7 @@ direct_declarator
 			$<astval>$->addChild($<astval>4);
 			$<astval>$->addChild($<astval>5);
 		}
+// TODO
 	| direct_declarator OPEN_PAREN_TK scope_push identifier_list CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:direct_declarator OPEN_PAREN_TK identifier_list CLOSE_PAREN_TK)
@@ -1820,7 +1826,7 @@ postfix_expression
 	| postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK
 		{
 			REDUCTION(postfix_expression:postfix_expression OPEN_BRACK_TK expression CLOSE_BRACK_TK)
-			$<astval>$ = new postfix_expression_astNode("[ expression ]", yylloc, &acTree);
+			$<astval>$ = new postfix_expression_astNode("postfix_expression [ expression ]", yylloc, &acTree);
 			$<astval>$->addChild($<astval>1);
 			$<astval>$->addChild($<astval>2);
 			$<astval>$->addChild($<astval>3);
@@ -1882,7 +1888,7 @@ primary_expression
 			{
 			  NvPcomp::BParser::error(yyloc, "SYNTAX ERROR: Identifier '" + identifier + "' not declared in current scope.");
 			} 
-			
+			((leaf_astNode*) $<astval>$)->mangled_name = st_node->getMangledName();
 			//~ $<astval>$ = new primary_expression_astNode("identifier", yylloc, &acTree);
 			//~ $<astval>$->addChild($<astval>1);
 		}
