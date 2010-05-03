@@ -174,13 +174,13 @@ else
 	
 	if (f_table)
 	{
-	  functionDefinition new_func;
-	  st_node->setMangledName(f_table->insert(identifier, &new_func));	  
+	  functionDefinition *new_func = new functionDefinition;
+	  st_node->setMangledName(f_table->insert(identifier, new_func));	  
 	}
 	else
 	{
-	  variableInfo new_var;
-	  st_node->setMangledName(v_table.insert(identifier, &new_var));
+	  variableInfo *new_var = new variableInfo();
+	  st_node->setMangledName(v_table.insert(identifier, new_var));
 	  cout << "adding " << identifier << " to variable Table: " << st_node->getMangledName() << endl;
 	}
 	return true;
