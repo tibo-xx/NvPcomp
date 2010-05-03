@@ -92,7 +92,8 @@ NvPcomp::symNode *NvPcomp::symTable::search_top(string key) {
 }
 
 int NvPcomp::symTable::search(const string key, symNode* &Node, bool ignoreFirst) {		
-		
+	
+	// Returning an int was really stupid.  Next time use and enum.	
 	bool found = false;
 	int retVal = -1;
 	int level = 0;
@@ -138,7 +139,7 @@ void NvPcomp::symTable::dump() {
 		// loop through and print out node information:
 		for(map_iter = (*iter)->begin(); map_iter != (*iter)->end(); map_iter++) {
 			if((*map_iter).second != NULL) {
-				LOG(SymbolDump, logLEVEL1) << string(level, '\t') << "Symbol: " << (*map_iter).first << " of type " << (*map_iter).second->_strType << " on line " << (*map_iter).second->_loc.begin.line;
+				LOG(SymbolDump, logLEVEL1) << string(level, '\t') << "Symbol: " << (*map_iter).first << " of type " << (*map_iter).second->getTopType() << " on line " << (*map_iter).second->_loc.begin.line;
 								
 			}
 		}

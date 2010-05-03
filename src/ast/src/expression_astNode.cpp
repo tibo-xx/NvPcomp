@@ -52,7 +52,7 @@ bool expression_astNode::checkType(NvPcomp::symTable *table) {
 	rhs = (leaf_astNode*) children.at(2);
 
 	// Is the lhs in the symbol table?
-	if(table->search(lhs->getString(), stNode_lhs, false) < 0) {
+	if(table->search(lhs->getString(), stNode_lhs, false) == -1) {
 		retVal = false;
 	} else {		
 		// Check the right hand side to see if this is a constant or another variable.

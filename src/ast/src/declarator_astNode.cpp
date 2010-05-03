@@ -49,7 +49,12 @@ std::string declarator_astNode::getName()
 	return identifier;
 }
 
-bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, NvPcomp::symTable *table, variableTable *v_table, string &error, astInfoTable<functionDefinition> *f_table) {
+bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, \
+										NvPcomp::symTable *table, \
+										variableTable *v_table, \
+										string &error, \
+										astInfoTable<functionDefinition> *f_table, \
+										NvPcomp::location loc) {
 
 	string identifier;
 	bool is_pointer = false;
@@ -64,16 +69,28 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	ret3ac = identifier;
 
 	NvPcomp::symNode* st_node = table->search_top(identifier);
+	
+	// The identifier is not in the table...try to put it on the top.
 	if (!st_node)
 	{
-	  error = "SERIOUS ERROR: '" + identifier + "' not found in symbol table";
-	  return false;
+		st_node = new NvPcomp::symNode(loc, identifier, "");
+		InsertResult result = table->insert(identifier, st_node);
+
+		if(result == INSERT_SUCCESS_W_SHADOW) {
+			LOG(INFOLog, logLEVEL1) << "Warning: Variable " << identifier << " redefined on line: " << loc.begin.line << " at position: " << loc.begin.column;
+		} else if(result == INSERT_FAIL_IN_CURRENT_LEVEL) {
+			LOG(INFOLog, logLEVEL1) << "failed to insert " << identifier;
+			error = "SERIOUS ERROR: failed to insert '" + identifier + "'";
+			return false;
+		}					
 	} 	  
-        if (st_node->hasType())
+    		
+	if (st_node->hasType())
 	{
 	  error = "SYNTAX ERROR: Redeclaration of '" + identifier + "'";
 	  return false;
 	}     
+	
 	// Add specifiers
 	for (int i = 0; i < declaration_specifiers->getNumberOfChildren(); i ++)
 	{
