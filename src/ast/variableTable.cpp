@@ -52,18 +52,6 @@ string variableTable::insert(std::string key, variableInfo *info) {
 
 }
 
-void variableTable::print() {
-
-	map<string, variableInfo *>::iterator map_iter;
-	
-	cout << "Table:" << endl;
-	
-	for(map_iter = _table.begin(); map_iter != _table.end(); map_iter++) {
-		cout << "\t" << (*map_iter).first << endl;
-	}
-	
-}
-
 bool variableTable::setMemLocation(std::string key, int memLocation) {
 	variableInfo *info;
 	bool retVal = false;
@@ -144,4 +132,16 @@ string variableTable::mangleName(std::string key, int suffix) {
 	retVal << key.substr(0, MAXNAMELENGTH - suffixSize -1 ) << suffixStr.str();
 	
 	return retVal.str();
+}
+
+void variableTable::print() {
+
+	map<string, variableInfo *>::iterator map_iter;
+	
+	cout << "Table:" << endl;
+	
+	for(map_iter = _table.begin(); map_iter != _table.end(); map_iter++) {
+		cout << "\t" << (*map_iter).first << endl;
+	}
+	
 }

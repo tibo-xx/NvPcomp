@@ -53,9 +53,9 @@ std::string declarator_astNode::getName()
 
 bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declaration_specifiers, \
 										NvPcomp::symTable *table, \
-										variableTable &v_table, \
+										variableTable *v_table, \
 										string &error, \
-										astInfoTable<functionDefinition> *f_table, \
+										astInfoTable<functionDefinition>* f_table, \
 										NvPcomp::location loc) {
 
 	string identifier;
@@ -174,14 +174,16 @@ else
 	
 	if (f_table)
 	{
-	  functionDefinition *new_func = new functionDefinition;
-	  st_node->setMangledName(f_table->insert(identifier, new_func));	  
+	  functionDefinition *new_func = new functionDefinition();
+	  st_node->setMangledName(f_table->insert(identifier, new_func));
+	  f_table->print();	  
 	}
 	else
 	{
 	  variableInfo *new_var = new variableInfo();
-	  st_node->setMangledName(v_table.insert(identifier, new_var));
-	  cout << "adding " << identifier << " to variable Table: " << st_node->getMangledName() << endl;
+	  st_node->setMangledName(v_table->insert(identifier, new_var));
+	  v_table->print();
+	  //cout << "adding " << identifier << " to variable Table: " << st_node->getMangledName() << endl;
 	}
 	return true;
 }

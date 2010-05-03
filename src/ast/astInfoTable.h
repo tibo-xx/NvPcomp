@@ -38,6 +38,7 @@ public:
 	~astInfoTable();
 	std::string insert(std::string key, OBJTYPE *obj);
 	bool search(const std::string key, OBJTYPE* &obj);
+	void print();
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -101,6 +102,18 @@ bool astInfoTable<OBJTYPE>::search(const std::string key, OBJTYPE* &obj) {
 		retVal = true;
 	}
 	return retVal;	
+
+}
+
+template<typename OBJTYPE>
+void astInfoTable<OBJTYPE>::print() {
+	typename std::map<std::string, OBJTYPE *>::iterator iter;
+	
+	cout << "Table:" << endl;
+	
+	for(iter = _table.begin(); iter != _table.end(); iter++) {
+		cout << "\t" << (*iter).first << endl;
+	}
 
 }
 
