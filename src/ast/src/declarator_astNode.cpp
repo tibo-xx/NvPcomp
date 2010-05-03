@@ -67,12 +67,12 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	  identifier = getChild(1)->getString();
 	  is_pointer = true;
 	}
-	else
+else
 	{
 	  if (getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK")
 	  {
 	    // 2D array
-	    if (getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK")
+	    if (getChild(0)->getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK constant_expression CLOSE_BRACK_TK")
 	    {
 	      identifier = getChild(0)->getChild(0)->getChild(0)->getString();
 	      is_array = true;
@@ -85,6 +85,12 @@ bool declarator_astNode::setSpecifiers(declaration_specifiers_astNode* declarati
 	      is_array = true;
 	      array_size = atoi(getChild(0)->getChild(2)->getString().c_str());
 	    }
+	  }
+	  else if(getChild(0)->getString() == "direct_declarator OPEN_BRACK_TK CLOSE_BRACK_TK")
+	  {
+	      identifier = getChild(0)->getChild(0)->getString();
+	      is_array = true;
+	      array_size = -1;
 	  }
 	  else
 	    identifier = getChild(0)->getString();
