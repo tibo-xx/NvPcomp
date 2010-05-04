@@ -41,7 +41,8 @@ void expression_astNode::output3AC() {
 
 bool expression_astNode::checkType(NvPcomp::symTable *table) {
 	
-	leaf_astNode *lhs;
+	astNode *tempRHS;
+	leaf_astNode *lhs;	
 	leaf_astNode *rhs;
 	NvPcomp::symNode* stNode_lhs;
 	NvPcomp::symNode* stNode_rhs;
@@ -49,16 +50,26 @@ bool expression_astNode::checkType(NvPcomp::symTable *table) {
 
 	// We're assuming that we have three nodes right now, left-hand-side, operator, right-hand-side.
 	lhs = (leaf_astNode*) children.at(0);
-	rhs = (leaf_astNode*) children.at(2);
+	
+	// The RHS can be of different types.
+	tempRHS = children.at(2);
+	
+	if("postfix_expression" == tempRHS->getType()) {
+		rhs = (leaf_astNode*)tempRHS->getChild(0);
+	} else {
+		rhs = (leaf_astNode*)tempRHS;
+	}
 
 	// Is the lhs in the symbol table?
 	if(table->search(lhs->getString(), stNode_lhs, false) == -1) {
 		retVal = false;
-	} else {		
+	} else {
+		cout << "Token " << rhs->getString() << " of type: " << rhs->getTokenType() << endl;
 		// Check the right hand side to see if this is a constant or another variable.
 		if(IDENTIFIER_TK == rhs->getTokenType()) {
+			cout << "Checking Identifier..." << endl;
 			// The right-hand-side is an identifier, grab its symbol table node.
-			if(table->search(rhs->getString(), stNode_rhs, false) < 0) {
+			if(table->search(rhs->getString(), stNode_rhs, false) == -1) {
 				retVal = false;
 			} else {
 				// Compare the types of the two identifiers.
@@ -67,13 +78,35 @@ bool expression_astNode::checkType(NvPcomp::symTable *table) {
 		} else {
 			// Compare the type of the left-hand-side with the constant.
 			retVal = checkTypes(stNode_lhs, rhs);
+			cout << "Checking Constant..." << endl;
 		}
 	}
 	return retVal;
 }
 
 bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, NvPcomp::symNode* rhs) {
-	return true;
+	bool retVal = true;
+	int i;
+	int tempType;
+	
+	// Our version of c is going to be really strongly typed.
+	int numTypes = lhs->getNumberOfTypes();
+	
+	if(numTypes == rhs->getNumberOfTypes()) {
+		cout << "Same number of types: " << numTypes << endl;
+		for(i=0; i<numTypes; i++) {
+			cout << "Starting with " << i << endl;
+			if(!rhs->hasType(lhs->getTypeByIndex(i))) {
+				cout << "Type mismatch..." << endl;
+				retVal = false;
+			}
+		}
+	} else {
+		retVal = false;
+	}
+		
+	return retVal;
+	
 }
 
 bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, leaf_astNode* rhs) {

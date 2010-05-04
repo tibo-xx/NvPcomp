@@ -1982,6 +1982,7 @@ identifier
 void NvPcomp::BParser::error(const NvPcomp::BParser::location_type &loc, const std::string &msg) {
 	LOG(ERRORLog, logLEVEL1) << buffer.bufferGetLineNoCR(loc.begin.line, loc.end.line);
 	LOG(ERRORLog, logLEVEL1) << std::string(loc.begin.column - 1, ' ') <<"^-Error: " << msg << " at location: " << loc << std::endl;
+	exit(0);  // This is AWFUL!!!!!
 }
 
 // Declare the Scanner and implement the yylex function

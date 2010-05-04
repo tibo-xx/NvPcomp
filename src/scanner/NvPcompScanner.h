@@ -34,7 +34,7 @@ namespace NvPcomp {
 					std::ostream* arg_yyout = 0, \
 					const char *filename = 0, \
 					ast * astIn = 0) : yyFlexLexer(arg_yyin, arg_yyout) {buffer.openFile(filename); asTree = astIn;}
-																																								
+
 		FlexScanner(std::istream* arg_yyin = 0, \
 					const char *filename = 0, \
 					ast *astIn = 0): yyFlexLexer(arg_yyin) {buffer.openFile(filename); asTree = astIn;};

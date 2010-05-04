@@ -182,7 +182,6 @@ else
 	  variableInfo *new_var = new variableInfo();
 	  setMemorySize(st_node, new_var);
 	  st_node->setMangledName(v_table->insert(identifier, new_var));
-	  v_table->print();
 	}
 	return true;
 }
@@ -259,7 +258,6 @@ bool declarator_astNode::addType(int token_type, NvPcomp::symNode *st_node, std:
 	  
 	  return true;
 }
-
 
 // This is a really bad way to do this.
 void declarator_astNode::setMemorySize(NvPcomp::symNode* st_node, variableInfo *varInfo) {
