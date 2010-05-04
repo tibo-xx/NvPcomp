@@ -26,6 +26,7 @@
 #include <ast_include.h>
 #include <variableTable.h>
 #include <astInfoTable.h>
+#include <defines.h>
 
 class declarator_astNode:public astNode {
 public:
@@ -44,6 +45,7 @@ public:
 	std::string variable;
 private:
 	bool addType(int token_type, NvPcomp::symNode *st_node, std::string &error);
+	void setMemorySize(NvPcomp::symNode* st_node, variableInfo *varInfo);
 };
 
 #endif /* DECLARATOR_ASTNODE_H_ */

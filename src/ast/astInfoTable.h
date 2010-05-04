@@ -26,7 +26,6 @@ typedef struct functionDefinition {
     astNode *definition;    
 } functionDefinition;
 
-
 template<typename OBJTYPE>
 class astInfoTable {
 protected:

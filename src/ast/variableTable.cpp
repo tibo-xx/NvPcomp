@@ -141,7 +141,7 @@ void variableTable::print() {
 	cout << "Table:" << endl;
 	
 	for(map_iter = _table.begin(); map_iter != _table.end(); map_iter++) {
-		cout << "\t" << (*map_iter).first << endl;
+		cout << "\t" << (*map_iter).first << " of size " << (*map_iter).second->size << " bytes." << endl;
 	}
 	
 }

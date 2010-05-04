@@ -28,7 +28,6 @@
 #include <variableTable.h>
 #include <optokentypes.h>
 
-
 class ast {
     public:
         ast(NvPcomp::tacTree *tree);
