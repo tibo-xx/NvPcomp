@@ -1,14 +1,9 @@
-/**********************************************************************/
-//! tacTree - Three Address Code Tree
-/*!
- * \class tacTree
- *
- * Description: tac Tree 
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Three Address Code Tree
+ *  \file tacTree.h
+ *  \class tacTree
+ *  \brief Class for the three address code tree
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
 #ifndef TACTREE_H_
 #define TACTREE_H_
 

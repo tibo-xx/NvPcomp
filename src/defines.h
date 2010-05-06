@@ -1,6 +1,16 @@
-// Architecture defines
+/*!  Architecture and memory definitions
+ *  \file defines.h
+ *  \author CMT, DRJ & BFB
+ */
 
+/*!
+  \def ARCH_INT_MAX 
+*/
 #define ARCH_INT_MAX	127
+
+/*!
+  \def ARCH_INT_MIN
+*/
 #define ARCH_INT_MIN	-128
 
 // Memory sizes in bytes

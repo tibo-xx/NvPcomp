@@ -1,5 +1,4 @@
 /***********************************************************************
- *   symNode - Symbol Table Node.
  *   Copyright (C) 2010  CMT & DRJ & BFB
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -25,11 +24,16 @@
  * 	-o					Output the final product to a file
  * 	-q					Generate intermediate code only
  * 	-S 					Generate assembly-language code
- *  -all[1-8] 			Turn on all output (lexer, symbol table, parser,
+ *  -A[1-8] 			Turn on all output (lexer, symbol table, parser,
  * 						ast, and scanner mode) 	
  * 
- * 	\author CMT, DRJ & BFB
  **********************************************************************/
+/*!  Command Line Parser
+ *  \file comLineParser.cpp
+ *  \class comLineParser
+ *  \brief Class for parsing the command line
+ *  \author CMT, DRJ & BFB
+ */
 #include <comLineParser.h>
 #include <string.h>
 
@@ -82,6 +86,7 @@ comLineParser::comLineParser(int argc, char* argv[]) {
 						("S",NULL,                      
 						"assembly code");						
 	targetFile		=	arg_file1 
+	
 						(NULL,NULL,NULL, 
 						"NvPcomp target file");	
 	all  			= 	arg_int0

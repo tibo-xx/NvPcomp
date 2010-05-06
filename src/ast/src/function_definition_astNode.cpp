@@ -15,8 +15,14 @@
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
-* \author CMT, DRJ & BFB
 **********************************************************************/
+
+/*!  Function definition AST node
+ *  \file function_definition_astNode.cpp
+ *  \class function_definition_astNode
+ *  \brief Class for the function definition node
+ *  \author CMT, DRJ & BFB
+ */
 
 #include <function_definition_astNode.h>
 

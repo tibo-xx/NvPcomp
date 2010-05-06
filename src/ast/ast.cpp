@@ -15,8 +15,14 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 	
- * 	\author CMT, DRJ & BFB
  **********************************************************************/
+/*!  Abstract Syntax Tree
+ *  \file ast.cpp
+ *  \class ast
+ *  \brief Class for the abstract sytax tree
+ *  \author CMT, DRJ & BFB
+ */
+
 #include <ast.h>
 
 using namespace std;

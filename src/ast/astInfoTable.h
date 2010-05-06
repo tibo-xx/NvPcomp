@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! struct table implementation for NvPcomp
-/*!
- * \class astInfoTable
- *
- * Description: The struct Table implementation for NvPcomp
- *
- * \author CMT, DRJ & BFB
- *
+/*!  AST info table
+ *  \file ast.h
+ *  \class astInfoTable
+ *  \brief AST Info Table
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
+
 #ifndef ASTINFOTABLE_H_
 #define ASTINFOTABLE_H_
 

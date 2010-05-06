@@ -16,7 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-
+/*!  Three Address Code Node
+ *  \file tacNode.cpp
+ *  \class tacNode
+ *  \brief Class for the three address code node
+ *  \author CMT, DRJ & BFB
+ */
 #include <tacNode.h>
 
 using namespace std;

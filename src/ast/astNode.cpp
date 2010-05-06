@@ -15,8 +15,13 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 	
- * 	\author CMT, DRJ & BFB
  **********************************************************************/
+/*!  Abstract Syntax Tree Node
+ *  \file astNode.cpp
+ *  \brief Node class for the AST
+ *  \author CMT, DRJ & BFB
+ */
+
 #include <astNode.h>
 #include <string.h>
 #include <iostream>

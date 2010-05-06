@@ -221,7 +221,7 @@ NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::insertID(std::string 
 	}	
 }
 
-/* Very basic INDENTIFIER decision making */
+/* Very basic IDENTIFIER decision making */
 NvPcomp::BParser::token::yytokentype NvPcomp::FlexScanner::check_id() {
 	std::string key = std::string(yytext);
 	symNode *tempNode;

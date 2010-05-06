@@ -9,7 +9,7 @@ int main () {
 	const int ARRAY_SIZE = 5;
 	int i[5];
 
-	/* i[0] = 3; */
+	i[0] = 3;
 
 	return 1;
 }

@@ -16,7 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-
+/*!  Three Address Code Tree
+ *  \file tacTree.cpp
+ *  \class tacTree
+ *  \brief Class for the three address code tree
+ *  \author CMT, DRJ & BFB
+ */
 #include <tacTree.h>
 
 using namespace std;

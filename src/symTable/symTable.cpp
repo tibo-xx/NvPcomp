@@ -16,6 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
+/*!  Symbol table 
+ *  \file symTable.cpp
+ *  \class symTable
+ *  \brief Class for the symbol table
+ *  \author CMT, DRJ & BFB
+ */
 #include <symTable.h>
 #include <NvPcomp_logger.h>
 

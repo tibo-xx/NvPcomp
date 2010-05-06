@@ -16,6 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
+/*!  Symbol Table Node
+ *  \file symNode.cpp
+ *  \class symNode
+ *  \brief Class for the symbol table node
+ *  \author CMT, DRJ & BFB
+ */
 #include <symNode.h>
 
 using namespace std;

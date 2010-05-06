@@ -16,6 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
+/*!  Variable Table
+ *  \file variableTable.cpp
+ *  \class variableTable
+ *  \brief Variable table implementation for NvPcomp
+ *  \author CMT, DRJ & BFB
+ */
 #include <variableTable.h>
 
 using namespace std;

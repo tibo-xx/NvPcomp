@@ -655,6 +655,7 @@ direct_declarator
 		}
 
 // TODO no idea what this is for
+// Del leaving this here: http://msdn.microsoft.com/en-us/library/1x82y1z4(v=VS.80).aspx 
 	| OPEN_PAREN_TK declarator CLOSE_PAREN_TK
 		{
 			REDUCTION(direct_declarator:OPEN_PAREN_TK declarator CLOSE_PAREN_TK)

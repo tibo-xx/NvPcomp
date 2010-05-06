@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! Abstract Syntax Tree Node
-/*!
- * \class astNode
- *
- * Description: Basic node of the Abstract Syntax Tree
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Abstract Syntax Tree Node
+ *  \file astNode.h
+ *  \class astNode
+ *  \brief Base class for the AST node
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
+
 #ifndef ASTNODE_H_
 #define ASTNODE_H_
 

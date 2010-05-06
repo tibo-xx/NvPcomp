@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! ASTNode declaration_astNode implementation for NvPcomp
-/*!
-* \class declaration_astNode
-*
-* Description: The declaration_astNode implementation for Abstract Syntax Tree in NvPcomp
-*
-* \author CMT, DRJ & BFB
-*
-*/
-/**********************************************************************/
+/*!  ASTNode declaration_astNode implementation for NvPcomp
+ *  \file declaration_astNode.h
+ *  \class declaration_astNode
+ *  \brief The declaration_astNode implementation for Abstract Syntax Tree in NvPcomp
+ *  \author CMT, DRJ & BFB
+ */
+
 #ifndef DECLARATION_ASTNODE_H_
 #define DECLARATION_ASTNODE_H_
 

@@ -1,14 +1,9 @@
-/**********************************************************************/
-//! Symbol table implementation for NvPcomp
-/*!
- * \class symTable
- *
- * Description: The Symbol Table implementation for NvPcomp
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Symbol table 
+ *  \file symTable.h
+ *  \class symTable
+ *  \brief Class for the symbol table
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
 #ifndef SYMTABLE_H_
 #define SYMTABLE_H_
 

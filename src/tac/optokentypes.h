@@ -1,10 +1,7 @@
-//! optokentypes.h
-/*! 
- *
- * Description: Holds the token types for 3AC
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Operation token types 
+ *  \file optokentypes.h
+ *  \brief Enum for the operations needed in 3AC
+ *  \author CMT, DRJ & BFB
  */
 #ifndef OPTOKENTYPES_H_
 #define OPTOKENTYPES_H_

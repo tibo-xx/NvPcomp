@@ -1,11 +1,9 @@
-//! yytokentypes.h
-/*! 
- *
- * Description: Holds the token types from parse.cc
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Parser token types
+ *  \file yytokentypes.h <> 
+ *  \brief Main driver for NvPcomp
+ *  \author CMT, DRJ & BFB
  */
+
 #ifndef YYTOKENTYPES_H_
 #define YYTOKENTYPES_H_
 

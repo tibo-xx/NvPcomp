@@ -17,6 +17,12 @@
  * 
  **********************************************************************/
 
+/*!  Main driver for NvPcomp
+ *  \file main.cpp
+ *  \brief Main driver for NvPcomp
+ *  \author CMT, DRJ & BFB
+ */
+
 #include <NvPcomp_logger.h>
 #include <NvPcompScanner.h>
 #include <NvPcompParser.h>
@@ -30,6 +36,12 @@
 #include <fstream>
 
 using namespace std;
+
+/*! \fn void parse_mode(const char *fileName)
+ *  \brief Puts compiler into parse mode
+ *  \param filename a char pointer to the input filename
+ *  \return void
+ */
 
 void parse_mode(const char *fileName) {
 	NvPcomp::FlexScanner *scanner;
@@ -61,6 +73,11 @@ void parse_mode(const char *fileName) {
 	
 }
 
+/*! \fn void scan_mode(const char *fileName)
+ *  \brief Puts compiler into scanner mode
+ *  \param filename a char pointer to the input filename
+ *  \return void
+ */
 void scan_mode(const char *fileName) {
 	
 	NvPcomp::FlexScanner *scanner;
@@ -95,7 +112,12 @@ void scan_mode(const char *fileName) {
 	}
 	
 }
-
+/*! \fn int main( int argc, char* argv[] )
+ *  \brief Puts compiler into scanner mode
+ *  \param argc int number of arguments
+ *  \param argv[] char pointer to array of command line arguments
+ *  \return int
+ */
 int main( int argc, char* argv[] ) {
 
 	string inputFile;

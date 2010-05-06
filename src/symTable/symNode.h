@@ -1,11 +1,8 @@
-//! Symbol table Node
-/*! 
- * \class symNode
- *
- * Description
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Symbol table node
+ *  \file symNode.h
+ *  \class symNode
+ *  \brief Class for the symbol table node
+ *  \author CMT, DRJ & BFB
  */
 #ifndef SYMNODE_H_
 #define SYMNODE_H_

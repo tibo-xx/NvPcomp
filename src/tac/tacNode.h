@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! tacNode - Three Address Code base class
-/*!
- * \class tacNode
- *
- * Description: Basic node of the Three Address Code Tree
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Three Address Code Node
+ *  \file tacNode.h
+ *  \class tacNode
+ *  \brief Class for the three address code node
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
+
 #ifndef TACNODE_H_
 #define TACNODE_H_
 

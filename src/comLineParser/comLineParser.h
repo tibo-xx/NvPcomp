@@ -1,8 +1,4 @@
-/**********************************************************************/
-//! Command Line Parser
-/*!
- * \class comLineParser
- *
+/**********************************************************************
  * Description: Your driver needs to accept and parse at least the 
  * 				following command line options:
  *
@@ -29,14 +25,19 @@
  * 	each phase, or to accept additional arguments to the -d option. 
  * 	You may also, if you wish, accept additional arguments for whatever 
  * 	uses you like, provided that these are appropriately documented. 
- *
- * \author CMT, DRJ & BFB
+ * 
  *  This file uses the argtable2 library.
  *	Copyright (C) 1998-2001,2003-2010 Stewart Heitmann
  *	sheitmann@users.sourceforge.net
  *
  */
 /**********************************************************************/
+/*!  Command Line Parser
+ *  \file comLineParser.h
+ *  \class comLineParser
+ *  \brief Class for parsing the command line
+ *  \author CMT, DRJ & BFB
+ */
 #ifndef COMLINEPARSER_H_
 #define COMLINEPARSER_H_
 
@@ -118,8 +119,6 @@ private:
  * appear zero-or-once on the command line, arg_int1 is for options that
  * appear exactly once on the command line, and arg_intn is for options 
  * that appear any number of times (within a given range). */
-
-
 							
 };
 

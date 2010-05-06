@@ -1,14 +1,9 @@
-/**********************************************************************/
-//! SourceBuffer
-/*!
- * \class sourceBuffer
- *
- * Description: 
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Source Buffer 
+ *  \file sourceBuffer.h
+ *  \class sourceBuffer
+ *  \brief Class for the sourceBuffer
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
 #ifndef SOURCEBUFFER_H_
 #define SOURCEBUFFER_H_
 

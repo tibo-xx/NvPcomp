@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! Abstract Syntax Tree
-/*!
- * \class ast
- *
- * Description: Abstract Syntax Tree
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Abstract Syntax Tree
+ *  \file ast.h
+ *  \class ast
+ *  \brief Base Class for the abstract sytax tree
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
+
 #ifndef AST_H_
 #define AST_H_
 

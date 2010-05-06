@@ -9,8 +9,8 @@
 CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0 -ansi
 CXX = g++
 LEX = flex++
-YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
-#YACC = bison
+#YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+YACC = bison
 LEXFLAGS = -+
 
 ARCH =$(shell /bin/uname -m)

@@ -14,9 +14,14 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-* \author CMT, DRJ & BFB
 **********************************************************************/
+
+/*!  Declaration AST node
+ *  \file declaration_astNode.cpp
+ *  \class declaration_astNode
+ *  \brief Class for the declaration node
+ *  \author CMT, DRJ & BFB
+ */
 
 #include <declaration_astNode.h>
 

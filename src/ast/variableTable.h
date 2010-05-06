@@ -1,14 +1,10 @@
-/**********************************************************************/
-//! Variable table implementation for NvPcomp
-/*!
- * \class variableTable
- *
- * Description: The Variable Table implementation for NvPcomp
- *
- * \author CMT, DRJ & BFB
- *
+/*!  Variable table implementation for NvPcomp
+ *  \file astNode.h
+ *  \class variableTable
+ *  \brief The Variable Table implementation for NvPcomp
+ *  \author CMT, DRJ & BFB
  */
-/**********************************************************************/
+
 #ifndef VARIABLETABLE_H_
 #define VARIABLETABLE_H_
 
