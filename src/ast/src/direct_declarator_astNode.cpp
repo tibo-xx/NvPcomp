@@ -32,8 +32,37 @@ direct_declarator_astNode::direct_declarator_astNode(std::string _nodeString, Nv
 	nodeType = "direct_declarator";
 	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
 }
+/*
+direct_declarator_astNode::direct_declarator_astNode(std::string _nodeString, NvPcomp::location _loc, NvPcomp::tacTree *tree, declaratorType type)
+	:astNode(_nodeString, _loc, tree) {
+	nodeType = "direct_declarator";
+	_type = type;
+	LOG(ASTLog, logLEVEL1) << "===== Creating astNode ==== " << nodeType << " " << nodeString;
+}*/
 
 void direct_declarator_astNode::output3AC() {
 	LOG(ASTLog, logLEVEL1) << nodeType << " is not supported at this time" << nodeString;
 }
 
+/*
+void direct_declarator_astNode::updateVariableTable(variableTable *v_table, NvPcomp::symTable *table) {
+	astNode *asNode;
+	NvPcomp::symNode *smNode;
+	variableInfo* info;
+
+	asNode = getChild(0);
+	table->search(asNode->getString(), smNode, false);
+
+	cout << "Starting to update variableTable..." << endl;
+
+	if(smNode) {
+		cout << "\tFound symNode..." << endl;
+		if(v_table->search(smNode->getMangledName(), info)) {
+			cout << "\tFound mangledName in variableTable..." << endl;
+			info->isArray = true;
+			asNode = getChild(2);
+			info->elements = atoi(asNode->getString().c_str());
+		}		
+	}
+}
+*/

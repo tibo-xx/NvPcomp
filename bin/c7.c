@@ -8,7 +8,8 @@
 
 int main () {
 	int i;
-	int j = 1;
+	int j;
+	j = 1;
 	
 	
 	for (i = 0; i < 5; i++)

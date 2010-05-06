@@ -24,10 +24,11 @@ namespace NvPcomp {
 			void addNode(tacNode *node);
 			void outputASM();
 			void displayTree();
+			std::vector<tacNode> *getTree();
+			std::string getOp(int op);
 			ast* asTree;
 		private:
 			std::vector<tacNode> _tree;
-			std::string getOp(int op);
 			std::vector<std::string> translateOps;
 	};
 };

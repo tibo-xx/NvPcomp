@@ -175,12 +175,20 @@ else
 	if (f_table)
 	{
 	  functionDefinition *new_func = new functionDefinition();
+	  new_func->loc = st_node->_loc;
 	  st_node->setMangledName(f_table->insert(identifier, new_func));
 	}
 	else
 	{
 	  variableInfo *new_var = new variableInfo();
 	  setMemorySize(st_node, new_var);
+	  if(is_array) {
+		new_var->isArray = true;
+		new_var->elements = array_size;  
+	  } else {
+		new_var->isArray = false;
+		new_var->elements = 0;
+	  }
 	  st_node->setMangledName(v_table->insert(identifier, new_var));
 	}
 	return true;
@@ -262,25 +270,33 @@ bool declarator_astNode::addType(int token_type, NvPcomp::symNode *st_node, std:
 // This is a really bad way to do this.
 void declarator_astNode::setMemorySize(NvPcomp::symNode* st_node, variableInfo *varInfo) {
 	
-	int retVal = 0;
+	int size = 0;
+	int type = 0;
 	
 	if(st_node->hasType(SHORT_TK)) {
-		retVal = SHORT_SIZE;
+		size = SHORT_SIZE;
+		
 	} else if(st_node->hasType(INT_TK)) {
-		retVal = INT_SIZE;
+		size = INT_SIZE;
+		type = INT_TK;
 	} else if(st_node->hasType(LONG_TK)) {
-		retVal = LONG_SIZE;
+		size = LONG_SIZE;
+		type = LONG_TK;
 	} else if(st_node->hasType(CHAR_TK)) {
-		retVal = CHAR_SIZE;
+		size = CHAR_SIZE;
+		type = CHAR_TK;
 	} else if(st_node->hasType(FLOAT_TK)) {
-		retVal = FLOAT_SIZE;
+		size = FLOAT_SIZE;
+		type = FLOAT_TK;
 	} else if(st_node->hasType(DOUBLE_TK)) {
-		retVal = DOUBLE_SIZE;
+		size = DOUBLE_SIZE;
+		type = DOUBLE_TK;
 	} else {
 		// This is bad.
 	}
 		
-	varInfo->size = retVal;
+	varInfo->size = size;
+	varInfo->tokenType = type;
 	
 }
 

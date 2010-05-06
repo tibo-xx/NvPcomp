@@ -105,9 +105,7 @@ bool variableTable::search(const std::string key, variableInfo* &info) {
 		info = (*iter).second;
 		retVal = true;
 	}
-	
 	return retVal;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -150,4 +148,8 @@ void variableTable::print() {
 		cout << "\t" << (*map_iter).first << " of size " << (*map_iter).second->size << " bytes." << endl;
 	}
 	
+}
+
+map< std::string, variableInfo *> *variableTable::getTable() {
+	return &_table;
 }

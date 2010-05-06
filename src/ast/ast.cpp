@@ -65,7 +65,7 @@ string ast::genLabel() {
 
 string ast::genReg() {
 	stringstream retString;
-	retString << "A" << _numReg;
+	retString << "s" << _numReg;
 	_numReg++;
 	
 	return retString.str();

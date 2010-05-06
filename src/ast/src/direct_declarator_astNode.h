@@ -21,6 +21,8 @@
 #include <position.hh>
 #include <location.hh>
 #include <tacTree.h>
+#include <variableTable.h>
+#include <symTable.h>
 #include <NvPcomp_logger.h>
 
 class direct_declarator_astNode:public astNode {

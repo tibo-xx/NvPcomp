@@ -17,7 +17,6 @@ sourceBuffer::sourceBuffer() {
 
 sourceBuffer::~sourceBuffer() {}
 
-
 bool sourceBuffer::good() {
 	return in.good();
 }
@@ -104,6 +103,39 @@ string sourceBuffer::bufferGetLineNoCR(long lineNumStart, long lineNumFinish) {
 			} else {
 				_curLineBuffer += strTemp;
 			}
+			_curLine++;
+		}
+	}
+		
+	return _curLineBuffer;
+	
+}
+
+string sourceBuffer::bufferGetLineCommented(long lineNumStart, long lineNumFinish, string commentChar) {
+	
+	string strTemp;
+	int i;
+	
+	// Clear the string
+	_curLineBuffer.clear();
+	
+	// Check if the input stream is good.
+	if(in.good()) {
+				
+		// Are we currently past the requested line?	
+		if(lineNumStart <= _curLine) {
+			resetBuffer();
+		}
+		
+		// Loop through the file discarding unwanted lines.
+		if(_curLine < lineNumStart - 1) {
+			skipLine(lineNumStart - 1 - _curLine);
+		}
+		
+		for(i = 0; i <= (lineNumFinish - lineNumStart); i++) {
+			getline(in, strTemp);
+			LOG(DEBUGLog, logLEVEL5) << BUFFERLOG_START << "getLine: " << strTemp;
+			_curLineBuffer += commentChar + strTemp + '\n';
 			_curLine++;
 		}
 	}

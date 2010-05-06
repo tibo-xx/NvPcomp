@@ -80,6 +80,7 @@ NvPcomp::tacTree::~tacTree() {}
 void NvPcomp::tacTree::addNode(tacNode *node) {
 	_tree.push_back (*node);
 }
+
 void NvPcomp::tacTree::displayTree() {
 	vector<tacNode>::iterator it;
 	for(it = _tree.begin(); it < _tree.end(); it++) 
@@ -96,6 +97,10 @@ string NvPcomp::tacTree::getOp(int op) {
 		return translateOps[op-258];
 	else
 		return "error";
+}
+
+vector<NvPcomp::tacNode> *NvPcomp::tacTree::getTree() {
+	return &_tree;
 }
 
 void NvPcomp::tacTree::outputASM() {}

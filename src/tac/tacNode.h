@@ -11,7 +11,6 @@
 #include <string>
 #include <location.hh>
 
-
 namespace NvPcomp {
 	class tacNode {
 		public:

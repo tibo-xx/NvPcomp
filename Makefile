@@ -9,8 +9,8 @@
 CXXFLAGS = -O1 -g3 -Wall -fmessage-length=0 -ansi
 CXX = g++
 LEX = flex++
-#YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
-YACC = bison
+YACC = /home/thibec/usr/share/bison-2.4.1/bin/bison
+#YACC = bison
 LEXFLAGS = -+
 
 ARCH =$(shell /bin/uname -m)
@@ -27,6 +27,7 @@ OBJS += ./src/parser/parse.o
 OBJS += ./src/comLineParser/comLineParser.o
 OBJS += ./src/tac/tacNode.o
 OBJS += ./src/tac/tacTree.o
+OBJS += ./src/asm/kcpsm3Writer.o
 
 INCS =	-I./src/
 INCS += -I./src/symTable
@@ -36,6 +37,7 @@ INCS += -I./src/parser
 INCS += -I./src/comLineParser
 INCS += -I./src/ast/
 INCS += -I./src/tac/
+INCS += -I./src/asm/
 INCS += -I./src/ast/src/
 INCS += -I./src/buffer
 INCS += -I./src/test

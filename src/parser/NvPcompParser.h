@@ -5,7 +5,7 @@
 
 
 namespace NvPcomp {
-		
+
     class Parser {
     public:
         Parser( NvPcomp::FlexScanner *arg_scanner, const char *fileName, ast *_astIn) :     \
@@ -15,7 +15,7 @@ namespace NvPcomp {
                         asTree = _astIn;                                \
                         acTree = asTree->gettacTree();                  \
                     }
-    
+
         int parse() {
             return parser.parse();
         }

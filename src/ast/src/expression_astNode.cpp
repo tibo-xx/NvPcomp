@@ -42,6 +42,7 @@ void expression_astNode::output3AC() {
 bool expression_astNode::checkType(NvPcomp::symTable *table) {
 	
 	astNode *tempRHS;
+	astNode *tempLHS;
 	leaf_astNode *lhs;	
 	leaf_astNode *rhs;
 	NvPcomp::symNode* stNode_lhs;
@@ -49,27 +50,36 @@ bool expression_astNode::checkType(NvPcomp::symTable *table) {
 	bool retVal = true;
 
 	// We're assuming that we have three nodes right now, left-hand-side, operator, right-hand-side.
-	lhs = (leaf_astNode*) children.at(0);
-	
-	// The RHS can be of different types.
+	tempLHS = children.at(0);
+	if("postfix_expression" == tempLHS->getType()) {
+		lhs = (leaf_astNode*)tempLHS->getChild(0);
+	} else {
+		lhs = (leaf_astNode*)tempLHS;
+	}
+		
 	tempRHS = children.at(2);
-	
-	if("postfix_expression" == tempRHS->getType()) {
+	if("postfix_expression" == tempRHS->getType() || \
+	   "multiplicative_expression" == tempRHS->getType() || \
+	   "additive_expression" == tempRHS->getType()) {
 		rhs = (leaf_astNode*)tempRHS->getChild(0);
 	} else {
 		rhs = (leaf_astNode*)tempRHS;
 	}
 
+	LOG(ASTLog, logLEVEL6) << "lhs: " << lhs->getString() << " of type " << lhs->getType() << endl;
+	LOG(ASTLog, logLEVEL6) << "rhs: " << rhs->getString() << " of type " << rhs->getType() << endl;
+
 	// Is the lhs in the symbol table?
 	if(table->search(lhs->getString(), stNode_lhs, false) == -1) {
 		retVal = false;
 	} else {
-		cout << "Token " << rhs->getString() << " of type: " << rhs->getTokenType() << endl;
+		LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "Token " << rhs->getString() << " of type: " << rhs->getTokenType() << endl;
 		// Check the right hand side to see if this is a constant or another variable.
 		if(IDENTIFIER_TK == rhs->getTokenType()) {
-			cout << "Checking Identifier..." << endl;
+			LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "Checking Identifier..." << endl;
 			// The right-hand-side is an identifier, grab its symbol table node.
 			if(table->search(rhs->getString(), stNode_rhs, false) == -1) {
+				LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "rhs: " << rhs->getString() << " was not in the symbol table." << endl;
 				retVal = false;
 			} else {
 				// Compare the types of the two identifiers.
@@ -78,7 +88,7 @@ bool expression_astNode::checkType(NvPcomp::symTable *table) {
 		} else {
 			// Compare the type of the left-hand-side with the constant.
 			retVal = checkTypes(stNode_lhs, rhs);
-			cout << "Checking Constant..." << endl;
+			LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "Checking Constant..." << endl;
 		}
 	}
 	return retVal;
@@ -90,21 +100,27 @@ bool expression_astNode::checkTypes(NvPcomp::symNode* lhs, NvPcomp::symNode* rhs
 	int tempType;
 	
 	// Our version of c is going to be really strongly typed.
-	int numTypes = lhs->getNumberOfTypes();
-	
-	if(numTypes == rhs->getNumberOfTypes()) {
-		cout << "Same number of types: " << numTypes << endl;
-		for(i=0; i<numTypes; i++) {
-			cout << "Starting with " << i << endl;
-			if(!rhs->hasType(lhs->getTypeByIndex(i))) {
-				cout << "Type mismatch..." << endl;
-				retVal = false;
-			}
-		}
-	} else {
-		retVal = false;
+	int lhsNumTypes = lhs->getNumberOfTypes();
+	int rhsNumTypes = rhs->getNumberOfTypes();
+	/*
+	if(lhs->hasType(STAR_TK)) {
+		--lhsNumTypes;
 	}
+	
+	if(rhs->hasType(STAR_TK)) {
+		--rhsNumTypes;
+	}
+	*/
+	
+	for(i=0; i<lhsNumTypes; i++) {
+		LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "Starting with " << i << endl;
 		
+		if(!rhs->hasType(lhs->getTypeByIndex(i)) && lhs->getTypeByIndex(i) != STAR_TK) {
+			LOG(ASTLog, logLEVEL6) << "expression_astnode: " << "Type mismatch..." << endl;
+			retVal = false;
+		}
+	}
+			
 	return retVal;
 	
 }

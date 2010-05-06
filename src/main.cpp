@@ -27,6 +27,7 @@
 #include <NvPcompScanner.h>
 #include <NvPcompParser.h>
 #include <sourceBuffer.h>
+#include <kcpsm3Writer.h>
 #include <comLineParser.h>
 #include <ast_include.h>
 #include <ast.h>
@@ -49,6 +50,7 @@ void parse_mode(const char *fileName) {
 	NvPcomp::BParser::location_type loc;
 	NvPcomp::tacTree acTree;
 	ifstream in;
+	kcpsm3Writer *asmWriter;
 	
 	ast *asTree;
 	asTree = new ast(&acTree);
@@ -71,6 +73,8 @@ void parse_mode(const char *fileName) {
 	asTree->getRoot()->output3AC();
 	acTree.displayTree();
 	
+	asmWriter = new kcpsm3Writer(&acTree, asTree, "compiled.psm", fileName);
+	asmWriter->genASM();
 }
 
 /*! \fn void scan_mode(const char *fileName)
@@ -178,6 +182,7 @@ int main( int argc, char* argv[] ) {
 			return -1;
 		}		
 		SET_OUTPUT(ASTLog, symbol_out);
+		SET_LOG_LEVEL(ASTLog, logLEVEL7);
 	}		
 	
 	//if (clp->isScanner()) {

@@ -14,12 +14,20 @@
 #include <map>
 #include <astNode.h>
 #include <iterator>
+#include <location.hh>
+#include <position.hh>
+
 using namespace std;
+
 #define ASTINFO_MAXNAMELENGTH	8
 
 typedef struct functionDefinition {
     astNode *declaration;
-    astNode *definition;    
+    astNode *definition;
+	NvPcomp::location loc;
+	std::vector<std::string> registers;
+	std::vector<std::string> return_registers;
+	int returnType;
 } functionDefinition;
 
 template<typename OBJTYPE>

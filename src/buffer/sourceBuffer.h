@@ -23,6 +23,7 @@ public:
 	bool good();
 	std::string bufferGetLine(long lineNumStart, long lineNumFinish);
 	std::string bufferGetLineNoCR(long lineNumStart, long lineNumFinish);
+	std::string bufferGetLineCommented(long lineNumStart, long lineNumFinish, std::string commentChar);
 private:
 	bool skipLine(long numLines);
 	bool resetBuffer();

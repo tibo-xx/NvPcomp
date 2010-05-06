@@ -2,21 +2,19 @@
  *  \file c6.c
  *  \brief Demonstrates the ability of NvPcomp to handle declarations and
  *  \brief generate code for procedures with single nesting levels and
- *  \brief value/reference parameters.  
+ *  \brief value parameters.  
  *  \author CMT, DRJ & BFB
  */
 
-int test (int x, int *y) {
-	x++;
-	y++;
+int func(int in) {
+	int t;
+	t = in;
+	return in + 10;
 }
 
-int main () {
-	int i, *j;
-	i = 3;
-	
-	if (i > 0)
-		test (i, j);
-	
-	return 1;
+int main() {
+	int j;
+	j = func(2);
+	j = j*2;
+	j = j/4;
 }

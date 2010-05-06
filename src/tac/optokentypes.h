@@ -27,7 +27,7 @@
   // Control Forms
   OP_LABEL = 271,		// The next statement is labeled with op1 
   OP_BR = 272,			// goto op3
-  OP_BREQ = 273,		// if(op1 = op2) goto op3
+  OP_BREQ = 273,		// if(op1 == op2) goto op3
   OP_BRGT = 274,		// **unused** if(op1 > op2) goto op3
   OP_BRLT = 275,		// **unused** if(op1 < op2) goto op3
   OP_BRGE = 276,		// **unused** if(op1 >= op2) goto op3
@@ -53,7 +53,7 @@
   OP_ARRAY = 294,		// op3 = op1[op2]  op1 = address, op2 = offset
   OP_INDR = 295, 		// op3 = address contained in op1
   OP_BIT_NOT = 296,		// op3 = ones copmlement of op1
-  OP_LSHIFT = 297,   		// op3 = op2 left shifted by op1 bits
+  OP_LSHIFT = 297,   	// op3 = op2 left shifted by op1 bits
   OP_RSHIFT = 298,		// op3 = op2 right shifted by op1 bits
   OP_BIT_AND = 299,		// op3 = op1 AND op2
   OP_BIT_XOR = 300,		// op3 = op1 XOR op2
